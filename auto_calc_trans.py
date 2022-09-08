@@ -10,9 +10,8 @@ from optparse import OptionParser,IndentedHelpFormatter
 HOME = os.environ.get('HOME')
 if HOME is None:
     HOME = os.environ.get('USERPROFILE')
-SCRDIR = os.path.join(HOME,'Script')
-DATDIR = os.path.join(HOME,'Work','Sentinel-1')
-L2ADIR = os.path.join(HOME,'Work','Sentinel-2','L2A')
+SCRDIR = os.path.join(HOME,'Automation')
+DATDIR = os.path.join(HOME,'Work','Sentinel-1_Data')
 SITES = ['Bojongsoang','Cihea']
 SUBDIRS = ['Cihea:sigma0','Bojongsoang:sigma0_speckle']
 DATE_FINAL = 5
@@ -22,7 +21,6 @@ MAX_RETRY = 10
 parser = OptionParser(formatter=IndentedHelpFormatter(max_help_position=200,width=200))
 parser.add_option('--scrdir',default=SCRDIR,help='Script directory (%default)')
 parser.add_option('--datdir',default=DATDIR,help='Data directory (%default)')
-parser.add_option('--l2adir',default=L2ADIR,help='L2A data directory (%default)')
 parser.add_option('-s','--str',default=None,help='Start date in the format YYYYMMDD (%default)')
 parser.add_option('-e','--end',default=None,help='End date in the format YYYYMMDD (%default)')
 parser.add_option('-S','--sites',default=None,action='append',help='Target sites ({})'.format(SITES))
@@ -31,7 +29,6 @@ parser.add_option('--date_final',default=DATE_FINAL,type='int',help='Date to cal
 parser.add_option('-M','--max_retry',default=MAX_RETRY,type='int',help='Maximum number of retries to download data (%default)')
 parser.add_option('--skip_upload',default=False,action='store_true',help='Skip upload (%default)')
 parser.add_option('--skip_copy',default=False,action='store_true',help='Skip copy (%default)')
-parser.add_option('--skip_s2_update',default=False,action='store_true',help='Skip Sentinel-2 update (%default)')
 parser.add_option('-d','--debug',default=False,action='store_true',help='Debug mode (%default)')
 (opts,args) = parser.parse_args()
 if opts.sites is None:
@@ -48,20 +45,20 @@ for s in opts.subdirs:
 for site in opts.sites:
     site_low = site.lower()
     datdir = os.path.join(opts.datdir,site)
-    log = os.path.join(datdir,site.lower()+'.log')
+    log = os.path.join(datdir,'GRD',site_low+'.log')
     command = 'python'
     command += ' '+os.path.join(opts.scrdir,'sentinel1_update.py')
-    command += ' --scrdir '+opts.scrdir
-    command += ' --datdir '+opts.datdir
+    command += ' --scrdir {}'.format(opts.scrdir)
+    command += ' --datdir {}'.format(opts.datdir)
     if opts.str is not None:
-        command += ' --str '+opts.str
+        command += ' --str {}'.format(opts.str)
     if opts.end is not None:
-        command += ' --end '+opts.end
+        command += ' --end {}'.format(opts.end)
     if opts.skip_upload:
         command += ' --skip_upload'
     if opts.skip_copy:
         command += ' --skip_copy'
-    command += ' --sites '+site
+    command += ' --sites {}'.format(site)
     #sys.stderr.write(command+'\n')
     call(command,shell=True)
     fnams = []
@@ -87,8 +84,8 @@ for site in opts.sites:
         command = 'python'
         command += ' '+os.path.join(opts.scrdir,'sentinel1_preprocess.py')
         command += ' '+fnam
-        command += ' --site '+site
-        command += ' --datdir '+os.path.join(datdir,subdir[site_low])
+        command += ' --site {}'.format(site)
+        command += ' --datdir {}'.format(os.path.join(datdir,'subset'))
         if 'speckle' in subdir[site_low].lower():
             command += ' --speckle'
         command += ' --iangle_value'
@@ -100,12 +97,13 @@ for site in opts.sites:
         command += ' '+os.path.join(opts.scrdir,'remove_snap_cache.py')
         call(command,shell=True)
     for dstr in dstrs:
-        fnam = os.path.join(datdir,subdir[site_low],dstr+'.tif')
+        fnam = os.path.join(datdir,'subset','{}_subset.tif'.format(dstr))
+        gnam = os.path.join(datdir,'resample','{}_resample.tif'.format(dstr))
         command = 'python'
         command += ' '+os.path.join(opts.scrdir,'sentinel_resample.py')
-        command += ' '+fnam
-        command += ' --datdir '+os.path.join(datdir,subdir[site_low])
-        command += ' --site '+site
+        command += ' --inp_fnam {}'.format(fnam)
+        command += ' --out_fnam {}'.format(gnam)
+        command += ' --site {}'.format(site)
         command += ' --read_comments'
         call(command,shell=True)
         dtim = datetime.strptime(dstr,'%Y%m%d')
@@ -113,11 +111,11 @@ for site in opts.sites:
         d2 = (dtim+timedelta(days=+1)).strftime('%Y%m%d')
         command = 'python'
         command += ' '+os.path.join(opts.scrdir,'get_preliminary_estimation.py')
-        command += ' --scrdir '+opts.scrdir
-        command += ' --datdir '+opts.datdir
-        command += ' --str '+d1
-        command += ' --end '+d2
-        command += ' --sites '+site
+        command += ' --scrdir {}'.format(opts.scrdir)
+        command += ' --datdir {}'.format(opts.datdir)
+        command += ' --str {}'.format(d1)
+        command += ' --end {}'.format(d2)
+        command += ' --sites {}'.format(site)
         call(command,shell=True)
     if os.path.exists(log):
         os.remove(log)
@@ -127,31 +125,7 @@ if dcur.day == opts.date_final:
     for site in opts.sites:
         command = 'python'
         command += ' '+os.path.join(opts.scrdir,'get_final_estimation.py')
-        command += ' --scrdir '+opts.scrdir
-        command += ' --datdir '+opts.datdir
-        command += ' --sites '+site
-        call(command,shell=True)
-
-if not opts.skip_s2_update:
-    for site in ['Bojongsoang']:
-        datdir = os.path.join(opts.datdir,site)
-        command = 'python'
-        command += ' '+os.path.join(opts.scrdir,'sentinel2_update.py')
-        command += ' --scrdir '+opts.scrdir
-        command += ' --datdir '+opts.l2adir
-        if opts.str is not None:
-            command += ' --str '+opts.str
-        else:
-            command += ' --str {:%Y%m%d}'.format(dcur+timedelta(days=-60))
-        if opts.end is not None:
-            command += ' --end '+opts.end
-        else:
-            command += ' --end {:%Y%m%d}'.format(dcur)
-        if opts.skip_upload:
-            command += ' --skip_upload'
-        if opts.skip_copy:
-            command += ' --skip_copy'
-        command += ' --sites '+site
-        command += ' --max_retry {}'.format(opts.max_retry)
-        #sys.stderr.write(command+'\n')
+        command += ' --scrdir {}'.format(opts.scrdir)
+        command += ' --datdir {}'.format(opts.datdir)
+        command += ' --sites {}'.format(site)
         call(command,shell=True)

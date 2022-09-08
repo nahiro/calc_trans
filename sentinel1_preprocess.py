@@ -54,9 +54,9 @@ if not m:
         raise ValueError('Error in file name >>> '+input_fnam)
 dstr = m.group(1)[:8]
 if opts.tiff:
-    output_fnam = os.path.join(opts.datdir,'{}.tif'.format(dstr))
+    output_fnam = os.path.join(opts.datdir,'{}_subset.tif'.format(dstr))
 else:
-    output_fnam = os.path.join(opts.datdir,'{}.dim'.format(dstr))
+    output_fnam = os.path.join(opts.datdir,'{}_subset.dim'.format(dstr))
 if os.path.exists(output_fnam):
     sys.exit()
 

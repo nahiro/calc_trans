@@ -12,7 +12,7 @@ from optparse import OptionParser,IndentedHelpFormatter
 HOME = os.environ.get('HOME')
 if HOME is None:
     HOME = os.environ.get('USERPROFILE')
-SCRDIR = os.path.join(HOME,'Script')
+SCRDIR = os.path.join(HOME,'Automation')
 DATDIR = os.path.join(HOME,'Work','Sentinel-1_Data')
 END = datetime.now().strftime('%Y%m%d')
 SITES = ['Cihea','Bojongsoang']
