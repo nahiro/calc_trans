@@ -45,7 +45,12 @@ for s in opts.subdirs:
 for site in opts.sites:
     site_low = site.lower()
     datdir = os.path.join(opts.datdir,site)
-    log = os.path.join(datdir,'GRD',site_low+'.log')
+    dnam = os.path.join(datdir,'GRD')
+    if not os.path.exists(dnam):
+        os.makedirs(dnam)
+    if not os.path.isdir(dnam):
+        raise IOError('Error, no such folder >>> {}'.format(dnam))
+    log = os.path.join(dnam,site_low+'.log')
     command = 'python'
     command += ' '+os.path.join(opts.scrdir,'sentinel1_update.py')
     command += ' --scrdir {}'.format(opts.scrdir)
@@ -67,7 +72,7 @@ for site in opts.sites:
         dmin = datetime.strptime(opts.str,'%Y%m%d')
         dmax = datetime.strptime(opts.end,'%Y%m%d')
         for year in range(dmin.year,dmax.year+1):
-            dnam = os.path.join(datdir,'{:04d}'.format(year))
+            dnam = os.path.join(datdir,'GRD','{:04d}'.format(year))
             if not os.path.isdir(dnam):
                 continue
             for f in sorted(os.listdir(dnam)):
@@ -98,12 +103,17 @@ for site in opts.sites:
                 dstrs.append(m.group(1))
     if len(dstrs) < 1:
         continue
+    dnam = os.path.join(datdir,'subset')
+    if not os.path.exists(dnam):
+        os.makedirs(dnam)
+    if not os.path.isdir(dnam):
+        raise IOError('Error, no such folder >>> {}'.format(dnam))
     for fnam in fnams:
         command = 'python'
         command += ' '+os.path.join(opts.scrdir,'sentinel1_preprocess.py')
         command += ' '+fnam
         command += ' --site {}'.format(site)
-        command += ' --datdir {}'.format(os.path.join(datdir,'subset'))
+        command += ' --datdir {}'.format(dnam)
         if 'speckle' in subdir[site_low].lower():
             command += ' --speckle'
         command += ' --iangle_value'
@@ -114,6 +124,11 @@ for site in opts.sites:
         command = 'python'
         command += ' '+os.path.join(opts.scrdir,'remove_snap_cache.py')
         call(command,shell=True)
+    dnam = os.path.join(datdir,'resample')
+    if not os.path.exists(dnam):
+        os.makedirs(dnam)
+    if not os.path.isdir(dnam):
+        raise IOError('Error, no such folder >>> {}'.format(dnam))
     for dstr in dstrs:
         fnam = os.path.join(datdir,'subset','{}_subset.tif'.format(dstr))
         gnam = os.path.join(datdir,'resample','{}_resample.tif'.format(dstr))

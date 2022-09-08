@@ -12,8 +12,8 @@ HOME = os.environ.get('HOME')
 if HOME is None:
     HOME = os.environ.get('USERPROFILE')
 SCRDIR = os.path.join(HOME,'Script')
-DATDIR = os.path.join(HOME,'Work','Sentinel-1')
-WRKDIR = os.path.join(HOME,'Work','SATREPS','Transplanting_date')
+DATDIR = os.path.join(HOME,'Work','Sentinel-1_Data')
+WRKDIR = os.path.join(HOME,'Work','Sentinel-1_Data')
 END = datetime.now().strftime('%Y%m%d')
 SITES = ['Cihea','Bojongsoang']
 SUBDIRS = ['Cihea:sigma0','Bojongsoang:sigma0_speckle']
@@ -65,7 +65,7 @@ dtims = {}
 for site in opts.sites:
     site_low = site.lower()
     dtim_list = []
-    for f in sorted(os.listdir(os.path.join(opts.datdir,site,subdir[site_low]))):
+    for f in sorted(os.listdir(os.path.join(opts.datdir,site,'resample'))):
         m = re.search('('+'\d'*8+')_resample.tif',f)
         if not m:
             continue
@@ -121,7 +121,7 @@ for site in opts.sites:
                 command += ' --data_tmax '+data_tmax
                 command += ' --offset {:.4f}'.format(offset[site_low])
                 command += ' --incidence_list '+os.path.join(opts.wrkdir,site,'incidence_list.dat')
-                command += ' --datdir '+os.path.join(opts.datdir,site,subdir[site_low])
+                command += ' --datdir '+os.path.join(opts.datdir,site,'resample')
                 command += ' --search_key resample'
                 command += ' --near_fnam '+os.path.join(opts.wrkdir,site,'find_nearest.npz')
                 command += ' --mask_fnam '+os.path.join(opts.wrkdir,site,'paddy_mask.tif')
@@ -198,7 +198,7 @@ for site in opts.sites:
                 command += ' --data_tmax '+data_tmax
                 command += ' --offset {:.4f}'.format(offset[site_low])
                 command += ' --incidence_list '+os.path.join(opts.wrkdir,site,'incidence_list.dat')
-                command += ' --datdir '+os.path.join(opts.datdir,site,subdir[site_low])
+                command += ' --datdir '+os.path.join(opts.datdir,site,'resample')
                 command += ' --search_key resample'
                 command += ' --x_profile '+os.path.join(opts.wrkdir,site,'x_profile.npy')
                 command += ' --y_profile '+os.path.join(opts.wrkdir,site,'y_profile.npy')
