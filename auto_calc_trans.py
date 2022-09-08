@@ -63,7 +63,25 @@ for site in opts.sites:
     call(command,shell=True)
     fnams = []
     dstrs = []
-    if os.path.exists(log):
+    if opts.str is not None and opts.end is not None:
+        dmin = datetime.strptime(opts.str,'%Y%m%d')
+        dmax = datetime.strptime(opts.end,'%Y%m%d')
+        for year in range(dmin.year,dmax.year+1):
+            dnam = os.path.join(datdir,'{:04d}'.format(year))
+            if not os.path.isdir(dnam):
+                continue
+            for f in sorted(os.listdir(dnam)):
+                m = re.search('^S1[AB]_IW_GRDH_1SDV_('+'\d'*8+')T\S+\.zip$',f)
+                if not m:
+                    continue
+                dstr = m.group(1)
+                d = datetime.strptime(dstr,'%Y%m%d')
+                if d < dmin or d > dmax:
+                    continue
+                fnam = os.path.join(dnam,f)
+                fnams.append(fnam)
+                dstrs.append(dstr)
+    elif os.path.exists(log):
         with open(log,'r') as fp:
             for line in fp:
                 item = line.split()
