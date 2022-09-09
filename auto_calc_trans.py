@@ -149,6 +149,10 @@ for site in opts.sites:
         command += ' --str {}'.format(d1)
         command += ' --end {}'.format(d2)
         command += ' --sites {}'.format(site)
+        if opts.skip_upload:
+            command += ' --skip_upload'
+        if opts.skip_copy:
+            command += ' --skip_copy'
         call(command,shell=True)
     if os.path.exists(log):
         os.remove(log)
@@ -161,4 +165,8 @@ if dcur.day == opts.date_final:
         command += ' --scrdir {}'.format(opts.scrdir)
         command += ' --datdir {}'.format(opts.datdir)
         command += ' --sites {}'.format(site)
+        if opts.skip_upload:
+            command += ' --skip_upload'
+        if opts.skip_copy:
+            command += ' --skip_copy'
         call(command,shell=True)

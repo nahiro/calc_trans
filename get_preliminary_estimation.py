@@ -32,6 +32,8 @@ parser.add_option('--subdirs',default=None,action='append',help='Sub data direct
 parser.add_option('--offsets',default=None,action='append',help='Offset of transplanting date, for example, Cihea:-9.0 ({})'.format(OFFSETS))
 parser.add_option('--versions',default=None,action='append',help='Version of transplanting estimation, for example, Cihea:v1.0 ({})'.format(VERSIONS))
 parser.add_option('--test',default=False,action='store_true',help='Test mode (%default)')
+parser.add_option('--skip_upload',default=False,action='store_true',help='Skip upload (%default)')
+parser.add_option('--skip_copy',default=False,action='store_true',help='Skip copy (%default)')
 parser.add_option('-d','--debug',default=False,action='store_true',help='Debug mode (%default)')
 (opts,args) = parser.parse_args()
 if opts.sites is None:
@@ -265,7 +267,8 @@ for site in opts.sites:
                 command += ' --version '+version[site_low]
                 command += ' --overwrite'
                 command += ' '+' '.join(file_list)
-                call(command,shell=True)
+                if not opts.skip_upload:
+                    call(command,shell=True)
                 command = 'python'
                 command += ' '+os.path.join(opts.scrdir,'trans_date_copy.py')
                 command += ' --site '+site
@@ -277,7 +280,8 @@ for site in opts.sites:
                 command += ' --version '+version[site_low]
                 command += ' --overwrite'
                 command += ' '+' '.join(file_list)
-                call(command,shell=True)
+                if not opts.skip_copy:
+                    call(command,shell=True)
         except Exception:
             sys.stderr.write('Warning, error occured.\n')
         os.chdir(topdir)
