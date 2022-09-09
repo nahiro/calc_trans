@@ -130,7 +130,7 @@ for site in opts.sites:
                     command += ' '+os.path.join(opts.scrdir,'field_mean_shapefile.py')
                     command += ' --data_fnam '+tif_fnam
                     command += ' --area_fnam '+os.path.join(opts.wrkdir,site,'pixel_area_block.dat')
-                    command += ' --shpnam '+opts.shpnam
+                    command += ' --inpnam '+opts.shpnam
                     command += ' --outnam '+shp_bnam
                     command += ' --use_index'
                     call(command,shell=True)
