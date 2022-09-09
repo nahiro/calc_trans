@@ -17,7 +17,7 @@ from optparse import OptionParser,IndentedHelpFormatter
 HOME = os.environ.get('HOME')
 if HOME is None:
     HOME = os.environ.get('USERPROFILE')
-INPNAM = os.path.join(HOME,'Work','SATREPS','Shapefile','field_GIS','All_area_polygon_20210914','All_area_polygon_20210914')
+INPNAM = os.path.join(HOME,'Work','Shapefile','All_area_polygon_20210914','All_area_polygon_20210914')
 OUTNAM = os.path.join('.','transplanting_date')
 DATA_FILE = 'output.tif'
 AREA_FILE = 'pixel_area_block.dat'

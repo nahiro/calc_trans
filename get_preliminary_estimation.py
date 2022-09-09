@@ -14,6 +14,7 @@ if HOME is None:
 SCRDIR = os.path.join(HOME,'Script')
 DATDIR = os.path.join(HOME,'Work','Sentinel-1_Data')
 WRKDIR = os.path.join(HOME,'Work','Sentinel-1_Data')
+SHPNAM = os.path.join(HOME,'Work','Shapefile','All_area_polygon_20210914','All_area_polygon_20210914')
 END = datetime.now().strftime('%Y%m%d')
 SITES = ['Cihea','Bojongsoang']
 SUBDIRS = ['Cihea:sigma0','Bojongsoang:sigma0_speckle']
@@ -25,6 +26,7 @@ parser = OptionParser(formatter=IndentedHelpFormatter(max_help_position=200,widt
 parser.add_option('--scrdir',default=SCRDIR,help='Script directory (%default)')
 parser.add_option('--datdir',default=DATDIR,help='Data directory (%default)')
 parser.add_option('--wrkdir',default=WRKDIR,help='Work directory (%default)')
+parser.add_option('--shpnam',default=SHPNAM,help='Shapefile name (%default)')
 parser.add_option('-s','--str',default=None,help='Start date of estimation in the format YYYYMMDD (%default)')
 parser.add_option('-e','--end',default=END,help='End date of estimation in the format YYYYMMDD (%default)')
 parser.add_option('-S','--sites',default=None,action='append',help='Target sites ({})'.format(SITES))
@@ -140,6 +142,7 @@ for site in opts.sites:
                     command += ' '+os.path.join(opts.scrdir,'field_mean_shapefile.py')
                     command += ' --data_fnam '+tif_fnam
                     command += ' --area_fnam '+os.path.join(opts.wrkdir,site,'pixel_area_block.dat')
+                    command += ' --shpnam '+opts.shpnam
                     command += ' --outnam '+shp_bnam
                     command += ' --use_index'
                     call(command,shell=True)
