@@ -33,8 +33,7 @@ args = parser.parse_args()
 
 s2_analysis = 
 
-tmp_fnam = 'temp'
-with open(tmp_fnam) as fp:
+with tempfile.TemporaryFile(suffix='.ini') as fp:
     fp.write('[DEFAULT]\n')
     fp.write('scr_dir                             = {}\n'.format(args.scrdir))
     fp.write('s2_data                             = {}\n'.format(args.s2_data))
@@ -55,5 +54,30 @@ with open(tmp_fnam) as fp:
     fp.write('main.formula                        = False\n')
     fp.write('main.estimate                       = False\n')
     fp.write('main.no_gui                         = True\n')
+    fp.write('[geocor]\n')
+    fp.write('geocor.ref_fnam                     = %(top_dir)s/WorldView/wv2_180629_mul.tif\n')
+    fp.write('geocor.band_fnam                    = %(s2_data)s/band_names.txt\n')
+    fp.write('#geocor.python_path                  = %(python_path)s\n')
+    fp.write('geocor.scr_dir                      = %(scr_dir)s\n')
+    fp.write('[parcel]\n')
+    fp.write('parcel.gis_fnam                     = %(gis_fnam)s\n')
+    fp.write('parcel.mask_parcel                  = %(s2_data)s/parcel_mask.tif\n')
+    fp.write('#parcel.python_path                  = %(python_path)s\n')
+    fp.write('parcel.scr_dir                      = %(scr_dir)s\n')
+    fp.write('[atcor]\n')
+    fp.write('atcor.gis_fnam                      = %(gis_fnam)s\n')
+    fp.write('atcor.mask_studyarea                = %(s2_data)s/studyarea_mask.tif\n')
+    fp.write('atcor.mask_parcel                   = %(s2_data)s/parcel_mask.tif\n')
+    fp.write('#atcor.stat_fnam                     =\n')
+    fp.write('#atcor.inds_fnam                     =\n')
+    fp.write('#atcor.csv_flag                      = True\n')
+    fp.write('#atcor.oflag                         = [False,False,False,False,False]\n')
+    fp.write('#atcor.python_path                   = %(python_path)s\n')
+    fp.write('atcor.scr_dir                       = %(scr_dir)s\n')
+    fp.write('[interp]\n')
+    fp.write('#interp.csv_flag                     = True\n')
+    fp.write('#interp.oflag                        = [False,True]\n')
+    fp.write('#interp.python_path                  = %(python_path)s\n')
+    fp.write('interp.scr_dir                      = %(scr_dir)s\n')
 
 for dnam in soreted()
