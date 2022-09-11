@@ -77,7 +77,7 @@ for site in opts.sites:
         raise IOError('Error, no such folder >>> {}'.format(dnam))
     log = os.path.join(dnam,site_low+'.log')
     command = 'python'
-    command += ' '+os.path.join(opts.scrdir,'sentinel1_update.py')
+    command += ' {}'.format(os.path.join(opts.scrdir,'sentinel1_update.py'))
     command += ' --scrdir {}'.format(opts.scrdir)
     command += ' --datdir {}'.format(opts.datdir)
     if opts.str is not None:
@@ -146,7 +146,7 @@ for site in opts.sites:
         raise IOError('Error, no such folder >>> {}'.format(dnam))
     for fnam in fnams:
         command = 'python'
-        command += ' '+os.path.join(opts.scrdir,'sentinel1_preprocess.py')
+        command += ' {}'.format(os.path.join(opts.scrdir,'sentinel1_preprocess.py'))
         command += ' '+fnam
         command += ' --site {}'.format(site)
         command += ' --datdir {}'.format(dnam)
@@ -158,7 +158,7 @@ for site in opts.sites:
         call(command,shell=True)
         # Remove cache
         command = 'python'
-        command += ' '+os.path.join(opts.scrdir,'remove_snap_cache.py')
+        command += ' {}'.format(os.path.join(opts.scrdir,'remove_snap_cache.py'))
         call(command,shell=True)
     dnam = os.path.join(datdir,'resample')
     if not os.path.exists(dnam):
@@ -169,7 +169,7 @@ for site in opts.sites:
         fnam = os.path.join(datdir,'subset','{}_subset.tif'.format(dstr))
         gnam = os.path.join(datdir,'resample','{}_resample.tif'.format(dstr))
         command = 'python'
-        command += ' '+os.path.join(opts.scrdir,'sentinel_resample.py')
+        command += ' {}'.format(os.path.join(opts.scrdir,'sentinel_resample.py'))
         command += ' --inp_fnam {}'.format(fnam)
         command += ' --out_fnam {}'.format(gnam)
         command += ' --site {}'.format(site)
@@ -183,7 +183,7 @@ for site in opts.sites:
             pass
         else:
             command = 'python'
-            command += ' '+os.path.join(opts.scrdir,'get_preliminary_estimation.py')
+            command += ' {}'.format(os.path.join(opts.scrdir,'get_preliminary_estimation.py'))
             command += ' --scrdir {}'.format(opts.scrdir)
             command += ' --datdir {}'.format(opts.datdir)
             command += ' --str {}'.format(d1)
@@ -219,7 +219,7 @@ for site in opts.sites:
                 pass
             else:
                 command = 'python'
-                command += ' '+os.path.join(opts.scrdir,'get_final_estimation.py')
+                command += ' {}'.format(os.path.join(opts.scrdir,'get_final_estimation.py'))
                 command += ' --scrdir {}'.format(opts.scrdir)
                 command += ' --datdir {}'.format(opts.datdir)
                 command += ' --str {}'.format(d1)
