@@ -14,6 +14,8 @@ SCRDIR = os.path.join(HOME,'Automation')
 DATDIR = os.path.join(HOME,'Work','Sentinel-1_Data')
 SITES = ['Bojongsoang','Cihea']
 SUBDIRS = ['Cihea:sigma0','Bojongsoang:sigma0_speckle']
+P_VERSIONS = ['Cihea:v1.2','Bojongsoang:v1.0']
+F_VERSIONS = ['Cihea:v1.4','Bojongsoang:v1.0']
 DATE_FINAL = 5
 MAX_RETRY = 10
 
@@ -25,10 +27,13 @@ parser.add_option('-s','--str',default=None,help='Start date in the format YYYYM
 parser.add_option('-e','--end',default=None,help='End date in the format YYYYMMDD (%default)')
 parser.add_option('-S','--sites',default=None,action='append',help='Target sites ({})'.format(SITES))
 parser.add_option('--subdirs',default=None,action='append',help='Sub data directory, for example, Cihea:sigma0 ({})'.format(SUBDIRS))
+parser.add_option('--p_versions',default=None,action='append',help='Version of preliminary transplanting estimation, for example, Cihea:v1.0 ({})'.format(P_VERSIONS))
+parser.add_option('--f_versions',default=None,action='append',help='Version of final transplanting estimation, for example, Cihea:v1.0 ({})'.format(F_VERSIONS))
 parser.add_option('--date_final',default=DATE_FINAL,type='int',help='Date to calculate final estimation (%default)')
 parser.add_option('-M','--max_retry',default=MAX_RETRY,type='int',help='Maximum number of retries to download data (%default)')
 parser.add_option('--skip_upload',default=False,action='store_true',help='Skip upload (%default)')
 parser.add_option('--skip_copy',default=False,action='store_true',help='Skip copy (%default)')
+parser.add_option('--overwrite',default=False,action='store_true',help='Overwrite mode (%default)')
 parser.add_option('-d','--debug',default=False,action='store_true',help='Debug mode (%default)')
 (opts,args) = parser.parse_args()
 if opts.sites is None:
