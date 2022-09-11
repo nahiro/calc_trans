@@ -46,6 +46,22 @@ for s in opts.subdirs:
     if not m:
         raise ValueError('Error in subdir >>> '+s)
     subdir.update({m.group(1).lower():m.group(2)})
+if opts.p_versions is None:
+    opts.p_versions = P_VERSIONS
+p_version = {}
+for s in opts.p_versions:
+    m = re.search('([^:]+):([^:]+)',s)
+    if not m:
+        raise ValueError('Error in version >>> '+s)
+    p_version.update({m.group(1).lower():m.group(2)})
+if opts.f_versions is None:
+    opts.f_versions = F_VERSIONS
+f_version = {}
+for s in opts.f_versions:
+    m = re.search('([^:]+):([^:]+)',s)
+    if not m:
+        raise ValueError('Error in version >>> '+s)
+    f_version.update({m.group(1).lower():m.group(2)})
 
 for site in opts.sites:
     site_low = site.lower()
