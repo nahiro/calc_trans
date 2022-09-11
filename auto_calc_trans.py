@@ -89,6 +89,7 @@ for site in opts.sites:
     call(command,shell=True)
     fnams = []
     dstrs = []
+    dtims = []
     if opts.str is not None and opts.end is not None:
         dmin = datetime.strptime(opts.str,'%Y%m%d')
         dmax = datetime.strptime(opts.end,'%Y%m%d')
@@ -107,6 +108,7 @@ for site in opts.sites:
                 fnam = os.path.join(dnam,f)
                 fnams.append(fnam)
                 dstrs.append(dstr)
+                dtims.append(d)
     elif os.path.exists(log):
         with open(log,'r') as fp:
             for line in fp:
@@ -120,10 +122,17 @@ for site in opts.sites:
                 m = re.search('^S1[AB]_IW_GRDH_1SDV_('+'\d'*8+')T\S+\.zip$',f)
                 if not m:
                     continue
+                dstr = m.group(1)
+                d = datetime.strptime(dstr,'%Y%m%d')
                 fnams.append(fnam)
-                dstrs.append(m.group(1))
+                dstrs.append(dstr)
+                dtims.append(d)
     if len(dstrs) < 1:
         continue
+    indx = np.argsort(dtims)
+    fnams = [fnams[i] for i in indx]
+    dstrs = [dstrs[i] for i in indx]
+    dtims = [dtims[i] for i in indx]
     dnam = os.path.join(datdir,'subset')
     if not os.path.exists(dnam):
         os.makedirs(dnam)
