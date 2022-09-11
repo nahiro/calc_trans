@@ -14,6 +14,8 @@ if HOME is None:
     HOME = os.environ.get('USERPROFILE')
 SCRDIR = os.path.join(HOME,'Automation')
 DATDIR = os.path.join(HOME,'Work','Sentinel-1_Data')
+END = datetime.now().strftime('%Y%m%d')
+STR = END-timedelta(days=30)
 SITES = ['Bojongsoang','Cihea']
 SUBDIRS = ['Cihea:sigma0','Bojongsoang:sigma0_speckle']
 P_VERSIONS = ['Cihea:v1.2','Bojongsoang:v1.0']
@@ -25,8 +27,8 @@ MAX_RETRY = 10
 parser = OptionParser(formatter=IndentedHelpFormatter(max_help_position=200,width=200))
 parser.add_option('--scrdir',default=SCRDIR,help='Script directory (%default)')
 parser.add_option('--datdir',default=DATDIR,help='Data directory (%default)')
-parser.add_option('-s','--str',default=None,help='Start date in the format YYYYMMDD (%default)')
-parser.add_option('-e','--end',default=None,help='End date in the format YYYYMMDD (%default)')
+parser.add_option('-s','--str',default=STR,help='Start date in the format YYYYMMDD (%default)')
+parser.add_option('-e','--end',default=END,help='End date in the format YYYYMMDD (%default)')
 parser.add_option('-S','--sites',default=None,action='append',help='Target sites ({})'.format(SITES))
 parser.add_option('--subdirs',default=None,action='append',help='Sub data directory, for example, Cihea:sigma0 ({})'.format(SUBDIRS))
 parser.add_option('--p_versions',default=None,action='append',help='Version of preliminary transplanting estimation, for example, Cihea:v1.0 ({})'.format(P_VERSIONS))
@@ -129,6 +131,8 @@ for site in opts.sites:
                 fnams.append(fnam)
                 dstrs.append(dstr)
                 dtims.append(d)
+    else:
+        raise ValueError('Error, failed in determining Start/End date.')
     if len(dstrs) < 1:
         continue
     indx = np.argsort(dtims)
@@ -191,19 +195,31 @@ for site in opts.sites:
             if opts.skip_copy:
                 command += ' --skip_copy'
             call(command,shell=True)
+    if opts.str is not None and opts.end is not None:
+        pass
+    elif opts.str is not None:
+        dmax = dtims[-1]
+    elif opts.end is not None:
+        dmin = dtims[0]
+    else:
+        dmin = dtims[0]
+        dmax = dtims[-1]
+    dcur = dmin
+    while dcur <= dmax:
+        if dcur.day == opts.date_final:
+            dstr = dcur.strftime('%Y%m%d')
+            command = 'python'
+            command += ' '+os.path.join(opts.scrdir,'get_final_estimation.py')
+            command += ' --scrdir {}'.format(opts.scrdir)
+            command += ' --datdir {}'.format(opts.datdir)
+            command += ' --str {}'.format(dstr)
+            command += ' --end {}'.format(dstr)
+            command += ' --sites {}'.format(site)
+            if opts.skip_upload:
+                command += ' --skip_upload'
+            if opts.skip_copy:
+                command += ' --skip_copy'
+            call(command,shell=True)
+        dcur += timedelta(days=1)
     if os.path.exists(log):
         os.remove(log)
-
-dcur = datetime.now()
-if dcur.day == opts.date_final:
-    for site in opts.sites:
-        command = 'python'
-        command += ' '+os.path.join(opts.scrdir,'get_final_estimation.py')
-        command += ' --scrdir {}'.format(opts.scrdir)
-        command += ' --datdir {}'.format(opts.datdir)
-        command += ' --sites {}'.format(site)
-        if opts.skip_upload:
-            command += ' --skip_upload'
-        if opts.skip_copy:
-            command += ' --skip_copy'
-        call(command,shell=True)
