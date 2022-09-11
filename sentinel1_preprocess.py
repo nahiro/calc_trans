@@ -27,7 +27,8 @@ EPSG = 32748 # UTM zone 48S
 
 # Read options
 parser = OptionParser(formatter=IndentedHelpFormatter(max_help_position=200,width=200))
-parser.set_usage('Usage: %prog input_fnam [options]')
+parser.add_option('-I','--inp_fnam',default=None,help='Input file name (%default)')
+parser.add_option('-O','--out_fnam',default=None,help='Output file name (%default)')
 parser.add_option('-D','--datdir',default=DATDIR,help='Output data directory (%default)')
 parser.add_option('--site',default=None,help='Site name for preset coordinates (%default)')
 parser.add_option('--polygon',default=None,help='Polygon of ROI in WKT format (%default)')
@@ -43,21 +44,20 @@ parser.add_option('-E','--epsg',default=EPSG,help='Output EPSG (%default)')
 parser.add_option('-S','--std_grid',default=False,action='store_true',help='Use standard grid (%default)')
 parser.add_option('-T','--tiff',default=False,action='store_true',help='GeoTiff mode (%default)')
 (opts,args) = parser.parse_args()
-if len(args) < 1:
-    parser.print_help()
-    sys.exit(0)
-input_fnam = args[0]
-m = re.search('^[^_]+_[^_]+_[^_]+_[^_]+_([^_]+)_.*.zip$',os.path.basename(input_fnam))
+if not os.path.exists(opts.inp_fnam):
+    raise IOError('Error, no such file >>> {}'.format(opts.inp_fnam))
+m = re.search('^[^_]+_[^_]+_[^_]+_[^_]+_([^_]+)_.*.zip$',os.path.basename(opts.inp_fnam))
 if not m:
-    m = re.search('^[^_]+_[^_]+_[^_]+_[^_]+_([^_]+)_.*.SAFE$',os.path.basename(input_fnam))
+    m = re.search('^[^_]+_[^_]+_[^_]+_[^_]+_([^_]+)_.*.SAFE$',os.path.basename(opts.inp_fnam))
     if not m:
-        raise ValueError('Error in file name >>> '+input_fnam)
+        raise ValueError('Error in file name >>> '+opts.inp_fnam)
 dstr = m.group(1)[:8]
-if opts.tiff:
-    output_fnam = os.path.join(opts.datdir,'{}_subset.tif'.format(dstr))
-else:
-    output_fnam = os.path.join(opts.datdir,'{}_subset.dim'.format(dstr))
-if os.path.exists(output_fnam):
+if opts.out_fnam is None:
+    if opts.tiff:
+        opts.out_fnam = os.path.join(opts.datdir,'{}_subset.tif'.format(dstr))
+    else:
+        opts.out_fnam = os.path.join(opts.datdir,'{}_subset.dim'.format(dstr))
+if os.path.exists(opts.out_fnam):
     sys.exit()
 
 if opts.site is not None:
@@ -71,7 +71,7 @@ if opts.site is not None:
 # Get snappy Operators
 GPF.getDefaultInstance().getOperatorSpiRegistry().loadOperatorSpis()
 # Read original product
-data = ProductIO.readProduct(input_fnam)
+data = ProductIO.readProduct(opts.inp_fnam)
 # Apply orbit file (ApplyOrbitFileOp.java)
 if not opts.skip_orbit:
     params = HashMap()
@@ -163,6 +163,6 @@ data = data_tmp
 if opts.iangle_value:
     data.setDescription('iangle = {}'.format(iangle))
 if opts.tiff:
-    ProductIO.writeProduct(data,output_fnam,'GeoTiff')
+    ProductIO.writeProduct(data,opts.out_fnam,'GeoTiff')
 else:
-    ProductIO.writeProduct(data,output_fnam,'BEAM-DIMAP')
+    ProductIO.writeProduct(data,opts.out_fnam,'BEAM-DIMAP')
