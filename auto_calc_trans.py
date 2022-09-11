@@ -163,18 +163,23 @@ for site in opts.sites:
         dtim = datetime.strptime(dstr,'%Y%m%d')
         d1 = (dtim+timedelta(days=-1)).strftime('%Y%m%d')
         d2 = (dtim+timedelta(days=+1)).strftime('%Y%m%d')
-        command = 'python'
-        command += ' '+os.path.join(opts.scrdir,'get_preliminary_estimation.py')
-        command += ' --scrdir {}'.format(opts.scrdir)
-        command += ' --datdir {}'.format(opts.datdir)
-        command += ' --str {}'.format(d1)
-        command += ' --end {}'.format(d2)
-        command += ' --sites {}'.format(site)
-        if opts.skip_upload:
-            command += ' --skip_upload'
-        if opts.skip_copy:
-            command += ' --skip_copy'
-        call(command,shell=True)
+        wrkdir = os.path.join(opts.wrkdir,site,'preliminary',p_version[site_low],dstr)
+        gnam = os.path.join(wrkdir,'trans_date_{}_{}_preliminary.shp'.format(site_low,dstr))
+        if os.path.exists(gnam) and not opts.overwrite:
+            pass
+        else:
+            command = 'python'
+            command += ' '+os.path.join(opts.scrdir,'get_preliminary_estimation.py')
+            command += ' --scrdir {}'.format(opts.scrdir)
+            command += ' --datdir {}'.format(opts.datdir)
+            command += ' --str {}'.format(d1)
+            command += ' --end {}'.format(d2)
+            command += ' --sites {}'.format(site)
+            if opts.skip_upload:
+                command += ' --skip_upload'
+            if opts.skip_copy:
+                command += ' --skip_copy'
+            call(command,shell=True)
     if os.path.exists(log):
         os.remove(log)
 
