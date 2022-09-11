@@ -165,7 +165,7 @@ for site in opts.sites:
         os.makedirs(dnam)
     if not os.path.isdir(dnam):
         raise IOError('Error, no such folder >>> {}'.format(dnam))
-    for dstr in dstrs:
+    for dstr,dtim in zip(dstrs,dtims):
         fnam = os.path.join(datdir,'subset','{}_subset.tif'.format(dstr))
         gnam = os.path.join(datdir,'resample','{}_resample.tif'.format(dstr))
         command = 'python'
@@ -175,7 +175,6 @@ for site in opts.sites:
         command += ' --site {}'.format(site)
         command += ' --read_comments'
         call(command,shell=True)
-        dtim = datetime.strptime(dstr,'%Y%m%d')
         d1 = (dtim+timedelta(days=-1)).strftime('%Y%m%d')
         d2 = (dtim+timedelta(days=+1)).strftime('%Y%m%d')
         wrkdir = os.path.join(opts.wrkdir,site,'preliminary',p_version[site_low],dstr)
@@ -204,22 +203,33 @@ for site in opts.sites:
     else:
         dmin = dtims[0]
         dmax = dtims[-1]
-    dcur = dmin
-    while dcur <= dmax:
-        if dcur.day == opts.date_final:
-            dstr = dcur.strftime('%Y%m%d')
-            command = 'python'
-            command += ' '+os.path.join(opts.scrdir,'get_final_estimation.py')
-            command += ' --scrdir {}'.format(opts.scrdir)
-            command += ' --datdir {}'.format(opts.datdir)
-            command += ' --str {}'.format(dstr)
-            command += ' --end {}'.format(dstr)
-            command += ' --sites {}'.format(site)
-            if opts.skip_upload:
-                command += ' --skip_upload'
-            if opts.skip_copy:
-                command += ' --skip_copy'
-            call(command,shell=True)
-        dcur += timedelta(days=1)
+    dtim = dmin
+    while dtim <= dmax:
+        if dtim.day == opts.date_final:
+            dnex = dtim+relativedelta(months=1)
+            if (dtim+timedelta(days=1)).month != dnex.month: # not the end of month
+                dstr = (datetime(dtim.year,dtim.month,1)-timedelta(days=1)).strftime('%Y%m%d')
+            else:
+                dstr = dtim.strftime('%Y%m%d')
+            d1 = dtim.strftime('%Y%m%d')
+            d2 = d1
+            wrkdir = os.path.join(opts.wrkdir,site,'final',f_version[site_low],dstr)
+            gnam = os.path.join(wrkdir,'trans_date_{}_{}_final.shp'.format(site_low,dstr))
+            if os.path.exists(gnam) and not opts.overwrite:
+                pass
+            else:
+                command = 'python'
+                command += ' '+os.path.join(opts.scrdir,'get_final_estimation.py')
+                command += ' --scrdir {}'.format(opts.scrdir)
+                command += ' --datdir {}'.format(opts.datdir)
+                command += ' --str {}'.format(d1)
+                command += ' --end {}'.format(d2)
+                command += ' --sites {}'.format(site)
+                if opts.skip_upload:
+                    command += ' --skip_upload'
+                if opts.skip_copy:
+                    command += ' --skip_copy'
+                call(command,shell=True)
+        dtim += timedelta(days=1)
     if os.path.exists(log):
         os.remove(log)
