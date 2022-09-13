@@ -29,6 +29,10 @@ parser.add_argument('-e','--tmax',default=TMAX,help='Max date for analysis in th
 parser.add_argument('--data_tmin',default=None,help='Min date of input data in the format YYYYMMDD (%(default)s)')
 parser.add_argument('--data_tmax',default=DATA_TMAX,help='Max date of input data in the format YYYYMMDD (%(default)s)')
 parser.add_argument('--tmgn',default=TMGN,type=float,help='Margin of input data in day (%(default)s)')
+parser.add_argument('--skip_geocor',default=False,action='store_true',help='Skip geocor (%(default)s)')
+parser.add_argument('--skip_parcel',default=False,action='store_true',help='Skip parcel (%(default)s)')
+parser.add_argument('--skip_atcor',default=False,action='store_true',help='Skip atcor (%(default)s)')
+parser.add_argument('--skip_interp',default=False,action='store_true',help='Skip interp (%(default)s)')
 args = parser.parse_args()
 
 s2_analysis = 
@@ -45,10 +49,22 @@ with tempfile.TemporaryFile(suffix='.ini') as fp:
     fp.write('main.last_date                      =\n')
     fp.write('main.s2_data                        = {}\n'.format(args.s2_data))
     fp.write('main.download                       = False\n')
-    fp.write('main.geocor                         = True\n')
-    fp.write('main.parcel                         = True\n')
-    fp.write('main.atcor                          = True\n')
-    fp.write('main.interp                         = True\n')
+    if args.skip_geocor:
+        fp.write('main.geocor                         = False\n')
+    else:
+        fp.write('main.geocor                         = True\n')
+    if args.skip_parcel:
+        fp.write('main.parcel                         = False\n')
+    else:
+        fp.write('main.parcel                         = True\n')
+    if args.skip_atcor:
+        fp.write('main.atcor                          = False\n')
+    else:
+        fp.write('main.atcor                          = True\n')
+    if args.skip_interp:
+        fp.write('main.interp                         = False\n')
+    else:
+        fp.write('main.interp                         = True\n')
     fp.write('main.phenology                      = False\n')
     fp.write('main.extract                        = False\n')
     fp.write('main.formula                        = False\n')
