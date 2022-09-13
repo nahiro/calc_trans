@@ -35,7 +35,11 @@ parser.add_argument('--skip_atcor',default=False,action='store_true',help='Skip 
 parser.add_argument('--skip_interp',default=False,action='store_true',help='Skip interp (%(default)s)')
 args = parser.parse_args()
 
-s2_analysis = 
+tmin = datetime.strptime(args.tmin,'%Y%m%d')
+tmax = datetime.strptime(args.tmax,'%Y%m%d')
+d1 = datetime.strptime(args.data_tmin,'%Y%m%d')
+d2 = datetime.strptime(args.data_tmax,'%Y%m%d')
+data_years = np.arange(d1.year,d2.year+1,1)
 
 with tempfile.TemporaryFile(suffix='.ini') as fp:
     fp.write('[DEFAULT]\n')
@@ -96,4 +100,9 @@ with tempfile.TemporaryFile(suffix='.ini') as fp:
     fp.write('#interp.python_path                  = %(python_path)s\n')
     fp.write('interp.scr_dir                      = %(scr_dir)s\n')
 
-for dnam in soreted()
+if not args.skip_geocor:
+    geocor_dnam = os.path.join(args.s2_data,'geocor')
+    for ystr in soreted(os.listdir(geocor_dnam)):
+        if not re.search('^\d\d\d\d$',ystr):
+            continue
+        year = int(ystr)
