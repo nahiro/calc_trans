@@ -54,6 +54,8 @@ parser.add_argument('--skip_geocor',default=False,action='store_true',help='Skip
 parser.add_argument('--skip_parcel',default=False,action='store_true',help='Skip parcel (%(default)s)')
 parser.add_argument('--skip_atcor',default=False,action='store_true',help='Skip atcor (%(default)s)')
 parser.add_argument('--skip_interp',default=False,action='store_true',help='Skip interp (%(default)s)')
+parser.add_argument('--keep_tentative',default=False,action='store_true',help='Keep tentative interp (%(default)s)')
+parser.add_argument('-v','--verbose',default=False,action='store_true',help='Verbose mode (%(default)s)')
 parser.add_argument('-d','--debug',default=False,action='store_true',help='Debug mode (%(default)s)')
 args = parser.parse_args()
 site_low = args.site.lower()
@@ -233,9 +235,15 @@ if not args.skip_interp:
                 if d < tmin or d > tmax:
                     continue
                 fnam = os.path.join(dnam,f)
-                gnams = glob(os.path.join(tentative_dnam,ystr,'{}_interp.*'.format(dstr)))
-                print(gnams)
                 if args.debug:
                     sys.stderr.write('{}\n'.format(fnam))
                     sys.stderr.flush()
+                if not args.keep_tentative:
+                    gnams = glob(os.path.join(tentative_dnam,ystr,'{}_interp.*'.format(dstr)))
+                    if len(gnams) > 0:
+                        for gnam in gnams:
+                            os.remove(gnam)
+                            if args.verbose:
+                                sys.stderr.write('Removed {}\n'.format(gnam))
+                                sys.stderr.flush()
 
