@@ -54,6 +54,7 @@ parser.add_argument('--skip_geocor',default=False,action='store_true',help='Skip
 parser.add_argument('--skip_parcel',default=False,action='store_true',help='Skip parcel (%(default)s)')
 parser.add_argument('--skip_atcor',default=False,action='store_true',help='Skip atcor (%(default)s)')
 parser.add_argument('--skip_interp',default=False,action='store_true',help='Skip interp (%(default)s)')
+parser.add_argument('-d','--debug',default=False,action='store_true',help='Debug mode (%(default)s)')
 args = parser.parse_args()
 site_low = args.site.lower()
 if site_low == 'none':
@@ -156,7 +157,9 @@ if not args.skip_geocor:
                 if d < tmin or d > tmax:
                     continue
                 fnam = os.path.join(dnam,f)
-                print(fnam)
+                if args.debug:
+                    sys.stderr.write('{}\n'.format(fnam))
+                    sys.stderr.flush()
 
 if not args.skip_parcel:
     parcel_dnam = os.path.join(s2_data,'parcel')
@@ -179,7 +182,9 @@ if not args.skip_parcel:
                 if d < tmin or d > tmax:
                     continue
                 fnam = os.path.join(dnam,f)
-                print(fnam)
+                if args.debug:
+                    sys.stderr.write('{}\n'.format(fnam))
+                    sys.stderr.flush()
 
 if not args.skip_atcor:
     atcor_dnam = os.path.join(s2_data,'atcor')
@@ -202,7 +207,9 @@ if not args.skip_atcor:
                 if d < tmin or d > tmax:
                     continue
                 fnam = os.path.join(dnam,f)
-                print(fnam)
+                if args.debug:
+                    sys.stderr.write('{}\n'.format(fnam))
+                    sys.stderr.flush()
 
 if not args.skip_interp:
     interp_dnam = os.path.join(s2_data,'interp')
@@ -226,5 +233,9 @@ if not args.skip_interp:
                 if d < tmin or d > tmax:
                     continue
                 fnam = os.path.join(dnam,f)
-                print(fnam)
+                gnams = glob(os.path.join(tentative_dnam,ystr,'{}_interp.*'.format(dstr)))
+                print(gnams)
+                if args.debug:
+                    sys.stderr.write('{}\n'.format(fnam))
+                    sys.stderr.flush()
 
