@@ -19,6 +19,11 @@ SCRDIR = os.path.join(HOME,'SatelliteTool')
 S2_DATA = os.path.join(TOPDIR,'Sentinel-2_Data')
 GIS_FNAM = os.path.join(TOPDIR,'Shapefile','All_area_polygon_20210914','All_area_polygon_20210914.shp')
 WV_FNAM = os.path.join(TOPDIR,'WorldView','wv2_180629_mul.tif')
+RESAMPLE_PATH = '/SATREPS/ipb/User/1_Spatial-information/Sentinel-2/Cihea/resample'
+PARCEL_PATH = '/SATREPS/ipb/User/1_Spatial-information/Sentinel-2/Cihea/parcel'
+ATCOR_PATH = '/SATREPS/ipb/User/1_Spatial-information/Sentinel-2/Cihea/atcor'
+INTERP_PATH = '/SATREPS/ipb/User/1_Spatial-information/Sentinel-2/Cihea/interp'
+TENTATIVE_PATH = '/SATREPS/ipb/User/1_Spatial-information/Sentinel-2/Cihea/tentative_interp'
 TMAX = datetime.now().strftime('%Y%m%d')
 DATA_TMAX = TMAX
 GROW_PERIOD = 120 # day
@@ -33,6 +38,11 @@ parser.add_argument('--scrdir',default=SCRDIR,help='Script folder (%(default)s)'
 parser.add_argument('--s2_data',default=S2_DATA,help='Sentinel-2 data folder (%(default)s)')
 parser.add_argument('--gis_fnam',default=GIS_FNAM,help='Parcel data file (%(default)s)')
 parser.add_argument('--wv_fnam',default=WV_FNAM,help='WorldView data file (%(default)s)')
+parser.add_argument('--resample_path',default=RESAMPLE_PATH,help='Sentinel-2 resample on NAS (%(default)s)')
+parser.add_argument('--parcel_path',default=PARCEL_PATH,help='Sentinel-2 parcel on NAS (%(default)s)')
+parser.add_argument('--atcor_path',default=ATCOR_PATH,help='Sentinel-2 atcor on NAS (%(default)s)')
+parser.add_argument('--interp_path',default=INTERP_PATH,help='Sentinel-2 interp on NAS (%(default)s)')
+parser.add_argument('--tentative_path',default=TENTATIVE_PATH,help='Sentinel-2 tentative_interp on NAS (%(default)s)')
 parser.add_argument('-s','--tmin',default=None,help='Min date to send in the format YYYYMMDD (%(default)s)')
 parser.add_argument('-e','--tmax',default=TMAX,help='Max date to send in the format YYYYMMDD (%(default)s)')
 parser.add_argument('--data_tmin',default=None,help='Min date to calculate in the format YYYYMMDD (%(default)s)')
