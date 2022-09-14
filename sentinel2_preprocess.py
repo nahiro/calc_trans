@@ -2,6 +2,7 @@ import os
 import sys
 import re
 import tempfile
+from glob import glob
 from datetime import datetime,timedelta
 import numpy as np
 from argparse import ArgumentParser,RawTextHelpFormatter
@@ -171,6 +172,53 @@ if not args.skip_parcel:
             dnam = os.path.join(parcel_dnam,ystr)
             for f in sorted(os.listdir(dnam)):
                 m = re.search('^('+'\d'*8+')_parcel\.npz$',f)
+                if not m:
+                    continue
+                dstr = m.group(1)
+                d = datetime.strptime(dstr,'%Y%m%d')
+                if d < tmin or d > tmax:
+                    continue
+                fnam = os.path.join(dnam,f)
+                print(fnam)
+
+if not args.skip_atcor:
+    atcor_dnam = os.path.join(s2_data,'atcor')
+    if not os.path.isdir(atcor_dnam):
+        pass
+    else:
+        for ystr in sorted(os.listdir(atcor_dnam)):
+            if not re.search('^\d\d\d\d$',ystr):
+                continue
+            year = int(ystr)
+            if not year in data_years:
+                continue
+            dnam = os.path.join(atcor_dnam,ystr)
+            for f in sorted(os.listdir(dnam)):
+                m = re.search('^('+'\d'*8+')_atcor\.npz$',f)
+                if not m:
+                    continue
+                dstr = m.group(1)
+                d = datetime.strptime(dstr,'%Y%m%d')
+                if d < tmin or d > tmax:
+                    continue
+                fnam = os.path.join(dnam,f)
+                print(fnam)
+
+if not args.skip_interp:
+    interp_dnam = os.path.join(s2_data,'interp')
+    tentative_dnam = os.path.join(s2_data,'tentative_interp')
+    if not os.path.isdir(interp_dnam):
+        pass
+    else:
+        for ystr in sorted(os.listdir(interp_dnam)):
+            if not re.search('^\d\d\d\d$',ystr):
+                continue
+            year = int(ystr)
+            if not year in data_years:
+                continue
+            dnam = os.path.join(interp_dnam,ystr)
+            for f in sorted(os.listdir(dnam)):
+                m = re.search('^('+'\d'*8+')_interp\.npz$',f)
                 if not m:
                     continue
                 dstr = m.group(1)
