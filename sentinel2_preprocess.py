@@ -25,7 +25,6 @@ ATCOR_PATH = '/SATREPS/ipb/User/1_Spatial-information/Sentinel-2/Cihea/atcor'
 INTERP_PATH = '/SATREPS/ipb/User/1_Spatial-information/Sentinel-2/Cihea/interp'
 TENTATIVE_PATH = '/SATREPS/ipb/User/1_Spatial-information/Sentinel-2/Cihea/tentative_interp'
 TMAX = datetime.now().strftime('%Y%m%d')
-DATA_TMAX = TMAX
 GROW_PERIOD = 120 # day
 TMGN = 90 # day
 TSND = 30 # day
@@ -46,7 +45,7 @@ parser.add_argument('--tentative_path',default=TENTATIVE_PATH,help='Sentinel-2 t
 parser.add_argument('-s','--tmin',default=None,help='Min date to send in the format YYYYMMDD (%(default)s)')
 parser.add_argument('-e','--tmax',default=TMAX,help='Max date to send in the format YYYYMMDD (%(default)s)')
 parser.add_argument('--data_tmin',default=None,help='Min date to calculate in the format YYYYMMDD (%(default)s)')
-parser.add_argument('--data_tmax',default=DATA_TMAX,help='Max date to calculate in the format YYYYMMDD (%(default)s)')
+parser.add_argument('--data_tmax',default=None,help='Max date to calculate in the format YYYYMMDD (%(default)s)')
 parser.add_argument('--grow_period',default=GROW_PERIOD,type=int,help='Length of growing period in day (%(default)s)')
 parser.add_argument('--tmgn',default=TMGN,type=int,help='Margin of calculation period in day (%(default)s)')
 parser.add_argument('--tsnd',default=TSND,type=int,help='Duration of data to send in day (%(default)s)')
@@ -61,11 +60,14 @@ if site_low == 'none':
 else:
     s2_data = os.path.join(args.s2_data,args.site)
 tmax = datetime.strptime(args.tmax,'%Y%m%d')
-d2 = datetime.strptime(args.data_tmax,'%Y%m%d')
 if args.tmin is not None:
     tmin = datetime.strptime(args.tmin,'%Y%m%d')
 else:
     tmin = tmax-timedelta(days=args.tsnd)
+if args.data_tmax is not None:
+    d2 = datetime.strptime(args.data_tmax,'%Y%m%d')
+else:
+    d2 = tmax
 if args.data_tmin is not None:
     d1 = datetime.strptime(args.data_tmin,'%Y%m%d')
 else:
@@ -148,5 +150,10 @@ if not args.skip_geocor:
                 m = re.search('^('+'\d'*8+')_resample\.tif$',f)
                 if not m:
                     continue
-                print(f)
+                dstr = m.group(1)
+                d = datetime.strptime(dstr,'%Y%m%d')
+                if d < tmin or d > tmax:
+                    continue
+                fnam = os.path.join(dnam,f)
+                print(fnam)
 
