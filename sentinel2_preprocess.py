@@ -157,3 +157,26 @@ if not args.skip_geocor:
                 fnam = os.path.join(dnam,f)
                 print(fnam)
 
+if not args.skip_parcel:
+    parcel_dnam = os.path.join(s2_data,'parcel')
+    if not os.path.isdir(parcel_dnam):
+        pass
+    else:
+        for ystr in sorted(os.listdir(parcel_dnam)):
+            if not re.search('^\d\d\d\d$',ystr):
+                continue
+            year = int(ystr)
+            if not year in data_years:
+                continue
+            dnam = os.path.join(parcel_dnam,ystr)
+            for f in sorted(os.listdir(dnam)):
+                m = re.search('^('+'\d'*8+')_parcel\.npz$',f)
+                if not m:
+                    continue
+                dstr = m.group(1)
+                d = datetime.strptime(dstr,'%Y%m%d')
+                if d < tmin or d > tmax:
+                    continue
+                fnam = os.path.join(dnam,f)
+                print(fnam)
+
