@@ -133,11 +133,20 @@ with open('test.ini','w') as fp:
     fp.write('interp.scr_dir                      = {}\n'.format(args.scrdir))
 
 if not args.skip_geocor:
-    geocor_dnam = os.path.join(s2_data,'geocor')
-    if not os.path.isdir(geocor_dnam):
+    resample_dnam = os.path.join(s2_data,'resample')
+    if not os.path.isdir(resample_dnam):
         pass
     else:
-        for ystr in sorted(os.listdir(geocor_dnam)):
+        for ystr in sorted(os.listdir(resample_dnam)):
             if not re.search('^\d\d\d\d$',ystr):
                 continue
             year = int(ystr)
+            if not year in data_years:
+                continue
+            dnam = os.path.join(resample_dnam,ystr)
+            for f in sorted(os.listdir(dnam)):
+                m = re.search('^('+'\d'*8+')_resample\.tif$',f)
+                if not m:
+                    continue
+                print(f)
+
