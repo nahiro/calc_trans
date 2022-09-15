@@ -60,6 +60,7 @@ parser.add_argument('--skip_geocor',default=False,action='store_true',help='Skip
 parser.add_argument('--skip_parcel',default=False,action='store_true',help='Skip parcel (%(default)s)')
 parser.add_argument('--skip_atcor',default=False,action='store_true',help='Skip atcor (%(default)s)')
 parser.add_argument('--skip_interp',default=False,action='store_true',help='Skip interp (%(default)s)')
+parser.add_argument('--skip_upload',default=False,action='store_true',help='Skip upload (%(default)s)')
 parser.add_argument('--keep_tentative',default=False,action='store_true',help='Keep tentative interp (%(default)s)')
 parser.add_argument('-v','--verbose',default=False,action='store_true',help='Verbose mode (%(default)s)')
 parser.add_argument('-d','--debug',default=False,action='store_true',help='Debug mode (%(default)s)')
@@ -146,7 +147,7 @@ with open('test.ini','w') as fp:
     command = 'python'
     command += ' "{}"'.format(os.path.join(args.scrdir,'satellite_main.py'))
 
-if not args.skip_geocor:
+if not args.skip_geocor and not args.skip_upload:
     resample_dnam = os.path.join(s2_data,'resample')
     if not os.path.isdir(resample_dnam):
         pass
@@ -185,7 +186,7 @@ if not args.skip_geocor:
                         sys.stderr.write('{}\n'.format(command))
                         sys.stderr.flush()
 
-if not args.skip_parcel:
+if not args.skip_parcel and not args.skip_upload:
     parcel_dnam = os.path.join(s2_data,'parcel')
     if not os.path.isdir(parcel_dnam):
         pass
@@ -224,7 +225,7 @@ if not args.skip_parcel:
                         sys.stderr.write('{}\n'.format(command))
                         sys.stderr.flush()
 
-if not args.skip_atcor:
+if not args.skip_atcor and not args.skip_upload:
     atcor_dnam = os.path.join(s2_data,'atcor')
     if not os.path.isdir(atcor_dnam):
         pass
@@ -263,7 +264,7 @@ if not args.skip_atcor:
                         sys.stderr.write('{}\n'.format(command))
                         sys.stderr.flush()
 
-if not args.skip_interp:
+if not args.skip_interp and not args.skip_upload:
     interp_dnam = os.path.join(s2_data,'interp')
     tentative_dnam = os.path.join(s2_data,'tentative_interp')
     if not os.path.isdir(interp_dnam):
