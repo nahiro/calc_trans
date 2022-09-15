@@ -18,6 +18,7 @@ SITE = 'Cihea'
 SERVER = 'satreps-nas'
 PORT = 443
 PYTHON_PATH = os.path.join(HOME,'miniconda3','python')
+CMDDIR = os.path.join(HOME,'Automation')
 SCRDIR = os.path.join(HOME,'SatelliteTool')
 S2_DATA = os.path.join(TOPDIR,'Sentinel-2_Data')
 GIS_FNAM = os.path.join(TOPDIR,'Shapefile','All_area_polygon_20210914','All_area_polygon_20210914.shp')
@@ -38,6 +39,7 @@ parser.add_argument('-S','--site',default=SITE,help='Site name (%(default)s)')
 parser.add_argument('--server',default=None,help='Name of the server (%(default)s)')
 parser.add_argument('-P','--port',default=None,type=int,help='Port# of the server (%(default)s)')
 parser.add_argument('--python_path',default=PYTHON_PATH,help='Path to the Python (%(default)s)')
+parser.add_argument('--cmddir',default=CMDDIR,help='Command folder (%(default)s)')
 parser.add_argument('--scrdir',default=SCRDIR,help='Script folder (%(default)s)')
 parser.add_argument('--s2_data',default=S2_DATA,help='Sentinel-2 data folder (%(default)s)')
 parser.add_argument('--gis_fnam',default=GIS_FNAM,help='Parcel data file (%(default)s)')
@@ -171,7 +173,7 @@ if not args.skip_geocor:
                 fnams = glob(os.path.join(dnam,'{}_resample.*'.format(dstr)))
                 if len(fnams) > 0:
                     command = 'python'
-                    command += ' "{}"'.format(os.path.join(args.scrdir,'file_station_upload_files.py'))
+                    command += ' "{}"'.format(os.path.join(args.cmddir,'file_station_upload_files.py'))
                     for fnam in fnams:
                         command += ' "{}"'.format(fnam)
                     if args.server is not None:
@@ -210,7 +212,7 @@ if not args.skip_parcel:
                 fnams = glob(os.path.join(dnam,'{}_parcel.*'.format(dstr)))
                 if len(fnams) > 0:
                     command = 'python'
-                    command += ' "{}"'.format(os.path.join(args.scrdir,'file_station_upload_files.py'))
+                    command += ' "{}"'.format(os.path.join(args.cmddir,'file_station_upload_files.py'))
                     for fnam in fnams:
                         command += ' "{}"'.format(fnam)
                     if args.server is not None:
@@ -249,7 +251,7 @@ if not args.skip_atcor:
                 fnams = glob(os.path.join(dnam,'{}_atcor.*'.format(dstr)))
                 if len(fnams) > 0:
                     command = 'python'
-                    command += ' "{}"'.format(os.path.join(args.scrdir,'file_station_upload_files.py'))
+                    command += ' "{}"'.format(os.path.join(args.cmddir,'file_station_upload_files.py'))
                     for fnam in fnams:
                         command += ' "{}"'.format(fnam)
                     if args.server is not None:
@@ -298,7 +300,7 @@ if not args.skip_interp:
                 fnams = glob(os.path.join(dnam,'{}_interp.*'.format(dstr)))
                 if len(fnams) > 0:
                     command = 'python'
-                    command += ' "{}"'.format(os.path.join(args.scrdir,'file_station_upload_files.py'))
+                    command += ' "{}"'.format(os.path.join(args.cmddir,'file_station_upload_files.py'))
                     for fnam in fnams:
                         command += ' "{}"'.format(fnam)
                     if args.server is not None:
@@ -326,7 +328,7 @@ if not args.skip_interp:
                 fnams = glob(os.path.join(dnam,'{}_interp.*'.format(dstr)))
                 if len(fnams) > 0:
                     command = 'python'
-                    command += ' "{}"'.format(os.path.join(args.scrdir,'file_station_upload_files.py'))
+                    command += ' "{}"'.format(os.path.join(args.cmddir,'file_station_upload_files.py'))
                     for fnam in fnams:
                         command += ' "{}"'.format(fnam)
                     if args.server is not None:
