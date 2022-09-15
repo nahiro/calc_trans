@@ -141,6 +141,8 @@ with open('test.ini','w') as fp:
     fp.write('#interp.oflag                        = [False,True]\n')
     fp.write('#interp.python_path                  = {}\n'.format(args.python_path))
     fp.write('interp.scr_dir                      = {}\n'.format(args.scrdir))
+    command = 'python'
+    command += ' "{}"'.format(os.path.join(args.scrdir,'satellite_main.py'))
 
 if not args.skip_geocor:
     resample_dnam = os.path.join(s2_data,'resample')
