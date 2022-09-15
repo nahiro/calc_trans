@@ -99,8 +99,8 @@ with tempfile.NamedTemporaryFile(mode='w',suffix='.ini') as fp:
     fp.write('[main]\n')
     fp.write('#main.start_date                     =\n')
     fp.write('#main.end_date                       =\n')
-    fp.write('main.first_date                     =\n')
-    fp.write('main.last_date                      =\n')
+    fp.write('main.first_date                     = {:%Y%b%m%d}\n'.format(d1))
+    fp.write('main.last_date                      = {:%Y%b%m%d}\n'.format(d2))
     fp.write('main.s2_data                        = {}\n'.format(s2_data))
     fp.write('main.download                       = False\n')
     if args.skip_geocor:
@@ -157,7 +157,7 @@ with tempfile.NamedTemporaryFile(mode='w',suffix='.ini') as fp:
         sys.stderr.write('{}\n'.format(command))
         sys.stderr.flush()
     else:
-        call(command)
+        call(command,shell=True)
 
 if not args.skip_geocor and not args.skip_upload:
     if args.resample_dir is not None:
@@ -203,7 +203,7 @@ if not args.skip_geocor and not args.skip_upload:
                         sys.stderr.write('{}\n'.format(command))
                         sys.stderr.flush()
                     else:
-                        call(command)
+                        call(command,shell=True)
 
 if not args.skip_parcel and not args.skip_upload:
     if args.parcel_dir is not None:
@@ -249,7 +249,7 @@ if not args.skip_parcel and not args.skip_upload:
                         sys.stderr.write('{}\n'.format(command))
                         sys.stderr.flush()
                     else:
-                        call(command)
+                        call(command,shell=True)
 
 if not args.skip_atcor and not args.skip_upload:
     if args.atcor_dir is not None:
@@ -295,7 +295,7 @@ if not args.skip_atcor and not args.skip_upload:
                         sys.stderr.write('{}\n'.format(command))
                         sys.stderr.flush()
                     else:
-                        call(command)
+                        call(command,shell=True)
 
 if not args.skip_interp and not args.skip_upload:
     if args.interp_dir is not None:
@@ -354,7 +354,7 @@ if not args.skip_interp and not args.skip_upload:
                         sys.stderr.write('{}\n'.format(command))
                         sys.stderr.flush()
                     else:
-                        call(command)
+                        call(command,shell=True)
         # Upload tentative interp
         for ystr in sorted(os.listdir(tentative_dnam)):
             if not re.search('^\d\d\d\d$',ystr):
@@ -392,4 +392,4 @@ if not args.skip_interp and not args.skip_upload:
                         sys.stderr.write('{}\n'.format(command))
                         sys.stderr.flush()
                     else:
-                        call(command)
+                        call(command,shell=True)
