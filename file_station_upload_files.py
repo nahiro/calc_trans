@@ -33,7 +33,6 @@ MAX_ITEM = 10000
 MAX_RETRY = 10
 WAIT_TIME = 300 # sec
 CHUNK_SIZE = GB
-SITE = 'Bojongsoang'
 
 # Read options
 parser = ArgumentParser(usage='%(prog)s list_of_input_file [options]',formatter_class=lambda prog:RawTextHelpFormatter(prog,max_help_position=200,width=200))
@@ -45,7 +44,6 @@ parser.add_argument('-m','--max_item',default=MAX_ITEM,type=int,help='Max# of it
 parser.add_argument('-M','--max_retry',default=MAX_RETRY,type=int,help='Maximum number of retries to upload data (%(default)s)')
 parser.add_argument('-W','--wait_time',default=WAIT_TIME,type=int,help='Wait time to upload data in sec (%(default)s)')
 parser.add_argument('-C','--chunk_size',default=CHUNK_SIZE,type=int,help='Chunk size in byte (%(default)s)')
-parser.add_argument('-S','--site',default=SITE,help='Target sites (%(default)s)')
 parser.add_argument('-l','--logging',default=False,action='store_true',help='Logging mode (%(default)s)')
 parser.add_argument('-v','--verbose',default=False,action='store_true',help='Verbose mode (%(default)s)')
 parser.add_argument('--overwrite',default=False,action='store_true',help='Overwrite mode (%(default)s)')

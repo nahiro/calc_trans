@@ -15,6 +15,8 @@ TOPDIR = os.path.join(HOME,'Work')
 
 # Default values
 SITE = 'Cihea'
+SERVER = 'satreps-nas'
+PORT = 443
 PYTHON_PATH = os.path.join(HOME,'miniconda3','python')
 SCRDIR = os.path.join(HOME,'SatelliteTool')
 S2_DATA = os.path.join(TOPDIR,'Sentinel-2_Data')
@@ -33,6 +35,8 @@ TSND = 30 # day
 # Read options
 parser = ArgumentParser(formatter_class=lambda prog:RawTextHelpFormatter(prog,max_help_position=200,width=200))
 parser.add_argument('-S','--site',default=SITE,help='Site name (%(default)s)')
+parser.add_argument('--server',default=None,help='Name of the server (%(default)s)')
+parser.add_argument('-P','--port',default=None,type=int,help='Port# of the server (%(default)s)')
 parser.add_argument('--python_path',default=PYTHON_PATH,help='Path to the Python (%(default)s)')
 parser.add_argument('--scrdir',default=SCRDIR,help='Script folder (%(default)s)')
 parser.add_argument('--s2_data',default=S2_DATA,help='Sentinel-2 data folder (%(default)s)')
@@ -168,6 +172,10 @@ if not args.skip_geocor:
                     command += ' "{}"'.format(os.path.join(args.scrdir,'file_station_upload_files.py'))
                     for fnam in fnams:
                         command += ' "{}"'.format(fnam)
+                    if args.server is not None:
+                        command += ' --server {}'.format(args.server)
+                    if args.port is not None:
+                        command += ' --port {}'.format(args.port)
                     command += ' --srcdir {}/{}'.format(args.atcor_path,ystr)
                     if args.debug:
                         sys.stderr.write('{}\n'.format(command))
@@ -203,6 +211,10 @@ if not args.skip_parcel:
                     command += ' "{}"'.format(os.path.join(args.scrdir,'file_station_upload_files.py'))
                     for fnam in fnams:
                         command += ' "{}"'.format(fnam)
+                    if args.server is not None:
+                        command += ' --server {}'.format(args.server)
+                    if args.port is not None:
+                        command += ' --port {}'.format(args.port)
                     command += ' --srcdir {}/{}'.format(args.atcor_path,ystr)
                     if args.debug:
                         sys.stderr.write('{}\n'.format(command))
@@ -238,6 +250,10 @@ if not args.skip_atcor:
                     command += ' "{}"'.format(os.path.join(args.scrdir,'file_station_upload_files.py'))
                     for fnam in fnams:
                         command += ' "{}"'.format(fnam)
+                    if args.server is not None:
+                        command += ' --server {}'.format(args.server)
+                    if args.port is not None:
+                        command += ' --port {}'.format(args.port)
                     command += ' --srcdir {}/{}'.format(args.atcor_path,ystr)
                     if args.debug:
                         sys.stderr.write('{}\n'.format(command))
@@ -276,4 +292,17 @@ if not args.skip_interp:
                             if args.verbose:
                                 sys.stderr.write('Removed {}\n'.format(gnam))
                                 sys.stderr.flush()
-
+                fnams = glob(os.path.join(dnam,'{}_interp.*'.format(dstr)))
+                if len(fnams) > 0:
+                    command = 'python'
+                    command += ' "{}"'.format(os.path.join(args.scrdir,'file_station_upload_files.py'))
+                    for fnam in fnams:
+                        command += ' "{}"'.format(fnam)
+                    if args.server is not None:
+                        command += ' --server {}'.format(args.server)
+                    if args.port is not None:
+                        command += ' --port {}'.format(args.port)
+                    command += ' --srcdir {}/{}'.format(args.interp_path,ystr)
+                    if args.debug:
+                        sys.stderr.write('{}\n'.format(command))
+                        sys.stderr.flush()
