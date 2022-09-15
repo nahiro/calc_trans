@@ -30,10 +30,13 @@ s2_data = os.path.join(TOPDIR,'Sentinel-2_Data')
 s2_path = '/SATREPS/ipb/User/1_Spatial-information/Sentinel-2'
 dend = datetime.now().strftime('%Y%m%d')
 dstr = dend-timedelta(days=30)
+gis_bojongsoang = os.path.join(TOPDIR,'Shapefile','Bojongsoang','Bojongsoang.shp')
+gis_cihea = os.path.join(TOPDIR,'Shapefile','All_area_polygon_20210914','All_area_polygon_20210914.shp')
+gis_testsite = os.path.join(TOPDIR,'Shapefile','Testsite_polygon_20210914','Testsite_polygon_20210914.shp')
 
-for site in ['Cihea','Bojongsoang','Testsite']:
+for site in ['Bojongsoang','Cihea','Testsite']:
     # Download/Upload GRD, Calculate/Upload Planting
-    if site in ['Cihea','Bojongsoang']:
+    if site in ['Bojongsoang','Cihea']:
         command = python_path
         command += ' "{}"'.format(os.path.join(cmddir,'auto_calc_trans.py'))
         command += ' --scrdir "{}"'.format(cmddir)
@@ -61,16 +64,29 @@ for site in ['Cihea','Bojongsoang','Testsite']:
     command += ' "{}"'.format(os.path.join(cmddir,'sentinel2_preprocess.py'))
     command += ' --cmddir "{}"'.format(cmddir)
     command += ' --scrdir "{}"'.format(scrdir)
-
     command += ' --site {}'.format(site)
     command += ' --s2_data "{}"'.format(s2_data)
-    if site in ['Cihea']:
+    command += ' --resample_path {}/{}/resample'.format(s2_path,site)
+    command += ' --parcel_path {}/{}/parcel'.format(s2_path,site)
+    command += ' --atcor_path {}/{}/atcor'.format(s2_path,site)
+    command += ' --interp_path {}/{}/interp'.format(s2_path,site)
+    command += ' --tentative_path {}/{}/tentative_interp'.format(s2_path,site)
+
+
+
+    if site in ['Bojongsoang']:
         command += ' --l2a_dir "!{}"'.format(os.path.join(s2_data,'Bojongsoang','L2A'))
         command += ' --search_key R032'
+        command += ' --gis_fnam "{}"'.format(gis_bojongsoang)
+        command += ' --wv_fnam "{}"'.format()
+    elif site in ['Cihea']:
+        command += ' --gis_fnam "{}"'.format(gis_cihea)
+        command += ' --wv_fnam "{}"'.format()
     elif site in ['Testsite']:
+        command += ' --gis_fnam "{}"'.format(gis_testsite)
         command += ' --skip_geocor'
-    command += ' --gis_fnam {}'.format()
-    command += ' --wv_fnam {}'.format()
+    else:
+        ValueError('Error, site={}'.format(site))
     command += ' --l2a_dir {}'.format()
     command += ' --search_key {}'.format()
     command += ' --resample_dir {}'.format()
@@ -78,8 +94,3 @@ for site in ['Cihea','Bojongsoang','Testsite']:
     command += ' --atcor_dir {}'.format()
     command += ' --interp_dir {}'.format()
     command += ' --tentative_dir {}'.format()
-    command += ' --resample_path {}/{}/resample'.format(s2_path,site)
-    command += ' --parcel_path {}/{}/parcel'.format(s2_path,site)
-    command += ' --atcor_path {}/{}/atcor'.format(s2_path,site)
-    command += ' --interp_path {}/{}/interp'.format(s2_path,site)
-    command += ' --tentative_path {}/{}/tentative_interp'.format(s2_path,site)
