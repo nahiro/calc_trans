@@ -85,8 +85,7 @@ else:
     d1 = d2-timedelta(days=(args.grow_period*2+args.tmgn*2))
 data_years = np.arange(d1.year,d2.year+1,1)
 
-#with tempfile.TemporaryFile(suffix='.ini') as fp:
-with open('test.ini','w') as fp:
+with tempfile.NamedTemporaryFile(mode='w',suffix='.ini') as fp:
     fp.write('[DEFAULT]\n')
     fp.write('scr_dir                             = {}\n'.format(args.scrdir))
     fp.write('s2_data                             = {}\n'.format(s2_data))
@@ -144,9 +143,13 @@ with open('test.ini','w') as fp:
     fp.write('#interp.oflag                        = [False,True]\n')
     fp.write('#interp.python_path                  = {}\n'.format(args.python_path))
     fp.write('interp.scr_dir                      = {}\n'.format(args.scrdir))
+    fp.seek(0)
     command = 'python'
     command += ' "{}"'.format(os.path.join(args.scrdir,'satellite_main.py'))
+    command += ' "{}"'.format(fp.name)
+    print(command)
 
+sys.exit()
 if not args.skip_geocor and not args.skip_upload:
     resample_dnam = os.path.join(s2_data,'resample')
     if not os.path.isdir(resample_dnam):
