@@ -44,9 +44,12 @@ for site in ['Cihea','Bojongsoang','Testsite']:
 
     # Download/Upload L2A
     if site in ['Bojongsoang']:
-        s2_data = os.path.join(TOPDIR,'Sentinel-2_Data',site)
+        s2_data = os.path.join(TOPDIR,'Sentinel-2_Data')
         command = python_path
         command += ' "{}"'.format(os.path.join(cmddir,'sentinel2_update.py'))
+        command += ' --scrdir "{}"'.format(cmddir)
+        command += ' --datdir "{}"'.format(s2_data)
+        command += ' --sites {}'.format(site)
         command += ' --str {:%Y%m%d}'.format(dstr)
         command += ' --end {:%Y%m%d}'.format(dend)
         command += ' --skip_copy'
