@@ -375,37 +375,16 @@ if args.logging:
     log.addHandler(stream)
     HTTPConnection.debuglevel = 1
 
-srcdir = args.srcdir+'/{}/L2A'.format(args.site)
+srcdir = os.path.dirname(args.srcdir)
 if query_folder(srcdir) is None:
     sys.exit()
 else:
     folders.append(srcdir)
+make_folder(args.srcdir)
 
 for input_fnam in fnams:
-    # S2A_MSIL2A_20210104T030121_N0214_R032_T48MYT_20210104T062157.zip
     fnam = os.path.basename(input_fnam)
-    unam = fnam.upper()
-    bnam,enam = os.path.splitext(unam)
-    if enam != '.ZIP':
-        continue
-    m = re.search('([^_]+)_([^_]+)_([^_]+)_([^_]+)_([^_]+)_([^_]+)_([^_]+)',bnam)
-    if not m:
-        continue
-    if m.group(1) != 'S2A' and m.group(1) != 'S2B':
-        continue
-    if m.group(2) != 'MSIL2A':
-        sys.stderr.write('Warning, skipping file >>> '+fnam+'\n')
-        sys.stderr.flush()
-        continue
-    d1 = datetime.strptime(m.group(3),'%Y%m%dT%H%M%S')
-    d2 = datetime.strptime(m.group(7),'%Y%m%dT%H%M%S')
-    if d1.date() != d2.date():
-        sys.stderr.write('Warning, d1={}, d2={} >>> {}\n'.format(m.group(3),m.group(7),fnam))
-        sys.stderr.flush()
-    dstr_year = d1.strftime('%Y')
-    dnam = '{}/{}'.format(srcdir,dstr_year)
-    make_folder(dnam)
-    gnam = '{}/{}'.format(dnam,fnam)
+    gnam = '{}/{}'.format(args.srcdir,fnam)
     for ntry in range(args.max_retry): # loop to upload 1 file
         ret = upload_and_check_file(input_fnam,gnam,chunk_size=args.chunk_size)
         if ret == 0:
