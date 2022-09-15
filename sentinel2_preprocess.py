@@ -45,6 +45,8 @@ parser.add_argument('--scrdir',default=SCRDIR,help='Script folder (%(default)s)'
 parser.add_argument('--s2_data',default=S2_DATA,help='Sentinel-2 data folder (%(default)s)')
 parser.add_argument('--gis_fnam',default=GIS_FNAM,help='Parcel data file (%(default)s)')
 parser.add_argument('--wv_fnam',default=WV_FNAM,help='WorldView data file (%(default)s)')
+parser.add_argument('--l2a_dir',default=None,help='Sentinel-2 L2A folder (%(default)s)')
+parser.add_argument('--search_key',default=None,help='Search keyword for L2A (%(default)s)')
 parser.add_argument('--resample_dir',default=None,help='Sentinel-2 resample folder (%(default)s)')
 parser.add_argument('--parcel_dir',default=None,help='Sentinel-2 parcel folder (%(default)s)')
 parser.add_argument('--atcor_dir',default=None,help='Sentinel-2 atcor folder (%(default)s)')
@@ -125,6 +127,10 @@ with tempfile.NamedTemporaryFile(mode='w',suffix='.ini') as fp:
     fp.write('main.estimate                       = False\n')
     fp.write('main.no_gui                         = True\n')
     fp.write('[geocor]\n')
+    if args.l2a_dir is not None:
+        fp.write('geocor.l2a_dir                      = {}\n'.format(args.l2a_dir))
+    if args.search_key is not None:
+        fp.write('geocor.search_key                   = {}\n'.format(args.search_key))
     fp.write('geocor.ref_fnam                     = {}\n'.format(args.wv_fnam))
     fp.write('geocor.band_fnam                    = {}\n'.format(os.path.join(s2_data,'band_names.txt')))
     fp.write('#geocor.python_path                  = {}\n'.format(args.python_path))
