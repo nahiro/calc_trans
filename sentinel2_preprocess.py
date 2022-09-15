@@ -45,6 +45,11 @@ parser.add_argument('--scrdir',default=SCRDIR,help='Script folder (%(default)s)'
 parser.add_argument('--s2_data',default=S2_DATA,help='Sentinel-2 data folder (%(default)s)')
 parser.add_argument('--gis_fnam',default=GIS_FNAM,help='Parcel data file (%(default)s)')
 parser.add_argument('--wv_fnam',default=WV_FNAM,help='WorldView data file (%(default)s)')
+parser.add_argument('--resample_dir',default=None,help='Sentinel-2 resample folder (%(default)s)')
+parser.add_argument('--parcel_dir',default=None,help='Sentinel-2 parcel folder (%(default)s)')
+parser.add_argument('--atcor_dir',default=None,help='Sentinel-2 atcor folder (%(default)s)')
+parser.add_argument('--interp_dir',default=None,help='Sentinel-2 interp folder (%(default)s)')
+parser.add_argument('--tentative_dir',default=None,help='Sentinel-2 tentative_interp folder (%(default)s)')
 parser.add_argument('--resample_path',default=RESAMPLE_PATH,help='Sentinel-2 resample on NAS (%(default)s)')
 parser.add_argument('--parcel_path',default=PARCEL_PATH,help='Sentinel-2 parcel on NAS (%(default)s)')
 parser.add_argument('--atcor_path',default=ATCOR_PATH,help='Sentinel-2 atcor on NAS (%(default)s)')
@@ -155,7 +160,10 @@ with tempfile.NamedTemporaryFile(mode='w',suffix='.ini') as fp:
         call(command)
 
 if not args.skip_geocor and not args.skip_upload:
-    resample_dnam = os.path.join(s2_data,'resample')
+    if args.resample_dir is not None:
+        resample_dnam = args.resample_dir
+    else:
+        resample_dnam = os.path.join(s2_data,'resample')
     if not os.path.isdir(resample_dnam):
         pass
     else:
@@ -196,7 +204,10 @@ if not args.skip_geocor and not args.skip_upload:
                         call(command)
 
 if not args.skip_parcel and not args.skip_upload:
-    parcel_dnam = os.path.join(s2_data,'parcel')
+    if args.parcel_dir is not None:
+        parcel_dnam = args.parcel_dir
+    else:
+        parcel_dnam = os.path.join(s2_data,'parcel')
     if not os.path.isdir(parcel_dnam):
         pass
     else:
@@ -237,7 +248,10 @@ if not args.skip_parcel and not args.skip_upload:
                         call(command)
 
 if not args.skip_atcor and not args.skip_upload:
-    atcor_dnam = os.path.join(s2_data,'atcor')
+    if args.atcor_dir is not None:
+        atcor_dnam = args.atcor_dir
+    else:
+        atcor_dnam = os.path.join(s2_data,'atcor')
     if not os.path.isdir(atcor_dnam):
         pass
     else:
@@ -278,8 +292,14 @@ if not args.skip_atcor and not args.skip_upload:
                         call(command)
 
 if not args.skip_interp and not args.skip_upload:
-    interp_dnam = os.path.join(s2_data,'interp')
-    tentative_dnam = os.path.join(s2_data,'tentative_interp')
+    if args.interp_dir is not None:
+        interp_dnam = args.interp_dir
+    else:
+        interp_dnam = os.path.join(s2_data,'interp')
+    if args.tentative_dir is not None:
+        tentative_dnam = args.tentative_dir
+    else:
+        tentative_dnam = os.path.join(s2_data,'tentative_interp')
     if not os.path.isdir(interp_dnam):
         pass
     else:
