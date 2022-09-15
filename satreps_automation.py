@@ -27,6 +27,7 @@ cmddir = os.path.join(HOME,'Automation')
 scrdir = os.path.join(HOME,'SatelliteTool')
 dend = datetime.now().strftime('%Y%m%d')
 dstr = dend-timedelta(days=30)
+s2_path = '/SATREPS/ipb/User/1_Spatial-information/Sentinel-2'
 
 for site in ['Cihea','Bojongsoang','Testsite']:
     # Download/Upload GRD, Calculate/Upload Planting
@@ -56,3 +57,23 @@ for site in ['Cihea','Bojongsoang','Testsite']:
         call(command,shell=True)
 
     # Calculate/Upload Preprocess
+    command = python_path
+    command += ' "{}"'.format(os.path.join(cmddir,'sentinel2_preprocess.py'))
+    command += ' --cmddir "{}"'.format(cmddir)
+    command += ' --scrdir "{}"'.format(scrdir)
+
+    command += ' --s2_data "{}"'.format()
+    command += ' --gis_fnam {}'.format()
+    command += ' --wv_fnam {}'.format()
+    command += ' --l2a_dir {}'.format()
+    command += ' --search_key {}'.format()
+    command += ' --resample_dir {}'.format()
+    command += ' --parcel_dir {}'.format()
+    command += ' --atcor_dir {}'.format()
+    command += ' --interp_dir {}'.format()
+    command += ' --tentative_dir {}'.format()
+    command += ' --resample_path {}/{}/resample'.format(s2_path,site)
+    command += ' --parcel_path {}/{}/parcel'.format(s2_path,site)
+    command += ' --atcor_path {}/{}/atcor'.format(s2_path,site)
+    command += ' --interp_path {}/{}/interp'.format(s2_path,site)
+    command += ' --tentative_path {}/{}/tentative_interp'.format(s2_path,site)
