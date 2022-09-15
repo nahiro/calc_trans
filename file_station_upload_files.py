@@ -199,16 +199,14 @@ def make_folder(path):
     return 0
 
 def make_folders(path):
-    normalized_path = os.path.normpath(path)
-    path_components = normalized_path.split(os.sep)
-    if path[0] == os.sep:
-        dnam = os.sep
-    else:
-        dnam = ''
+    path_sep = '/'
+    normalized_path = os.path.normpath(path).replace(os.sep,path_sep)
+    path_components = normalized_path.split(path_sep)
+    dnam = ''
     for p in path_components:
         if not p:
             continue
-        dnam = os.path.join(dnam,p)
+        dnam = '{}{}{}'.format(dnam,path_sep,p)
         make_folder(dnam)
 
 def read_in_chunks(file_object,chunk_size=GB):
@@ -373,13 +371,7 @@ if args.logging:
     log.addHandler(stream)
     HTTPConnection.debuglevel = 1
 
-srcdir = os.path.dirname(args.srcdir)
-if query_folder(srcdir) is None:
-    sys.exit()
-else:
-    folders.append(srcdir)
 make_folder(args.srcdir)
-
 for input_fnam in fnams:
     fnam = os.path.basename(input_fnam)
     gnam = '{}/{}'.format(args.srcdir,fnam)
