@@ -33,6 +33,8 @@ dstr = dend-timedelta(days=30)
 gis_bojongsoang = os.path.join(TOPDIR,'Shapefile','Bojongsoang','Bojongsoang.shp')
 gis_cihea = os.path.join(TOPDIR,'Shapefile','All_area_polygon_20210914','All_area_polygon_20210914.shp')
 gis_testsite = os.path.join(TOPDIR,'Shapefile','Testsite_polygon_20210914','Testsite_polygon_20210914.shp')
+wv_bojongsoang = os.path.join(TOPDIR,'WorldView','wv2_190816_mul.tif')
+wv_cihea = os.path.join(TOPDIR,'WorldView','wv2_180629_mul.tif')
 
 for site in ['Bojongsoang','Cihea','Testsite']:
     # Download/Upload GRD, Calculate/Upload Planting
