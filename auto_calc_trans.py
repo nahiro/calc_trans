@@ -14,8 +14,9 @@ if HOME is None:
     HOME = os.environ.get('USERPROFILE')
 SCRDIR = os.path.join(HOME,'Automation')
 DATDIR = os.path.join(HOME,'Work','Sentinel-1_Data')
-END = datetime.now().strftime('%Y%m%d')
-STR = END-timedelta(days=30)
+NOW = datetime.now()
+END = NOW.strftime('%Y%m%d')
+STR = (NOW-timedelta(days=30)).strftime('%Y%m%d')
 SITES = ['Bojongsoang','Cihea']
 SUBDIRS = ['Cihea:sigma0','Bojongsoang:sigma0_speckle']
 P_VERSIONS = ['Cihea:v1.2','Bojongsoang:v1.0']

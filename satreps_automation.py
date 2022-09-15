@@ -2,7 +2,8 @@ import os
 import sys
 import re
 import psutil
-from datetime import datetime
+from datetime import datetime,timedelta
+from subprocess import call
 
 script_name = os.path.basename(sys.argv[0])
 pids = []
@@ -28,7 +29,7 @@ scrdir = os.path.join(HOME,'SatelliteTool')
 s1_data = os.path.join(TOPDIR,'Sentinel-1_Data')
 s2_data = os.path.join(TOPDIR,'Sentinel-2_Data')
 s2_path = '/SATREPS/ipb/User/1_Spatial-information/Sentinel-2'
-dend = datetime.now().strftime('%Y%m%d')
+dend = datetime.now()
 dstr = dend-timedelta(days=30)
 gis_bojongsoang = os.path.join(TOPDIR,'Shapefile','Bojongsoang','Bojongsoang.shp')
 gis_cihea = os.path.join(TOPDIR,'Shapefile','All_area_polygon_20210914','All_area_polygon_20210914.shp')
@@ -87,3 +88,5 @@ for site in ['Bojongsoang','Cihea','Testsite']:
         command += ' --skip_geocor'
     else:
         ValueError('Error, site={}'.format(site))
+    if site in ['Cihea','Testsite']:
+        call(command,shell=True)
