@@ -162,6 +162,16 @@ if not args.skip_geocor:
                 if args.debug:
                     sys.stderr.write('{}\n'.format(fnam))
                     sys.stderr.flush()
+                fnams = glob(os.path.join(dnam,'{}_resample.*'.format(dstr)))
+                if len(fnams) > 0:
+                    command = 'python'
+                    command += ' "{}"'.format(os.path.join(args.scrdir,'file_station_upload_files.py'))
+                    for fnam in fnams:
+                        command += ' "{}"'.format(fnam)
+                    command += ' --srcdir {}/{}'.format(args.atcor_path,ystr)
+                    if args.debug:
+                        sys.stderr.write('{}\n'.format(command))
+                        sys.stderr.flush()
 
 if not args.skip_parcel:
     parcel_dnam = os.path.join(s2_data,'parcel')
@@ -187,6 +197,16 @@ if not args.skip_parcel:
                 if args.debug:
                     sys.stderr.write('{}\n'.format(fnam))
                     sys.stderr.flush()
+                fnams = glob(os.path.join(dnam,'{}_parcel.*'.format(dstr)))
+                if len(fnams) > 0:
+                    command = 'python'
+                    command += ' "{}"'.format(os.path.join(args.scrdir,'file_station_upload_files.py'))
+                    for fnam in fnams:
+                        command += ' "{}"'.format(fnam)
+                    command += ' --srcdir {}/{}'.format(args.atcor_path,ystr)
+                    if args.debug:
+                        sys.stderr.write('{}\n'.format(command))
+                        sys.stderr.flush()
 
 if not args.skip_atcor:
     atcor_dnam = os.path.join(s2_data,'atcor')
@@ -212,6 +232,16 @@ if not args.skip_atcor:
                 if args.debug:
                     sys.stderr.write('{}\n'.format(fnam))
                     sys.stderr.flush()
+                fnams = glob(os.path.join(dnam,'{}_atcor.*'.format(dstr)))
+                if len(fnams) > 0:
+                    command = 'python'
+                    command += ' "{}"'.format(os.path.join(args.scrdir,'file_station_upload_files.py'))
+                    for fnam in fnams:
+                        command += ' "{}"'.format(fnam)
+                    command += ' --srcdir {}/{}'.format(args.atcor_path,ystr)
+                    if args.debug:
+                        sys.stderr.write('{}\n'.format(command))
+                        sys.stderr.flush()
 
 if not args.skip_interp:
     interp_dnam = os.path.join(s2_data,'interp')
