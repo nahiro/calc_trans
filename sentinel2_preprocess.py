@@ -5,6 +5,7 @@ import tempfile
 from glob import glob
 from datetime import datetime,timedelta
 import numpy as np
+from subprocess import call
 from argparse import ArgumentParser,RawTextHelpFormatter
 
 # Constants
@@ -147,9 +148,12 @@ with tempfile.NamedTemporaryFile(mode='w',suffix='.ini') as fp:
     command = 'python'
     command += ' "{}"'.format(os.path.join(args.scrdir,'satellite_main.py'))
     command += ' "{}"'.format(fp.name)
-    print(command)
+    if args.debug:
+        sys.stderr.write('{}\n'.format(command))
+        sys.stderr.flush()
+    else:
+        call(command)
 
-sys.exit()
 if not args.skip_geocor and not args.skip_upload:
     resample_dnam = os.path.join(s2_data,'resample')
     if not os.path.isdir(resample_dnam):
@@ -188,6 +192,8 @@ if not args.skip_geocor and not args.skip_upload:
                     if args.debug:
                         sys.stderr.write('{}\n'.format(command))
                         sys.stderr.flush()
+                    else:
+                        call(command)
 
 if not args.skip_parcel and not args.skip_upload:
     parcel_dnam = os.path.join(s2_data,'parcel')
@@ -227,6 +233,8 @@ if not args.skip_parcel and not args.skip_upload:
                     if args.debug:
                         sys.stderr.write('{}\n'.format(command))
                         sys.stderr.flush()
+                    else:
+                        call(command)
 
 if not args.skip_atcor and not args.skip_upload:
     atcor_dnam = os.path.join(s2_data,'atcor')
@@ -266,6 +274,8 @@ if not args.skip_atcor and not args.skip_upload:
                     if args.debug:
                         sys.stderr.write('{}\n'.format(command))
                         sys.stderr.flush()
+                    else:
+                        call(command)
 
 if not args.skip_interp and not args.skip_upload:
     interp_dnam = os.path.join(s2_data,'interp')
@@ -315,6 +325,8 @@ if not args.skip_interp and not args.skip_upload:
                     if args.debug:
                         sys.stderr.write('{}\n'.format(command))
                         sys.stderr.flush()
+                    else:
+                        call(command)
             # Upload tentative interp
             dnam = os.path.join(tentative_dnam,ystr)
             for f in sorted(os.listdir(dnam)):
@@ -343,3 +355,5 @@ if not args.skip_interp and not args.skip_upload:
                     if args.debug:
                         sys.stderr.write('{}\n'.format(command))
                         sys.stderr.flush()
+                    else:
+                        call(command)
