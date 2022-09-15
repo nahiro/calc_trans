@@ -174,6 +174,8 @@ if not args.skip_geocor and not args.skip_upload:
             if not year in data_years:
                 continue
             dnam = os.path.join(resample_dnam,ystr)
+            if not os.path.isdir(dnam):
+                continue
             for f in sorted(os.listdir(dnam)):
                 m = re.search('^('+'\d'*8+')_resample\.tif$',f)
                 if not m:
@@ -218,6 +220,8 @@ if not args.skip_parcel and not args.skip_upload:
             if not year in data_years:
                 continue
             dnam = os.path.join(parcel_dnam,ystr)
+            if not os.path.isdir(dnam):
+                continue
             for f in sorted(os.listdir(dnam)):
                 m = re.search('^('+'\d'*8+')_parcel\.npz$',f)
                 if not m:
@@ -262,6 +266,8 @@ if not args.skip_atcor and not args.skip_upload:
             if not year in data_years:
                 continue
             dnam = os.path.join(atcor_dnam,ystr)
+            if not os.path.isdir(dnam):
+                continue
             for f in sorted(os.listdir(dnam)):
                 m = re.search('^('+'\d'*8+')_atcor\.npz$',f)
                 if not m:
@@ -303,14 +309,16 @@ if not args.skip_interp and not args.skip_upload:
     if not os.path.isdir(interp_dnam):
         pass
     else:
+        # Upload interp
         for ystr in sorted(os.listdir(interp_dnam)):
             if not re.search('^\d\d\d\d$',ystr):
                 continue
             year = int(ystr)
             if not year in data_years:
                 continue
-            # Upload interp
             dnam = os.path.join(interp_dnam,ystr)
+            if not os.path.isdir(dnam):
+                continue
             for f in sorted(os.listdir(dnam)):
                 m = re.search('^('+'\d'*8+')_interp\.npz$',f)
                 if not m:
@@ -347,7 +355,13 @@ if not args.skip_interp and not args.skip_upload:
                         sys.stderr.flush()
                     else:
                         call(command)
-            # Upload tentative interp
+        # Upload tentative interp
+        for ystr in sorted(os.listdir(tentative_dnam)):
+            if not re.search('^\d\d\d\d$',ystr):
+                continue
+            year = int(ystr)
+            if not year in data_years:
+                continue
             dnam = os.path.join(tentative_dnam,ystr)
             for f in sorted(os.listdir(dnam)):
                 m = re.search('^('+'\d'*8+')_interp\.npz$',f)
