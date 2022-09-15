@@ -2,7 +2,7 @@ import os
 import sys
 import re
 import psutil
-import time
+from datetime import datetime
 
 script_name = os.path.basename(sys.argv[0])
 pids = []
@@ -25,19 +25,31 @@ TOPDIR = 'F:\Work'
 python_path = os.path.join(HOME,'miniconda3','python.exe')
 cmddir = os.path.join(HOME,'Automation')
 scrdir = os.path.join(HOME,'SatelliteTool')
+dend = datetime.now().strftime('%Y%m%d')
+dstr = dend-timedelta(days=30)
 
 for site in ['Cihea','Bojongsoang','Testsite']:
     # Download/Upload GRD, Calculate/Upload Planting
-    if site != 'Testsite':
+    if site in ['Cihea','Bojongsoang']:
         s1_data = os.path.join(TOPDIR,'Sentinel-1_Data')
         command = python_path
         command += ' "{}"'.format(os.path.join(cmddir,'auto_calc_trans.py'))
         command += ' --scrdir "{}"'.format(cmddir)
         command += ' --datdir "{}"'.format(s1_data)
         command += ' --sites {}'.format(site)
+        command += ' --str {:%Y%m%d}'.format(dstr)
+        command += ' --end {:%Y%m%d}'.format(dend)
         command += ' --skip_copy'
         call(command,shell=True)
 
-    # Download/Upload L2A, Calculate/Upload Preprocess
-    s2_data = os.path.join(TOPDIR,'Sentinel-2_Data',site)
-    command = python_path
+    # Download/Upload L2A
+    if site in ['Bojongsoang']:
+        s2_data = os.path.join(TOPDIR,'Sentinel-2_Data',site)
+        command = python_path
+        command += ' "{}"'.format(os.path.join(cmddir,'sentinel2_update.py'))
+        command += ' --str {:%Y%m%d}'.format(dstr)
+        command += ' --end {:%Y%m%d}'.format(dend)
+        command += ' --skip_copy'
+        call(command,shell=True)
+
+    # Calculate/Upload Preprocess
