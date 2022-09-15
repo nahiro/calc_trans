@@ -25,14 +25,15 @@ TOPDIR = 'F:\Work'
 python_path = os.path.join(HOME,'miniconda3','python.exe')
 cmddir = os.path.join(HOME,'Automation')
 scrdir = os.path.join(HOME,'SatelliteTool')
+s1_data = os.path.join(TOPDIR,'Sentinel-1_Data')
+s2_data = os.path.join(TOPDIR,'Sentinel-2_Data')
+s2_path = '/SATREPS/ipb/User/1_Spatial-information/Sentinel-2'
 dend = datetime.now().strftime('%Y%m%d')
 dstr = dend-timedelta(days=30)
-s2_path = '/SATREPS/ipb/User/1_Spatial-information/Sentinel-2'
 
 for site in ['Cihea','Bojongsoang','Testsite']:
     # Download/Upload GRD, Calculate/Upload Planting
     if site in ['Cihea','Bojongsoang']:
-        s1_data = os.path.join(TOPDIR,'Sentinel-1_Data')
         command = python_path
         command += ' "{}"'.format(os.path.join(cmddir,'auto_calc_trans.py'))
         command += ' --scrdir "{}"'.format(cmddir)
@@ -45,7 +46,6 @@ for site in ['Cihea','Bojongsoang','Testsite']:
 
     # Download/Upload L2A
     if site in ['Bojongsoang']:
-        s2_data = os.path.join(TOPDIR,'Sentinel-2_Data')
         command = python_path
         command += ' "{}"'.format(os.path.join(cmddir,'sentinel2_update.py'))
         command += ' --scrdir "{}"'.format(cmddir)
@@ -62,7 +62,13 @@ for site in ['Cihea','Bojongsoang','Testsite']:
     command += ' --cmddir "{}"'.format(cmddir)
     command += ' --scrdir "{}"'.format(scrdir)
 
-    command += ' --s2_data "{}"'.format()
+    command += ' --site {}'.format(site)
+    command += ' --s2_data "{}"'.format(s2_data)
+    if site in ['Cihea']:
+        command += ' --l2a_dir "!{}"'.format(os.path.join(s2_data,'Bojongsoang','L2A'))
+        command += ' --search_key R032'
+    elif site in ['Testsite']:
+        command += ' --skip_geocor'
     command += ' --gis_fnam {}'.format()
     command += ' --wv_fnam {}'.format()
     command += ' --l2a_dir {}'.format()
