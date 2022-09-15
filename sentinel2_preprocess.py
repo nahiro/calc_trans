@@ -363,6 +363,8 @@ if not args.skip_interp and not args.skip_upload:
             if not year in data_years:
                 continue
             dnam = os.path.join(tentative_dnam,ystr)
+            if not os.path.isdir(dnam):
+                continue
             for f in sorted(os.listdir(dnam)):
                 m = re.search('^('+'\d'*8+')_interp\.npz$',f)
                 if not m:
