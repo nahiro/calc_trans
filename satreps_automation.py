@@ -71,26 +71,17 @@ for site in ['Bojongsoang','Cihea','Testsite']:
     command += ' --atcor_path {}/{}/atcor'.format(s2_path,site)
     command += ' --interp_path {}/{}/interp'.format(s2_path,site)
     command += ' --tentative_path {}/{}/tentative_interp'.format(s2_path,site)
-
-
-
     if site in ['Bojongsoang']:
+        command += ' --gis_fnam "{}"'.format(gis_bojongsoang)
+        command += ' --wv_fnam "{}"'.format(wv_bojongsoang)
+    elif site in ['Cihea']:
         command += ' --l2a_dir "!{}"'.format(os.path.join(s2_data,'Bojongsoang','L2A'))
         command += ' --search_key R032'
-        command += ' --gis_fnam "{}"'.format(gis_bojongsoang)
-        command += ' --wv_fnam "{}"'.format()
-    elif site in ['Cihea']:
         command += ' --gis_fnam "{}"'.format(gis_cihea)
-        command += ' --wv_fnam "{}"'.format()
+        command += ' --wv_fnam "{}"'.format(wv_cihea)
     elif site in ['Testsite']:
         command += ' --gis_fnam "{}"'.format(gis_testsite)
+        command += ' --resample_dir "!{}"'.format(os.path.join(s2_data,'Cihea','resample'))
         command += ' --skip_geocor'
     else:
         ValueError('Error, site={}'.format(site))
-    command += ' --l2a_dir {}'.format()
-    command += ' --search_key {}'.format()
-    command += ' --resample_dir {}'.format()
-    command += ' --parcel_dir {}'.format()
-    command += ' --atcor_dir {}'.format()
-    command += ' --interp_dir {}'.format()
-    command += ' --tentative_dir {}'.format()
