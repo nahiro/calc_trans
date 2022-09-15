@@ -32,6 +32,7 @@ for site in ['Cihea','Bojongsoang','Testsite']:
         s1_data = os.path.join(TOPDIR,'Sentinel-1_Data')
         command = python_path
         command += ' "{}"'.format(os.path.join(cmddir,'auto_calc_trans.py'))
+        command += ' --scrdir "{}"'.format(cmddir)
         command += ' --datdir "{}"'.format(s1_data)
         command += ' --sites {}'.format(site)
         command += ' --skip_copy'
