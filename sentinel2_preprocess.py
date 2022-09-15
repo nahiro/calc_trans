@@ -271,6 +271,7 @@ if not args.skip_interp:
             year = int(ystr)
             if not year in data_years:
                 continue
+            # Upload interp
             dnam = os.path.join(interp_dnam,ystr)
             for f in sorted(os.listdir(dnam)):
                 m = re.search('^('+'\d'*8+')_interp\.npz$',f)
@@ -303,6 +304,34 @@ if not args.skip_interp:
                     if args.port is not None:
                         command += ' --port {}'.format(args.port)
                     command += ' --srcdir {}/{}'.format(args.interp_path,ystr)
+                    if args.debug:
+                        sys.stderr.write('{}\n'.format(command))
+                        sys.stderr.flush()
+            # Upload tentative interp
+            dnam = os.path.join(tentative_dnam,ystr)
+            for f in sorted(os.listdir(dnam)):
+                m = re.search('^('+'\d'*8+')_interp\.npz$',f)
+                if not m:
+                    continue
+                dstr = m.group(1)
+                d = datetime.strptime(dstr,'%Y%m%d')
+                if d < tmin or d > tmax:
+                    continue
+                fnam = os.path.join(dnam,f)
+                if args.debug:
+                    sys.stderr.write('{}\n'.format(fnam))
+                    sys.stderr.flush()
+                fnams = glob(os.path.join(dnam,'{}_interp.*'.format(dstr)))
+                if len(fnams) > 0:
+                    command = 'python'
+                    command += ' "{}"'.format(os.path.join(args.scrdir,'file_station_upload_files.py'))
+                    for fnam in fnams:
+                        command += ' "{}"'.format(fnam)
+                    if args.server is not None:
+                        command += ' --server {}'.format(args.server)
+                    if args.port is not None:
+                        command += ' --port {}'.format(args.port)
+                    command += ' --srcdir {}/{}'.format(args.tentative_path,ystr)
                     if args.debug:
                         sys.stderr.write('{}\n'.format(command))
                         sys.stderr.flush()
