@@ -48,7 +48,10 @@ for site in ['Bojongsoang','Cihea','Testsite']:
         command += ' --str {:%Y%m%d}'.format(dstr)
         command += ' --end {:%Y%m%d}'.format(dend)
         command += ' --skip_copy'
-        call(command,shell=True)
+        try:
+            call(command,shell=True)
+        except Exception:
+            pass
 
     # Download/Upload L2A
     if site in ['Bojongsoang']:
@@ -60,7 +63,10 @@ for site in ['Bojongsoang','Cihea','Testsite']:
         command += ' --str {:%Y%m%d}'.format(dstr)
         command += ' --end {:%Y%m%d}'.format(dend)
         command += ' --skip_copy'
-        call(command,shell=True)
+        try:
+            call(command,shell=True)
+        except Exception:
+            pass
 
     # Calculate/Upload Preprocess
     command = python_path
@@ -89,4 +95,7 @@ for site in ['Bojongsoang','Cihea','Testsite']:
     else:
         ValueError('Error, site={}'.format(site))
     if site in ['Cihea','Testsite']:
-        call(command,shell=True)
+        try:
+            call(command,shell=True)
+        except Exception:
+            pass
