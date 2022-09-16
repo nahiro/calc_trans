@@ -179,7 +179,7 @@ for site in opts.sites:
         call(command,shell=True)
         d1 = (dtim+timedelta(days=-1)).strftime('%Y%m%d')
         d2 = (dtim+timedelta(days=+1)).strftime('%Y%m%d')
-        wrkdir = os.path.join(opts.wrkdir,site,'preliminary',p_version[site_low],dstr)
+        wrkdir = os.path.join(opts.datdir,site,'preliminary',p_version[site_low],dstr)
         gnam = os.path.join(wrkdir,'trans_date_{}_{}_preliminary.shp'.format(site_low,dstr))
         if os.path.exists(gnam) and not opts.overwrite:
             pass
@@ -215,7 +215,7 @@ for site in opts.sites:
                 dstr = dtim.strftime('%Y%m%d')
             d1 = dtim.strftime('%Y%m%d')
             d2 = d1
-            wrkdir = os.path.join(opts.wrkdir,site,'final',f_version[site_low],dstr)
+            wrkdir = os.path.join(opts.datdir,site,'final',f_version[site_low],dstr)
             gnam = os.path.join(wrkdir,'trans_date_{}_{}_final.shp'.format(site_low,dstr))
             if os.path.exists(gnam) and not opts.overwrite:
                 pass

@@ -101,8 +101,8 @@ with tempfile.NamedTemporaryFile(mode='w',suffix='.ini') as fp:
     fp.write('[main]\n')
     fp.write('#main.start_date                     =\n')
     fp.write('#main.end_date                       =\n')
-    fp.write('main.first_date                     = {:%Y%b%m%d}\n'.format(d1))
-    fp.write('main.last_date                      = {:%Y%b%m%d}\n'.format(d2))
+    fp.write('main.first_date                     = {:%Y-%m%b-%d}\n'.format(d1))
+    fp.write('main.last_date                      = {:%Y-%m%b-%d}\n'.format(d2))
     fp.write('main.s2_data                        = {}\n'.format(s2_data))
     fp.write('main.download                       = False\n')
     if args.skip_geocor:
