@@ -25,6 +25,7 @@ tcur = time.time()
 files = glob('/tmp/jffi*')
 files.extend(glob('/tmp/imageio*'))
 files.extend(glob(os.path.join(HOME,'.snap/var/cache/temp/imageio*')))
+files.extend(glob(os.path.join(HOME,'Automation/imageio*')))
 
 for f in files:
     t = os.path.getmtime(f)
