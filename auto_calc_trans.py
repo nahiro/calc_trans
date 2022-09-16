@@ -182,7 +182,8 @@ for site in opts.sites:
         wrkdir = os.path.join(opts.datdir,site,'preliminary',p_version[site_low],dstr)
         gnam = os.path.join(wrkdir,'trans_date_{}_{}_preliminary.shp'.format(site_low,dstr))
         if os.path.exists(gnam) and not opts.overwrite:
-            pass
+            sys.stderr.write('Preliminary file exists, skip >>> {}\n'.format(gnam))
+            sys.stderr.flush()
         else:
             command = 'python'
             command += ' {}'.format(os.path.join(opts.scrdir,'get_preliminary_estimation.py'))
@@ -219,7 +220,8 @@ for site in opts.sites:
             wrkdir = os.path.join(opts.datdir,site,'final',f_version[site_low],dstr)
             gnam = os.path.join(wrkdir,'trans_date_{}_{}_final.shp'.format(site_low,dstr))
             if os.path.exists(gnam) and not opts.overwrite:
-                pass
+                sys.stderr.write('Final file exists, skip >>> {}\n'.format(gnam))
+                sys.stderr.flush()
             else:
                 command = 'python'
                 command += ' {}'.format(os.path.join(opts.scrdir,'get_final_estimation.py'))

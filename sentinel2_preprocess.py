@@ -93,7 +93,7 @@ else:
     d1 = d2-timedelta(days=(args.grow_period*2+args.tmgn*2))
 data_years = np.arange(d1.year,d2.year+1,1)
 
-with tempfile.NamedTemporaryFile(mode='w',suffix='.ini') as fp:
+with tempfile.NamedTemporaryFile(mode='w+',suffix='.ini') as fp:
     fp.write('[DEFAULT]\n')
     fp.write('scr_dir                             = {}\n'.format(args.scrdir))
     fp.write('s2_data                             = {}\n'.format(s2_data))
