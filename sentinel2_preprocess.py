@@ -32,7 +32,7 @@ TENTATIVE_PATH = '/SATREPS/ipb/User/1_Spatial-information/Sentinel-2/Cihea/tenta
 TMAX = datetime.now().strftime('%Y%m%d')
 GROW_PERIOD = 120 # day
 TMGN = 90 # day
-TSND = 30 # day
+TSND = 180 # day
 
 # Read options
 parser = ArgumentParser(formatter_class=lambda prog:RawTextHelpFormatter(prog,max_help_position=200,width=200))

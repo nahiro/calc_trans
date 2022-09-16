@@ -30,7 +30,7 @@ s1_data = os.path.join(TOPDIR,'Sentinel-1_Data')
 s2_data = os.path.join(TOPDIR,'Sentinel-2_Data')
 s2_path = '/SATREPS/ipb/User/1_Spatial-information/Sentinel-2'
 dend = datetime.now()
-dstr = dend-timedelta(days=30)
+dstr = dend-timedelta(days=180)
 gis_bojongsoang = os.path.join(TOPDIR,'Shapefile','Bojongsoang','Bojongsoang.shp')
 gis_cihea = os.path.join(TOPDIR,'Shapefile','All_area_polygon_20210914','All_area_polygon_20210914.shp')
 gis_testsite = os.path.join(TOPDIR,'Shapefile','Testsite_polygon_20210914','Testsite_polygon_20210914.shp')
