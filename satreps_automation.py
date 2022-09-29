@@ -75,7 +75,7 @@ for site in ['Bojongsoang','Cihea','Testsite']:
     command += ' --scrdir "{}"'.format(scrdir)
     command += ' --site {}'.format(site)
     command += ' --s2_data "{}"'.format(s2_data)
-    command += ' --resample_path {}/{}/resample'.format(s2_path,site)
+    command += ' --geocor_path {}/{}/geocor'.format(s2_path,site)
     command += ' --parcel_path {}/{}/parcel'.format(s2_path,site)
     command += ' --atcor_path {}/{}/atcor'.format(s2_path,site)
     command += ' --interp_path {}/{}/interp'.format(s2_path,site)
@@ -90,7 +90,7 @@ for site in ['Bojongsoang','Cihea','Testsite']:
         command += ' --wv_fnam "{}"'.format(wv_cihea)
     elif site in ['Testsite']:
         command += ' --gis_fnam "{}"'.format(gis_testsite)
-        command += ' --resample_dir "!{}"'.format(os.path.join(s2_data,'Cihea','resample'))
+        command += ' --geocor_dir "!{}"'.format(os.path.join(s2_data,'Cihea','geocor'))
         command += ' --skip_geocor'
     else:
         ValueError('Error, site={}'.format(site))
