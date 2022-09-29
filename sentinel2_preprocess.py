@@ -48,11 +48,13 @@ parser.add_argument('--wv_fnam',default=WV_FNAM,help='WorldView data file (%(def
 parser.add_argument('--l2a_dir',default=None,help='Sentinel-2 L2A folder (%(default)s)')
 parser.add_argument('--search_key',default=None,help='Search keyword for L2A (%(default)s)')
 parser.add_argument('--geocor_dir',default=None,help='Sentinel-2 geocor folder (%(default)s)')
+parser.add_argument('--indices_dir',default=None,help='Sentinel-2 indices folder (%(default)s)')
 parser.add_argument('--parcel_dir',default=None,help='Sentinel-2 parcel folder (%(default)s)')
 parser.add_argument('--atcor_dir',default=None,help='Sentinel-2 atcor folder (%(default)s)')
 parser.add_argument('--interp_dir',default=None,help='Sentinel-2 interp folder (%(default)s)')
 parser.add_argument('--tentative_dir',default=None,help='Sentinel-2 tentative_interp folder (%(default)s)')
 parser.add_argument('--geocor_path',default=GEOCOR_PATH,help='Sentinel-2 geocor on NAS (%(default)s)')
+parser.add_argument('--indices_path',default=INDICES_PATH,help='Sentinel-2 indices on NAS (%(default)s)')
 parser.add_argument('--parcel_path',default=PARCEL_PATH,help='Sentinel-2 parcel on NAS (%(default)s)')
 parser.add_argument('--atcor_path',default=ATCOR_PATH,help='Sentinel-2 atcor on NAS (%(default)s)')
 parser.add_argument('--interp_path',default=INTERP_PATH,help='Sentinel-2 interp on NAS (%(default)s)')
@@ -65,6 +67,7 @@ parser.add_argument('--grow_period',default=GROW_PERIOD,type=int,help='Length of
 parser.add_argument('--tmgn',default=TMGN,type=int,help='Margin of calculation period in day (%(default)s)')
 parser.add_argument('--tsnd',default=TSND,type=int,help='Duration of data to send in day (%(default)s)')
 parser.add_argument('--skip_geocor',default=False,action='store_true',help='Skip geocor (%(default)s)')
+parser.add_argument('--skip_indices',default=False,action='store_true',help='Skip indices (%(default)s)')
 parser.add_argument('--skip_parcel',default=False,action='store_true',help='Skip parcel (%(default)s)')
 parser.add_argument('--skip_atcor',default=False,action='store_true',help='Skip atcor (%(default)s)')
 parser.add_argument('--skip_interp',default=False,action='store_true',help='Skip interp (%(default)s)')
@@ -109,6 +112,10 @@ with tempfile.NamedTemporaryFile(mode='w+',suffix='.ini') as fp:
         fp.write('main.geocor                         = False\n')
     else:
         fp.write('main.geocor                         = True\n')
+    if args.skip_indices:
+        fp.write('main.indices                        = False\n')
+    else:
+        fp.write('main.indices                        = True\n')
     if args.skip_parcel:
         fp.write('main.parcel                         = False\n')
     else:
@@ -203,7 +210,53 @@ if not args.skip_geocor and not args.skip_upload:
                         command += ' --server {}'.format(args.server)
                     if args.port is not None:
                         command += ' --port {}'.format(args.port)
-                    command += ' --srcdir {}/{}'.format(args.atcor_path,ystr)
+                    command += ' --srcdir {}/{}'.format(args.geocor_path,ystr)
+                    if args.debug:
+                        sys.stderr.write('{}\n'.format(command))
+                        sys.stderr.flush()
+                    else:
+                        call(command,shell=True)
+
+if not args.skip_indices and not args.skip_upload:
+    if args.indices_dir is not None:
+        indices_dnam = args.indices_dir
+    else:
+        indices_dnam = os.path.join(s2_data,'indices')
+    if not os.path.isdir(indices_dnam):
+        pass
+    else:
+        for ystr in sorted(os.listdir(indices_dnam)):
+            if not re.search('^\d\d\d\d$',ystr):
+                continue
+            year = int(ystr)
+            if not year in data_years:
+                continue
+            dnam = os.path.join(indices_dnam,ystr)
+            if not os.path.isdir(dnam):
+                continue
+            for f in sorted(os.listdir(dnam)):
+                m = re.search('^('+'\d'*8+')_indices\.tif$',f)
+                if not m:
+                    continue
+                dstr = m.group(1)
+                d = datetime.strptime(dstr,'%Y%m%d')
+                if d < tmin or d > tmax:
+                    continue
+                fnam = os.path.join(dnam,f)
+                if args.debug:
+                    sys.stderr.write('{}\n'.format(fnam))
+                    sys.stderr.flush()
+                fnams = glob(os.path.join(dnam,'{}_indices.*'.format(dstr)))
+                if len(fnams) > 0:
+                    command = 'python'
+                    command += ' "{}"'.format(os.path.join(args.cmddir,'file_station_upload_files.py'))
+                    for fnam in fnams:
+                        command += ' "{}"'.format(fnam)
+                    if args.server is not None:
+                        command += ' --server {}'.format(args.server)
+                    if args.port is not None:
+                        command += ' --port {}'.format(args.port)
+                    command += ' --srcdir {}/{}'.format(args.indices_path,ystr)
                     if args.debug:
                         sys.stderr.write('{}\n'.format(command))
                         sys.stderr.flush()
@@ -249,7 +302,7 @@ if not args.skip_parcel and not args.skip_upload:
                         command += ' --server {}'.format(args.server)
                     if args.port is not None:
                         command += ' --port {}'.format(args.port)
-                    command += ' --srcdir {}/{}'.format(args.atcor_path,ystr)
+                    command += ' --srcdir {}/{}'.format(args.parcel_path,ystr)
                     if args.debug:
                         sys.stderr.write('{}\n'.format(command))
                         sys.stderr.flush()

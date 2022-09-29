@@ -90,8 +90,9 @@ for site in ['Bojongsoang','Cihea','Testsite']:
         command += ' --wv_fnam "{}"'.format(wv_cihea)
     elif site in ['Testsite']:
         command += ' --gis_fnam "{}"'.format(gis_testsite)
-        command += ' --geocor_dir "!{}"'.format(os.path.join(s2_data,'Cihea','geocor'))
+        command += ' --indices_dir "!{}"'.format(os.path.join(s2_data,'Cihea','indices'))
         command += ' --skip_geocor'
+        command += ' --skip_indices'
     else:
         ValueError('Error, site={}'.format(site))
     if site in ['Cihea','Testsite']:
