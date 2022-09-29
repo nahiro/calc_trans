@@ -24,7 +24,7 @@ SCRDIR = os.path.join(HOME,'SatelliteTool')
 S2_DATA = os.path.join(TOPDIR,'Sentinel-2_Data')
 GIS_FNAM = os.path.join(TOPDIR,'Shapefile','All_area_polygon_20210914','All_area_polygon_20210914.shp')
 WV_FNAM = os.path.join(TOPDIR,'WorldView','wv2_180629_mul.tif')
-RESAMPLE_PATH = '/SATREPS/ipb/User/1_Spatial-information/Sentinel-2/Cihea/resample'
+GEOCOR_PATH = '/SATREPS/ipb/User/1_Spatial-information/Sentinel-2/Cihea/geocor'
 PARCEL_PATH = '/SATREPS/ipb/User/1_Spatial-information/Sentinel-2/Cihea/parcel'
 ATCOR_PATH = '/SATREPS/ipb/User/1_Spatial-information/Sentinel-2/Cihea/atcor'
 INTERP_PATH = '/SATREPS/ipb/User/1_Spatial-information/Sentinel-2/Cihea/interp'
@@ -47,12 +47,12 @@ parser.add_argument('--gis_fnam',default=GIS_FNAM,help='Parcel data file (%(defa
 parser.add_argument('--wv_fnam',default=WV_FNAM,help='WorldView data file (%(default)s)')
 parser.add_argument('--l2a_dir',default=None,help='Sentinel-2 L2A folder (%(default)s)')
 parser.add_argument('--search_key',default=None,help='Search keyword for L2A (%(default)s)')
-parser.add_argument('--resample_dir',default=None,help='Sentinel-2 resample folder (%(default)s)')
+parser.add_argument('--geocor_dir',default=None,help='Sentinel-2 geocor folder (%(default)s)')
 parser.add_argument('--parcel_dir',default=None,help='Sentinel-2 parcel folder (%(default)s)')
 parser.add_argument('--atcor_dir',default=None,help='Sentinel-2 atcor folder (%(default)s)')
 parser.add_argument('--interp_dir',default=None,help='Sentinel-2 interp folder (%(default)s)')
 parser.add_argument('--tentative_dir',default=None,help='Sentinel-2 tentative_interp folder (%(default)s)')
-parser.add_argument('--resample_path',default=RESAMPLE_PATH,help='Sentinel-2 resample on NAS (%(default)s)')
+parser.add_argument('--geocor_path',default=GEOCOR_PATH,help='Sentinel-2 geocor on NAS (%(default)s)')
 parser.add_argument('--parcel_path',default=PARCEL_PATH,help='Sentinel-2 parcel on NAS (%(default)s)')
 parser.add_argument('--atcor_path',default=ATCOR_PATH,help='Sentinel-2 atcor on NAS (%(default)s)')
 parser.add_argument('--interp_path',default=INTERP_PATH,help='Sentinel-2 interp on NAS (%(default)s)')
@@ -132,7 +132,6 @@ with tempfile.NamedTemporaryFile(mode='w+',suffix='.ini') as fp:
     if args.search_key is not None:
         fp.write('geocor.search_key                   = {}\n'.format(args.search_key))
     fp.write('geocor.ref_fnam                     = {}\n'.format(args.wv_fnam))
-    fp.write('geocor.band_fnam                    = {}\n'.format(os.path.join(s2_data,'band_names.txt')))
     fp.write('#geocor.python_path                  = {}\n'.format(args.python_path))
     fp.write('geocor.scr_dir                      = {}\n'.format(args.scrdir))
     fp.write('[parcel]\n')
@@ -166,24 +165,24 @@ with tempfile.NamedTemporaryFile(mode='w+',suffix='.ini') as fp:
         call(command,shell=True)
 
 if not args.skip_geocor and not args.skip_upload:
-    if args.resample_dir is not None:
-        resample_dnam = args.resample_dir
+    if args.geocor_dir is not None:
+        geocor_dnam = args.geocor_dir
     else:
-        resample_dnam = os.path.join(s2_data,'resample')
-    if not os.path.isdir(resample_dnam):
+        geocor_dnam = os.path.join(s2_data,'geocor')
+    if not os.path.isdir(geocor_dnam):
         pass
     else:
-        for ystr in sorted(os.listdir(resample_dnam)):
+        for ystr in sorted(os.listdir(geocor_dnam)):
             if not re.search('^\d\d\d\d$',ystr):
                 continue
             year = int(ystr)
             if not year in data_years:
                 continue
-            dnam = os.path.join(resample_dnam,ystr)
+            dnam = os.path.join(geocor_dnam,ystr)
             if not os.path.isdir(dnam):
                 continue
             for f in sorted(os.listdir(dnam)):
-                m = re.search('^('+'\d'*8+')_resample\.tif$',f)
+                m = re.search('^('+'\d'*8+')_geocor\.tif$',f)
                 if not m:
                     continue
                 dstr = m.group(1)
@@ -194,7 +193,7 @@ if not args.skip_geocor and not args.skip_upload:
                 if args.debug:
                     sys.stderr.write('{}\n'.format(fnam))
                     sys.stderr.flush()
-                fnams = glob(os.path.join(dnam,'{}_resample.*'.format(dstr)))
+                fnams = glob(os.path.join(dnam,'{}_geocor.*'.format(dstr)))
                 if len(fnams) > 0:
                     command = 'python'
                     command += ' "{}"'.format(os.path.join(args.cmddir,'file_station_upload_files.py'))
