@@ -17,7 +17,7 @@ from optparse import OptionParser,IndentedHelpFormatter
 HOME = os.environ.get('HOME')
 if HOME is None:
     HOME = os.environ.get('USERPROFILE')
-INPNAM = os.path.join(HOME,'Work','Shapefile','All_area_polygon_20210914','All_area_polygon_20210914')
+SHP_FNAM = os.path.join(HOME,'Work','Shapefile','All_area_polygon_20210914','All_area_polygon_20210914')
 OUTNAM = os.path.join('.','transplanting_date')
 DATA_FILE = 'output.tif'
 AREA_FILE = 'pixel_area_block.dat'
@@ -27,7 +27,7 @@ parser = OptionParser(formatter=IndentedHelpFormatter(max_help_position=200,widt
 parser.add_option('--data_fnam',default=DATA_FILE,help='Estimation data file (%default)')
 parser.add_option('--area_fnam',default=AREA_FILE,help='Area data file (%default)')
 parser.add_option('--true_fnam',default=None,help='True data file (%default)')
-parser.add_option('--inpnam',default=INPNAM,help='Input shapefile (%default)')
+parser.add_option('--shp_fnam',default=SHP_FNAM,help='Input shapefile (%default)')
 parser.add_option('--outnam',default=OUTNAM,help='Output shapefile (%default)')
 parser.add_option('-n','--no_block',default=False,action='store_true',help='No block in area_fnam (%default)')
 parser.add_option('--use_index',default=False,action='store_true',help='Use index instead of OBJECTID (%default)')
@@ -158,7 +158,7 @@ for i in range(object_ids.size):
     data_list[11] = risetime
     data_dict.update({object_id:data_list})
 
-r = shapefile.Reader(opts.inpnam)
+r = shapefile.Reader(opts.shp_fnam)
 if len(r) != nobject:
     raise ValueError('Error, len(r)={}, nobject={}'.format(len(r),nobject))
 w = shapefile.Writer(opts.outnam)
@@ -188,4 +188,4 @@ for iobj,shaperec in enumerate(r.iterShapeRecords()):
     w.shape(shp)
     w.record(*rec)
 w.close()
-shutil.copy2(opts.inpnam+'.prj',opts.outnam+'.prj')
+shutil.copy2(opts.shp_fnam+'.prj',opts.outnam+'.prj')
