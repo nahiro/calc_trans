@@ -25,6 +25,7 @@ S2_DATA = os.path.join(TOPDIR,'Sentinel-2_Data')
 GIS_FNAM = os.path.join(TOPDIR,'Shapefile','All_area_polygon_20210914','All_area_polygon_20210914.shp')
 WV_FNAM = os.path.join(TOPDIR,'WorldView','wv2_180629_mul.tif')
 GEOCOR_PATH = '/SATREPS/ipb/User/1_Spatial-information/Sentinel-2/Cihea/geocor'
+INDICES_PATH = '/SATREPS/ipb/User/1_Spatial-information/Sentinel-2/Cihea/indices'
 PARCEL_PATH = '/SATREPS/ipb/User/1_Spatial-information/Sentinel-2/Cihea/parcel'
 ATCOR_PATH = '/SATREPS/ipb/User/1_Spatial-information/Sentinel-2/Cihea/atcor'
 INTERP_PATH = '/SATREPS/ipb/User/1_Spatial-information/Sentinel-2/Cihea/interp'
