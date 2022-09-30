@@ -151,6 +151,7 @@ for site in opts.sites:
                     command += ' --smin 0'
                     command += ' --smax 6'
                     command += ' --title "Search Period: {} - {}"'.format(tmin,tmax)
+                    command += ' --block_fnam '+os.path.join(opts.wrkdir,site,site+'_outline',site+'_outline.shp')
                     command += ' --trans_fnam '+tif_fnam
                     command += ' --mask_fnam '+os.path.join(opts.wrkdir,site,'paddy_mask_studyarea.tif')
                     command += ' --output_fnam '+trans_pixel_image
@@ -171,6 +172,7 @@ for site in opts.sites:
                     command += ' --smin 0'
                     command += ' --smax 6'
                     command += ' --title "Search Period: {} - {}"'.format(tmin,tmax)
+                    command += ' --block_fnam '+os.path.join(opts.wrkdir,site,site+'_outline',site+'_outline.shp')
                     command += ' --trans_fnam '+shp_fnam
                     command += ' --mask_fnam '+os.path.join(opts.wrkdir,site,'paddy_mask_studyarea.dat')
                     command += ' --output_fnam '+trans_field_image
