@@ -128,6 +128,7 @@ if not opts.skip_upload:
             command += ' '+os.path.join(opts.scrdir,'sentinel2_upload_nas.py')
             command += ' --site '+site
             command += ' '+gnam
+            command += ' --verbose'
             call(command,shell=True)
 
 # Copy data
