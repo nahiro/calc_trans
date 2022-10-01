@@ -143,11 +143,19 @@ with tempfile.NamedTemporaryFile(mode='w+',suffix='.ini') as fp:
     fp.write('#geocor.python_path                  = {}\n'.format(args.python_path))
     fp.write('geocor.scr_dir                      = {}\n'.format(args.scrdir))
     fp.write('[parcel]\n')
+    if args.geocor_dir is not None:
+        fp.write('parcel.geocor_dir                   = {}\n'.format(args.geocor_dir))
+    if args.indices_dir is not None:
+        fp.write('parcel.indices_dir                  = {}\n'.format(args.indices_dir))
     fp.write('parcel.gis_fnam                     = {}\n'.format(args.gis_fnam))
     fp.write('parcel.mask_parcel                  = {}\n'.format(os.path.join(s2_data,'parcel_mask.tif')))
     fp.write('#parcel.python_path                  = {}\n'.format(args.python_path))
     fp.write('parcel.scr_dir                      = {}\n'.format(args.scrdir))
     fp.write('[atcor]\n')
+    if args.geocor_dir is not None:
+        fp.write('atcor.geocor_dir                    = {}\n'.format(args.geocor_dir))
+    if args.indices_dir is not None:
+        fp.write('atcor.indices_dir                   = {}\n'.format(args.indices_dir))
     fp.write('atcor.gis_fnam                      = {}\n'.format(args.gis_fnam))
     fp.write('atcor.mask_studyarea                = {}\n'.format(os.path.join(s2_data,'studyarea_mask.tif')))
     fp.write('atcor.mask_parcel                   = {}\n'.format(os.path.join(s2_data,'parcel_mask.tif')))
