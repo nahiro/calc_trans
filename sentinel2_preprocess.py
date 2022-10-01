@@ -97,7 +97,7 @@ else:
     d1 = d2-timedelta(days=(args.grow_period*2+args.tmgn*2))
 data_years = np.arange(d1.year,d2.year+1,1)
 
-with tempfile.NamedTemporaryFile(mode='w+',suffix='.ini') as fp:
+with tempfile.NamedTemporaryFile(mode='w+',suffix='.ini',delete=False) as fp:
     fp.write('[DEFAULT]\n')
     fp.write('scr_dir                             = {}\n'.format(args.scrdir))
     fp.write('s2_data                             = {}\n'.format(s2_data))
@@ -170,15 +170,16 @@ with tempfile.NamedTemporaryFile(mode='w+',suffix='.ini') as fp:
     fp.write('#interp.oflag                        = [False,True]\n')
     fp.write('#interp.python_path                  = {}\n'.format(args.python_path))
     fp.write('interp.scr_dir                      = {}\n'.format(args.scrdir))
-    fp.seek(0)
-    command = 'python'
-    command += ' "{}"'.format(os.path.join(args.scrdir,'satellite_main.py'))
-    command += ' "{}"'.format(fp.name)
-    if args.debug:
-        sys.stderr.write('{}\n'.format(command))
-        sys.stderr.flush()
-    else:
-        call(command,shell=True)
+command = 'python'
+command += ' "{}"'.format(os.path.join(args.scrdir,'satellite_main.py'))
+command += ' "{}"'.format(fp.name)
+if args.debug:
+    sys.stderr.write('{}\n'.format(command))
+    sys.stderr.flush()
+else:
+    call(command,shell=True)
+if os.path.exists(fp.name):
+    os.remove(fp.name)
 
 if not args.skip_geocor and not args.skip_upload:
     if args.geocor_dir is not None:
