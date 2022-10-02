@@ -60,6 +60,8 @@ parser.add_argument('--parcel_path',default=PARCEL_PATH,help='Sentinel-2 parcel 
 parser.add_argument('--atcor_path',default=ATCOR_PATH,help='Sentinel-2 atcor on NAS (%(default)s)')
 parser.add_argument('--interp_path',default=INTERP_PATH,help='Sentinel-2 interp on NAS (%(default)s)')
 parser.add_argument('--tentative_path',default=TENTATIVE_PATH,help='Sentinel-2 tentative_interp on NAS (%(default)s)')
+parser.add_argument('--subset_region',default=None,help='Subset Lat/Lon as [left,right,bottom,top] (%(default)s)')
+parser.add_argument('--resample_region',default=None,help='Resample UTM coordinates as [left,right,bottom,top] (%(default)s)')
 parser.add_argument('-s','--tmin',default=None,help='Min date to send in the format YYYYMMDD (%(default)s)')
 parser.add_argument('-e','--tmax',default=TMAX,help='Max date to send in the format YYYYMMDD (%(default)s)')
 parser.add_argument('--data_tmin',default=None,help='Min date to calculate in the format YYYYMMDD (%(default)s)')
@@ -140,6 +142,10 @@ with tempfile.NamedTemporaryFile(mode='w+',suffix='.ini',delete=False) as fp:
     if args.search_key is not None:
         fp.write('geocor.search_key                   = {}\n'.format(args.search_key))
     fp.write('geocor.ref_fnam                     = {}\n'.format(args.wv_fnam))
+    if args.subset_region is not None:
+        fp.write('geocor.trg_subset                   = {}\n'.format(args.subset_region))
+    if args.resample_region is not None:
+        fp.write('geocor.trg_resample                 = {}\n'.format(args.resample_region))
     fp.write('#geocor.python_path                  = {}\n'.format(args.python_path))
     fp.write('geocor.scr_dir                      = {}\n'.format(args.scrdir))
     fp.write('[parcel]\n')
