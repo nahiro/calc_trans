@@ -376,10 +376,9 @@ if args.logging:
     HTTPConnection.debuglevel = 1
 
 srcdir = args.srcdir+'/{}/L2A'.format(args.site)
+make_folders(srcdir)
 if query_folder(srcdir) is None:
     sys.exit()
-else:
-    folders.append(srcdir)
 
 for input_fnam in fnams:
     # S2A_MSIL2A_20210104T030121_N0214_R032_T48MYT_20210104T062157.zip

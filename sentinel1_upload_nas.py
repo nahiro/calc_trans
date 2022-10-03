@@ -376,10 +376,9 @@ if args.logging:
     HTTPConnection.debuglevel = 1
 
 srcdir = args.srcdir+'/{}/GRD'.format(args.site)
+make_folders(srcdir)
 if query_folder(srcdir) is None:
     sys.exit()
-else:
-    folders.append(srcdir)
 
 for input_fnam in fnams:
     # S1A_IW_GRDH_1SDV_20200102T111446_20200102T111515_030620_038227_6964.zip

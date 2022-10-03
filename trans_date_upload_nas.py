@@ -383,10 +383,9 @@ if args.logging:
     HTTPConnection.debuglevel = 1
 
 srcdir = args.srcdir+'/{}/{}'.format(args.site,args.level)
+make_folders(srcdir)
 if query_folder(srcdir) is None:
     sys.exit()
-else:
-    folders.append(srcdir)
 dnam = '{}/{}'.format(srcdir,args.version)
 make_folder(dnam)
 dstr_year = datetime.strptime(args.date,'%Y%m%d').strftime('%Y')

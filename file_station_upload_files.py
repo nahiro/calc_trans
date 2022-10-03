@@ -371,7 +371,7 @@ if args.logging:
     log.addHandler(stream)
     HTTPConnection.debuglevel = 1
 
-make_folder(args.srcdir)
+make_folders(args.srcdir)
 for input_fnam in fnams:
     fnam = os.path.basename(input_fnam)
     gnam = '{}/{}'.format(args.srcdir,fnam)
