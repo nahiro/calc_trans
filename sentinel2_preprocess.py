@@ -227,6 +227,7 @@ if not args.skip_geocor and not args.skip_upload:
                     if args.port is not None:
                         command += ' --port {}'.format(args.port)
                     command += ' --srcdir {}/{}'.format(args.geocor_path,ystr)
+                    command += ' --verbose'
                     if args.debug:
                         sys.stderr.write('{}\n'.format(command))
                         sys.stderr.flush()
@@ -273,6 +274,7 @@ if not args.skip_indices and not args.skip_upload:
                     if args.port is not None:
                         command += ' --port {}'.format(args.port)
                     command += ' --srcdir {}/{}'.format(args.indices_path,ystr)
+                    command += ' --verbose'
                     if args.debug:
                         sys.stderr.write('{}\n'.format(command))
                         sys.stderr.flush()
@@ -319,6 +321,7 @@ if not args.skip_parcel and not args.skip_upload:
                     if args.port is not None:
                         command += ' --port {}'.format(args.port)
                     command += ' --srcdir {}/{}'.format(args.parcel_path,ystr)
+                    command += ' --verbose'
                     if args.debug:
                         sys.stderr.write('{}\n'.format(command))
                         sys.stderr.flush()
@@ -365,6 +368,7 @@ if not args.skip_atcor and not args.skip_upload:
                     if args.port is not None:
                         command += ' --port {}'.format(args.port)
                     command += ' --srcdir {}/{}'.format(args.atcor_path,ystr)
+                    command += ' --verbose'
                     if args.debug:
                         sys.stderr.write('{}\n'.format(command))
                         sys.stderr.flush()
@@ -424,6 +428,7 @@ if not args.skip_interp and not args.skip_upload:
                     if args.port is not None:
                         command += ' --port {}'.format(args.port)
                     command += ' --srcdir {}/{}'.format(args.interp_path,ystr)
+                    command += ' --verbose'
                     if args.debug:
                         sys.stderr.write('{}\n'.format(command))
                         sys.stderr.flush()
@@ -462,6 +467,7 @@ if not args.skip_interp and not args.skip_upload:
                     if args.port is not None:
                         command += ' --port {}'.format(args.port)
                     command += ' --srcdir {}/{}'.format(args.tentative_path,ystr)
+                    command += ' --verbose'
                     if args.debug:
                         sys.stderr.write('{}\n'.format(command))
                         sys.stderr.flush()
