@@ -169,7 +169,7 @@ with tempfile.NamedTemporaryFile(mode='w+',suffix='.ini',delete=False) as fp:
     fp.write('atcor.gis_fnam                      = {}\n'.format(args.gis_fnam))
     fp.write('atcor.mask_studyarea                = {}\n'.format(os.path.join(s2_data,'studyarea_mask.tif')))
     fp.write('atcor.mask_parcel                   = {}\n'.format(os.path.join(s2_data,'parcel_mask.tif')))
-    fp.write('atcor.clean_thr                     = [{},{},1.0]\n'.format(args.cthr_avg,args.cthr_std)
+    fp.write('atcor.clean_thr                     = [{},{},1.0]\n'.format(args.cthr_avg,args.cthr_std))
     fp.write('#atcor.csv_flag                      = True\n')
     fp.write('#atcor.oflag                         = [False,False,False,False,False]\n')
     fp.write('#atcor.python_path                   = {}\n'.format(args.python_path))
