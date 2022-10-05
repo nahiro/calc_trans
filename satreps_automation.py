@@ -86,6 +86,7 @@ for site in ['Bojongsoang','Cihea','Testsite']:
         command += ' --wv_fnam "{}"'.format(wv_bojongsoang)
         command += ' --subset_region "[107.54,107.75,-7.04,-6.95]"'
         command += ' --resample_region "[790585.0,799555.0,9224425.0,9229335.0]"'
+        command += ' --cthr_avg 0.08'
     elif site in ['Cihea']:
         command += ' --l2a_dir "!{}"'.format(os.path.join(s2_data,'Bojongsoang','L2A'))
         command += ' --search_key R032'
