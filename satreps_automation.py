@@ -50,8 +50,9 @@ for site in ['Bojongsoang','Cihea','Testsite']:
         command += ' --skip_copy'
         try:
             call(command,shell=True)
-        except Exception:
-            pass
+        except Exception as e:
+            sys.stderr.write('{}\n'.format(e))
+            sys.stderr.flush()
 
     # Download/Upload L2A
     if site in ['Bojongsoang']:
@@ -65,8 +66,9 @@ for site in ['Bojongsoang','Cihea','Testsite']:
         command += ' --skip_copy'
         try:
             call(command,shell=True)
-        except Exception:
-            pass
+        except Exception as e:
+            sys.stderr.write('{}\n'.format(e))
+            sys.stderr.flush()
 
     # Calculate/Upload Preprocess
     command = python_path
@@ -100,8 +102,9 @@ for site in ['Bojongsoang','Cihea','Testsite']:
         command += ' --skip_indices'
     else:
         ValueError('Error, site={}'.format(site))
-    if site in ['Cihea','Testsite']:
+    if site in ['Bojongsoang','Cihea','Testsite']:
         try:
             call(command,shell=True)
-        except Exception:
-            pass
+        except Exception as e:
+            sys.stderr.write('{}\n'.format(e))
+            sys.stderr.flush()

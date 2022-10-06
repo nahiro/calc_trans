@@ -219,7 +219,8 @@ if not args.skip_geocor and not args.skip_upload:
                 if args.debug:
                     sys.stderr.write('{}\n'.format(fnam))
                     sys.stderr.flush()
-                fnams = glob(os.path.join(dnam,'{}_geocor.*'.format(dstr)))
+                fnams = glob(os.path.join(dnam,'{}_subset.*'.format(dstr)))
+                fnams.extend(glob(os.path.join(dnam,'{}_geocor*'.format(dstr))))
                 if len(fnams) > 0:
                     command = 'python'
                     command += ' "{}"'.format(os.path.join(args.cmddir,'file_station_upload_files.py'))
@@ -360,7 +361,8 @@ if not args.skip_atcor and not args.skip_upload:
                 if args.debug:
                     sys.stderr.write('{}\n'.format(fnam))
                     sys.stderr.flush()
-                fnams = glob(os.path.join(dnam,'{}_atcor.*'.format(dstr)))
+                fnams = glob(os.path.join(dnam,'{}_factor.*'.format(dstr)))
+                fnams.extend(glob(os.path.join(dnam,'{}_atcor.*'.format(dstr))))
                 if len(fnams) > 0:
                     command = 'python'
                     command += ' "{}"'.format(os.path.join(args.cmddir,'file_station_upload_files.py'))
