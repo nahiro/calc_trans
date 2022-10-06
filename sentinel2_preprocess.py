@@ -472,6 +472,7 @@ if not args.skip_interp and not args.skip_upload:
                     if args.port is not None:
                         command += ' --port {}'.format(args.port)
                     command += ' --srcdir {}/{}'.format(args.tentative_path,ystr)
+                    command += ' --overwrite'
                     command += ' --verbose'
                     if args.debug:
                         sys.stderr.write('{}\n'.format(command))
