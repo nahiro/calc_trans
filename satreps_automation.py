@@ -14,6 +14,7 @@ for p in psutil.process_iter(attrs=['pid','name','cmdline']):
     command = ' '.join(p.info['cmdline']).lower()
     if re.search('python',command) and re.search(script_name,command) and not re.search('powershell',command):
         pids.append(p.info['pid'])
+        cmds.append(command)
 if len(pids) > 2:
     sys.stderr.write('\nProcess exists >>> {}\n'.format(len(pids)))
     for i in range(len(pids)):
