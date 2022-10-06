@@ -5,16 +5,19 @@ import psutil
 from datetime import datetime,timedelta
 from subprocess import call
 
-script_name = os.path.basename(sys.argv[0])
+script_name = os.path.basename(sys.argv[0]).lower()
 pids = []
+cmds = []
 for p in psutil.process_iter(attrs=['pid','name','cmdline']):
     if p.info['cmdline'] is None:
         continue
-    command = ' '.join(p.info['cmdline'])
-    if re.search('python',command) and re.search(script_name,command):
+    command = ' '.join(p.info['cmdline']).lower()
+    if re.search('python',command) and re.search(script_name,command) and not re.search('powershell',command):
         pids.append(p.info['pid'])
-if len(pids) > 1:
-    sys.stderr.write('Process exists >>> {}'.format(len(pids)))
+if len(pids) > 2:
+    sys.stderr.write('\nProcess exists >>> {}\n'.format(len(pids)))
+    for i in range(len(pids)):
+        sys.stderr.write('{:3d} {:8d} {}\n'.format(i+1,pids[i],cmds[i]))
     sys.stderr.flush()
     sys.exit()
 
