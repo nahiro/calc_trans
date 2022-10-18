@@ -150,7 +150,7 @@ with tempfile.NamedTemporaryFile(mode='w+',suffix='.ini',delete=False) as fp:
         fp.write('geocor.trg_subset                   = {}\n'.format(args.subset_region))
     if args.resample_region is not None:
         fp.write('geocor.trg_resample                 = {}\n'.format(args.resample_region))
-    fp.write('#geocor.python_path                  = {}\n'.format(args.python_path))
+    fp.write('geocor.python_path                  = {}\n'.format(args.python_path))
     fp.write('geocor.scr_dir                      = {}\n'.format(args.scrdir))
     fp.write('[parcel]\n')
     if args.geocor_dir is not None:
@@ -159,7 +159,7 @@ with tempfile.NamedTemporaryFile(mode='w+',suffix='.ini',delete=False) as fp:
         fp.write('parcel.indices_dir                  = {}\n'.format(args.indices_dir))
     fp.write('parcel.gis_fnam                     = {}\n'.format(args.gis_fnam))
     fp.write('parcel.mask_parcel                  = {}\n'.format(os.path.join(s2_data,'parcel_mask.tif')))
-    fp.write('#parcel.python_path                  = {}\n'.format(args.python_path))
+    fp.write('parcel.python_path                  = {}\n'.format(args.python_path))
     fp.write('parcel.scr_dir                      = {}\n'.format(args.scrdir))
     fp.write('[atcor]\n')
     if args.geocor_dir is not None:
@@ -172,12 +172,12 @@ with tempfile.NamedTemporaryFile(mode='w+',suffix='.ini',delete=False) as fp:
     fp.write('atcor.clean_thr                     = [{},{},1.0]\n'.format(args.cthr_avg,args.cthr_std))
     fp.write('#atcor.csv_flag                      = True\n')
     fp.write('#atcor.oflag                         = [False,False,False,False,False]\n')
-    fp.write('#atcor.python_path                   = {}\n'.format(args.python_path))
+    fp.write('atcor.python_path                   = {}\n'.format(args.python_path))
     fp.write('atcor.scr_dir                       = {}\n'.format(args.scrdir))
     fp.write('[interp]\n')
     fp.write('#interp.csv_flag                     = True\n')
     fp.write('#interp.oflag                        = [False,True]\n')
-    fp.write('#interp.python_path                  = {}\n'.format(args.python_path))
+    fp.write('interp.python_path                  = {}\n'.format(args.python_path))
     fp.write('interp.scr_dir                      = {}\n'.format(args.scrdir))
 command = 'python'
 command += ' "{}"'.format(os.path.join(args.scrdir,'satellite_main.py'))
