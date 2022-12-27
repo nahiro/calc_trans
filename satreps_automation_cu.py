@@ -25,16 +25,16 @@ if len(pids) > 2:
 HOME = os.environ.get('USERPROFILE')
 if HOME is None:
     HOME = os.environ.get('HOME')
-TOPDIR = 'F:\Work'
+TOPDIR = os.path.join(HOME,'Work')
 
-python_path = os.path.join(HOME,'miniconda3','python.exe')
+python_path = os.path.join(HOME,'miniconda3','bin','python')
 cmddir = os.path.join(HOME,'Automation')
 scrdir = os.path.join(HOME,'SatelliteTool')
 s1_data = os.path.join(TOPDIR,'Sentinel-1_Data')
 s2_data = os.path.join(TOPDIR,'Sentinel-2_Data')
 s2_path = '/SATREPS/ipb/User/1_Spatial-information/Sentinel-2'
 dend = datetime.now()
-dstr = dend-timedelta(days=180)
+dstr = dend-timedelta(days=280)
 gis_bojongsoang = os.path.join(TOPDIR,'Shapefile','Bojongsoang','Bojongsoang.shp')
 gis_cihea = os.path.join(TOPDIR,'Shapefile','All_area_polygon_20210914','All_area_polygon_20210914.shp')
 gis_testsite = os.path.join(TOPDIR,'Shapefile','Testsite_polygon_20210914','Testsite_polygon_20210914.shp')
@@ -108,7 +108,8 @@ for site in ['Bojongsoang','Cihea','Testsite']:
         ValueError('Error, site={}'.format(site))
     if site in ['Bojongsoang','Cihea','Testsite']:
         try:
-            call(command,shell=True)
+            #call(command,shell=True)
+            pass
         except Exception as e:
             sys.stderr.write('{}\n'.format(e))
             sys.stderr.flush()
