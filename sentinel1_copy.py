@@ -47,7 +47,7 @@ for input_fnam in fnams:
     search_key = m.group(1)+'_'+m.group(2)+'_'+m.group(3)+'_'+m.group(4)+'_'+d1.strftime('%Y%m%d')
     copy_fnam = bnam+enam.lower()
     dstr_year = d1.strftime('%Y')
-    dstdir = os.path.join(opts.topdir,opts.site,dstr_year) # Destination directory
+    dstdir = os.path.join(opts.topdir,opts.site,'GRD',dstr_year) # Destination directory
     if not os.path.exists(dstdir):
         os.makedirs(dstdir)
     if not os.path.isdir(dstdir):
