@@ -269,6 +269,7 @@ for site in opts.sites:
                     command += ' --level preliminary'
                 command += ' --version '+version[site_low]
                 command += ' --overwrite'
+                command += ' --verbose'
                 command += ' '+' '.join(file_list)
                 if not opts.skip_upload:
                     call(command,shell=True)
@@ -282,7 +283,6 @@ for site in opts.sites:
                     command += ' --level preliminary'
                 command += ' --version '+version[site_low]
                 command += ' --overwrite'
-                command += ' --verbose'
                 command += ' '+' '.join(file_list)
                 if not opts.skip_copy:
                     call(command,shell=True)
