@@ -365,6 +365,30 @@ if not args.skip_indices and not (args.skip_upload and args.skip_copy):
                             sys.stderr.flush()
                         else:
                             call(command,shell=True)
+                    if not args.skip_copy:
+                        copy_dnam = os.path.join(args.indices_copy,ystr)
+                        if not os.path.exists(copy_dnam):
+                            os.makedirs(copy_dnam)
+                        if not os.path.isdir(copy_dnam):
+                            sys.stderr.write('Warning, no such folder >>> {}\n'.format(copy_dnam))
+                            sys.stderr.flush()
+                        else:
+                            for fnam in fnams:
+                                copy_fnam = os.path.join(copy_dnam,os.path.basename(fnam))
+                                if args.debug:
+                                    sys.stderr.write('cp {} {}\n'.format(fnam,copy_fnam))
+                                    sys.stderr.flush()
+                                elif os.path.exists(copy_fnam):
+                                    sys.stderr.write('File exists, skip   >>> {}\n'.format(copy_fnam))
+                                    sys.stderr.flush()
+                                else:
+                                    shutil.copy2(fnam,copy_fnam)
+                                    if os.path.exists(copy_fnam):
+                                        sys.stderr.write('Successfully copied >>> {}\n'.format(copy_fnam))
+                                        sys.stderr.flush()
+                                    else:
+                                        sys.stderr.write('Warning, failed to copy file >>> {}\n'.format(copy_fnam))
+                                        sys.stderr.flush()
 
 if not args.skip_parcel and not (args.skip_upload and args.skip_copy):
     if args.parcel_dir is not None:
@@ -413,6 +437,30 @@ if not args.skip_parcel and not (args.skip_upload and args.skip_copy):
                             sys.stderr.flush()
                         else:
                             call(command,shell=True)
+                    if not args.skip_copy:
+                        copy_dnam = os.path.join(args.parcel_copy,ystr)
+                        if not os.path.exists(copy_dnam):
+                            os.makedirs(copy_dnam)
+                        if not os.path.isdir(copy_dnam):
+                            sys.stderr.write('Warning, no such folder >>> {}\n'.format(copy_dnam))
+                            sys.stderr.flush()
+                        else:
+                            for fnam in fnams:
+                                copy_fnam = os.path.join(copy_dnam,os.path.basename(fnam))
+                                if args.debug:
+                                    sys.stderr.write('cp {} {}\n'.format(fnam,copy_fnam))
+                                    sys.stderr.flush()
+                                elif os.path.exists(copy_fnam):
+                                    sys.stderr.write('File exists, skip   >>> {}\n'.format(copy_fnam))
+                                    sys.stderr.flush()
+                                else:
+                                    shutil.copy2(fnam,copy_fnam)
+                                    if os.path.exists(copy_fnam):
+                                        sys.stderr.write('Successfully copied >>> {}\n'.format(copy_fnam))
+                                        sys.stderr.flush()
+                                    else:
+                                        sys.stderr.write('Warning, failed to copy file >>> {}\n'.format(copy_fnam))
+                                        sys.stderr.flush()
 
 if not args.skip_atcor and not (args.skip_upload and args.skip_copy):
     if args.atcor_dir is not None:
@@ -462,6 +510,30 @@ if not args.skip_atcor and not (args.skip_upload and args.skip_copy):
                             sys.stderr.flush()
                         else:
                             call(command,shell=True)
+                    if not args.skip_copy:
+                        copy_dnam = os.path.join(args.atcor_copy,ystr)
+                        if not os.path.exists(copy_dnam):
+                            os.makedirs(copy_dnam)
+                        if not os.path.isdir(copy_dnam):
+                            sys.stderr.write('Warning, no such folder >>> {}\n'.format(copy_dnam))
+                            sys.stderr.flush()
+                        else:
+                            for fnam in fnams:
+                                copy_fnam = os.path.join(copy_dnam,os.path.basename(fnam))
+                                if args.debug:
+                                    sys.stderr.write('cp {} {}\n'.format(fnam,copy_fnam))
+                                    sys.stderr.flush()
+                                elif os.path.exists(copy_fnam):
+                                    sys.stderr.write('File exists, skip   >>> {}\n'.format(copy_fnam))
+                                    sys.stderr.flush()
+                                else:
+                                    shutil.copy2(fnam,copy_fnam)
+                                    if os.path.exists(copy_fnam):
+                                        sys.stderr.write('Successfully copied >>> {}\n'.format(copy_fnam))
+                                        sys.stderr.flush()
+                                    else:
+                                        sys.stderr.write('Warning, failed to copy file >>> {}\n'.format(copy_fnam))
+                                        sys.stderr.flush()
 
 if not args.skip_interp and not (args.skip_upload and args.skip_copy):
     if args.interp_dir is not None:
@@ -523,6 +595,30 @@ if not args.skip_interp and not (args.skip_upload and args.skip_copy):
                             sys.stderr.flush()
                         else:
                             call(command,shell=True)
+                    if not args.skip_copy:
+                        copy_dnam = os.path.join(args.interp_copy,ystr)
+                        if not os.path.exists(copy_dnam):
+                            os.makedirs(copy_dnam)
+                        if not os.path.isdir(copy_dnam):
+                            sys.stderr.write('Warning, no such folder >>> {}\n'.format(copy_dnam))
+                            sys.stderr.flush()
+                        else:
+                            for fnam in fnams:
+                                copy_fnam = os.path.join(copy_dnam,os.path.basename(fnam))
+                                if args.debug:
+                                    sys.stderr.write('cp {} {}\n'.format(fnam,copy_fnam))
+                                    sys.stderr.flush()
+                                elif os.path.exists(copy_fnam):
+                                    sys.stderr.write('File exists, skip   >>> {}\n'.format(copy_fnam))
+                                    sys.stderr.flush()
+                                else:
+                                    shutil.copy2(fnam,copy_fnam)
+                                    if os.path.exists(copy_fnam):
+                                        sys.stderr.write('Successfully copied >>> {}\n'.format(copy_fnam))
+                                        sys.stderr.flush()
+                                    else:
+                                        sys.stderr.write('Warning, failed to copy file >>> {}\n'.format(copy_fnam))
+                                        sys.stderr.flush()
         # Upload tentative interp
         for ystr in sorted(os.listdir(tentative_dnam)):
             if not re.search('^\d\d\d\d$',ystr):
@@ -564,3 +660,28 @@ if not args.skip_interp and not (args.skip_upload and args.skip_copy):
                             sys.stderr.flush()
                         else:
                             call(command,shell=True)
+                    if not args.skip_copy:
+                        copy_dnam = os.path.join(args.tentative_copy,ystr)
+                        if not os.path.exists(copy_dnam):
+                            os.makedirs(copy_dnam)
+                        if not os.path.isdir(copy_dnam):
+                            sys.stderr.write('Warning, no such folder >>> {}\n'.format(copy_dnam))
+                            sys.stderr.flush()
+                        else:
+                            for fnam in fnams:
+                                copy_fnam = os.path.join(copy_dnam,os.path.basename(fnam))
+                                if args.debug:
+                                    sys.stderr.write('cp {} {}\n'.format(fnam,copy_fnam))
+                                    sys.stderr.flush()
+                                else:
+                                    if os.path.exists(copy_fnam):
+                                        os.remove(copy_fnam)
+                                        sys.stderr.write('File exists, delete >>> {}\n'.format(copy_fnam))
+                                        sys.stderr.flush()
+                                    shutil.copy2(fnam,copy_fnam)
+                                    if os.path.exists(copy_fnam):
+                                        sys.stderr.write('Successfully copied >>> {}\n'.format(copy_fnam))
+                                        sys.stderr.flush()
+                                    else:
+                                        sys.stderr.write('Warning, failed to copy file >>> {}\n'.format(copy_fnam))
+                                        sys.stderr.flush()
