@@ -90,6 +90,30 @@ args = parser.parse_args()
 site_low = args.site.lower()
 if site_low == 'none':
     s2_data = args.s2_data
+    if args.geocor_path is None:
+        args.geocor_path = '{}/geocor'.format(args.top_nas)
+    if args.indices_path is None:
+        args.indices_path = '{}/indices'.format(args.top_nas)
+    if args.parcel_path is None:
+        args.parcel_path = '{}/parcel'.format(args.top_nas)
+    if args.atcor_path is None:
+        args.atcor_path = '{}/atcor'.format(args.top_nas)
+    if args.interp_path is None:
+        args.interp_path = '{}/interp'.format(args.top_nas)
+    if args.tentative_path is None:
+        args.tentative_path = '{}/tentative_interp'.format(args.top_nas)
+    if args.geocor_copy is None:
+        args.geocor_copy = os.path.join(args.top_copy,'geocor')
+    if args.indices_copy is None:
+        args.indices_copy = os.path.join(args.top_copy,'indices')
+    if args.parcel_copy is None:
+        args.parcel_copy = os.path.join(args.top_copy,'parcel')
+    if args.atcor_copy is None:
+        args.atcor_copy = os.path.join(args.top_copy,'atcor')
+    if args.interp_copy is None:
+        args.interp_copy = os.path.join(args.top_copy,'interp')
+    if args.tentative_copy is None:
+        args.tentative_copy = os.path.join(args.top_copy,'tentative_interp')
 else:
     s2_data = os.path.join(args.s2_data,args.site)
     if args.geocor_path is None:
