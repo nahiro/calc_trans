@@ -13,8 +13,8 @@ HOME = os.environ.get('HOME')
 if HOME is None:
     HOME = os.environ.get('USERPROFILE')
 TOPDIR = os.path.join(HOME,'Work')
-NAS_TOP = '/SATREPS/ipb/User/1_Spatial-information/Sentinel-2'
-COPY_TOP = '/mnt/hlab2/Data/Sentinel-2'
+TOP_NAS = '/SATREPS/ipb/User/1_Spatial-information/Sentinel-2'
+TOP_COPY = '/mnt/hlab2/Data/Sentinel-2'
 
 # Default values
 SITE = 'Cihea'
@@ -26,18 +26,6 @@ SCRDIR = os.path.join(HOME,'SatelliteTool')
 S2_DATA = os.path.join(TOPDIR,'Sentinel-2_Data')
 GIS_FNAM = os.path.join(TOPDIR,'Shapefile','All_area_polygon_20210914','All_area_polygon_20210914.shp')
 WV_FNAM = os.path.join(TOPDIR,'WorldView','wv2_180629_mul.tif')
-GEOCOR_PATH = '{}/{}/geocor'.format(NAS_TOP,SITE)
-INDICES_PATH = '{}/{}/indices'.format(NAS_TOP,SITE)
-PARCEL_PATH = '{}/{}/parcel'.format(NAS_TOP,SITE)
-ATCOR_PATH = '{}/{}/atcor'.format(NAS_TOP,SITE)
-INTERP_PATH = '{}/{}/interp'.format(NAS_TOP,SITE)
-TENTATIVE_PATH = '{}/{}/tentative_interp'.format(NAS_TOP,SITE)
-GEOCOR_COPY = os.path.join(COPY_TOP,SITE,'geocor')
-INDICES_COPY = os.path.join(COPY_TOP,SITE,'indices')
-PARCEL_COPY = os.path.join(COPY_TOP,SITE,'parcel')
-ATCOR_COPY = os.path.join(COPY_TOP,SITE,'atcor')
-INTERP_COPY = os.path.join(COPY_TOP,SITE,'interp')
-TENTATIVE_COPY = os.path.join(COPY_TOP,SITE,'tentative_interp')
 TMAX = datetime.now().strftime('%Y%m%d')
 GROW_PERIOD = 120 # day
 TMGN = 90 # day
@@ -64,12 +52,20 @@ parser.add_argument('--parcel_dir',default=None,help='Sentinel-2 parcel folder (
 parser.add_argument('--atcor_dir',default=None,help='Sentinel-2 atcor folder (%(default)s)')
 parser.add_argument('--interp_dir',default=None,help='Sentinel-2 interp folder (%(default)s)')
 parser.add_argument('--tentative_dir',default=None,help='Sentinel-2 tentative_interp folder (%(default)s)')
-parser.add_argument('--geocor_path',default=GEOCOR_PATH,help='Sentinel-2 geocor on NAS (%(default)s)')
-parser.add_argument('--indices_path',default=INDICES_PATH,help='Sentinel-2 indices on NAS (%(default)s)')
-parser.add_argument('--parcel_path',default=PARCEL_PATH,help='Sentinel-2 parcel on NAS (%(default)s)')
-parser.add_argument('--atcor_path',default=ATCOR_PATH,help='Sentinel-2 atcor on NAS (%(default)s)')
-parser.add_argument('--interp_path',default=INTERP_PATH,help='Sentinel-2 interp on NAS (%(default)s)')
-parser.add_argument('--tentative_path',default=TENTATIVE_PATH,help='Sentinel-2 tentative_interp on NAS (%(default)s)')
+parser.add_argument('--top_nas',default=TOP_NAS,help='Sentinel-2 path on NAS (%(default)s)')
+parser.add_argument('--geocor_path',default=None,help='Sentinel-2 geocor on NAS (%(default)s)')
+parser.add_argument('--indices_path',default=None,help='Sentinel-2 indices on NAS (%(default)s)')
+parser.add_argument('--parcel_path',default=None,help='Sentinel-2 parcel on NAS (%(default)s)')
+parser.add_argument('--atcor_path',default=None,help='Sentinel-2 atcor on NAS (%(default)s)')
+parser.add_argument('--interp_path',default=None,help='Sentinel-2 interp on NAS (%(default)s)')
+parser.add_argument('--tentative_path',default=None,help='Sentinel-2 tentative_interp on NAS (%(default)s)')
+parser.add_argument('--top_copy',default=TOP_COPY,help='Sentinel-2 folder for copy (%(default)s)')
+parser.add_argument('--geocor_copy',default=None,help='Sentinel-2 geocor for copy (%(default)s)')
+parser.add_argument('--indices_copy',default=None,help='Sentinel-2 indices for copy (%(default)s)')
+parser.add_argument('--parcel_copy',default=None,help='Sentinel-2 parcel for copy (%(default)s)')
+parser.add_argument('--atcor_copy',default=None,help='Sentinel-2 atcor for copy (%(default)s)')
+parser.add_argument('--interp_copy',default=None,help='Sentinel-2 interp for copy (%(default)s)')
+parser.add_argument('--tentative_copy',default=None,help='Sentinel-2 tentative_interp for copy (%(default)s)')
 parser.add_argument('--subset_region',default=None,help='Subset Lat/Lon as [left,right,bottom,top] (%(default)s)')
 parser.add_argument('--resample_region',default=None,help='Resample UTM coordinates as [left,right,bottom,top] (%(default)s)')
 parser.add_argument('-s','--tmin',default=None,help='Min date to send in the format YYYYMMDD (%(default)s)')
@@ -96,6 +92,31 @@ if site_low == 'none':
     s2_data = args.s2_data
 else:
     s2_data = os.path.join(args.s2_data,args.site)
+    if args.geocor_path is None:
+        args.geocor_path = '{}/{}/geocor'.format(args.top_nas,args.site)
+    if args.indices_path is None:
+        args.indices_path = '{}/{}/indices'.format(args.top_nas,args.site)
+    if args.parcel_path is None:
+        args.parcel_path = '{}/{}/parcel'.format(args.top_nas,args.site)
+    if args.atcor_path is None:
+        args.atcor_path = '{}/{}/atcor'.format(args.top_nas,args.site)
+    if args.interp_path is None:
+        args.interp_path = '{}/{}/interp'.format(args.top_nas,args.site)
+    if args.tentative_path is None:
+        args.tentative_path = '{}/{}/tentative_interp'.format(args.top_nas,args.site)
+    if args.geocor_copy is None:
+        args.geocor_copy = os.path.join(args.top_copy,args.site,'geocor')
+    if args.indices_copy is None:
+        args.indices_copy = os.path.join(args.top_copy,args.site,'indices')
+    if args.parcel_copy is None:
+        args.parcel_copy = os.path.join(args.top_copy,args.site,'parcel')
+    if args.atcor_copy is None:
+        args.atcor_copy = os.path.join(args.top_copy,args.site,'atcor')
+    if args.interp_copy is None:
+        args.interp_copy = os.path.join(args.top_copy,args.site,'interp')
+    if args.tentative_copy is None:
+        args.tentative_copy = os.path.join(args.top_copy,args.site,'tentative_interp')
+
 tmax = datetime.strptime(args.tmax,'%Y%m%d')
 if args.tmin is not None:
     tmin = datetime.strptime(args.tmin,'%Y%m%d')
