@@ -276,21 +276,22 @@ if not args.skip_geocor and not (args.skip_upload and args.skip_copy):
                 fnams = glob(os.path.join(dnam,'{}_subset.*'.format(dstr)))
                 fnams.extend(glob(os.path.join(dnam,'{}_geocor*'.format(dstr))))
                 if len(fnams) > 0:
-                    command = 'python'
-                    command += ' "{}"'.format(os.path.join(args.cmddir,'file_station_upload_files.py'))
-                    for fnam in fnams:
-                        command += ' "{}"'.format(fnam)
-                    if args.server is not None:
-                        command += ' --server {}'.format(args.server)
-                    if args.port is not None:
-                        command += ' --port {}'.format(args.port)
-                    command += ' --srcdir {}/{}'.format(args.geocor_path,ystr)
-                    command += ' --verbose'
-                    if args.debug:
-                        sys.stderr.write('{}\n'.format(command))
-                        sys.stderr.flush()
-                    else:
-                        call(command,shell=True)
+                    if not args.skip_upload:
+                        command = 'python'
+                        command += ' "{}"'.format(os.path.join(args.cmddir,'file_station_upload_files.py'))
+                        for fnam in fnams:
+                            command += ' "{}"'.format(fnam)
+                        if args.server is not None:
+                            command += ' --server {}'.format(args.server)
+                        if args.port is not None:
+                            command += ' --port {}'.format(args.port)
+                        command += ' --srcdir {}/{}'.format(args.geocor_path,ystr)
+                        command += ' --verbose'
+                        if args.debug:
+                            sys.stderr.write('{}\n'.format(command))
+                            sys.stderr.flush()
+                        else:
+                            call(command,shell=True)
 
 if not args.skip_indices and not (args.skip_upload and args.skip_copy):
     if args.indices_dir is not None:
@@ -323,21 +324,22 @@ if not args.skip_indices and not (args.skip_upload and args.skip_copy):
                     sys.stderr.flush()
                 fnams = glob(os.path.join(dnam,'{}_indices.*'.format(dstr)))
                 if len(fnams) > 0:
-                    command = 'python'
-                    command += ' "{}"'.format(os.path.join(args.cmddir,'file_station_upload_files.py'))
-                    for fnam in fnams:
-                        command += ' "{}"'.format(fnam)
-                    if args.server is not None:
-                        command += ' --server {}'.format(args.server)
-                    if args.port is not None:
-                        command += ' --port {}'.format(args.port)
-                    command += ' --srcdir {}/{}'.format(args.indices_path,ystr)
-                    command += ' --verbose'
-                    if args.debug:
-                        sys.stderr.write('{}\n'.format(command))
-                        sys.stderr.flush()
-                    else:
-                        call(command,shell=True)
+                    if not args.skip_upload:
+                        command = 'python'
+                        command += ' "{}"'.format(os.path.join(args.cmddir,'file_station_upload_files.py'))
+                        for fnam in fnams:
+                            command += ' "{}"'.format(fnam)
+                        if args.server is not None:
+                            command += ' --server {}'.format(args.server)
+                        if args.port is not None:
+                            command += ' --port {}'.format(args.port)
+                        command += ' --srcdir {}/{}'.format(args.indices_path,ystr)
+                        command += ' --verbose'
+                        if args.debug:
+                            sys.stderr.write('{}\n'.format(command))
+                            sys.stderr.flush()
+                        else:
+                            call(command,shell=True)
 
 if not args.skip_parcel and not (args.skip_upload and args.skip_copy):
     if args.parcel_dir is not None:
@@ -370,21 +372,22 @@ if not args.skip_parcel and not (args.skip_upload and args.skip_copy):
                     sys.stderr.flush()
                 fnams = glob(os.path.join(dnam,'{}_parcel.*'.format(dstr)))
                 if len(fnams) > 0:
-                    command = 'python'
-                    command += ' "{}"'.format(os.path.join(args.cmddir,'file_station_upload_files.py'))
-                    for fnam in fnams:
-                        command += ' "{}"'.format(fnam)
-                    if args.server is not None:
-                        command += ' --server {}'.format(args.server)
-                    if args.port is not None:
-                        command += ' --port {}'.format(args.port)
-                    command += ' --srcdir {}/{}'.format(args.parcel_path,ystr)
-                    command += ' --verbose'
-                    if args.debug:
-                        sys.stderr.write('{}\n'.format(command))
-                        sys.stderr.flush()
-                    else:
-                        call(command,shell=True)
+                    if not args.skip_upload:
+                        command = 'python'
+                        command += ' "{}"'.format(os.path.join(args.cmddir,'file_station_upload_files.py'))
+                        for fnam in fnams:
+                            command += ' "{}"'.format(fnam)
+                        if args.server is not None:
+                            command += ' --server {}'.format(args.server)
+                        if args.port is not None:
+                            command += ' --port {}'.format(args.port)
+                        command += ' --srcdir {}/{}'.format(args.parcel_path,ystr)
+                        command += ' --verbose'
+                        if args.debug:
+                            sys.stderr.write('{}\n'.format(command))
+                            sys.stderr.flush()
+                        else:
+                            call(command,shell=True)
 
 if not args.skip_atcor and not (args.skip_upload and args.skip_copy):
     if args.atcor_dir is not None:
@@ -418,21 +421,22 @@ if not args.skip_atcor and not (args.skip_upload and args.skip_copy):
                 fnams = glob(os.path.join(dnam,'{}_factor.*'.format(dstr)))
                 fnams.extend(glob(os.path.join(dnam,'{}_atcor.*'.format(dstr))))
                 if len(fnams) > 0:
-                    command = 'python'
-                    command += ' "{}"'.format(os.path.join(args.cmddir,'file_station_upload_files.py'))
-                    for fnam in fnams:
-                        command += ' "{}"'.format(fnam)
-                    if args.server is not None:
-                        command += ' --server {}'.format(args.server)
-                    if args.port is not None:
-                        command += ' --port {}'.format(args.port)
-                    command += ' --srcdir {}/{}'.format(args.atcor_path,ystr)
-                    command += ' --verbose'
-                    if args.debug:
-                        sys.stderr.write('{}\n'.format(command))
-                        sys.stderr.flush()
-                    else:
-                        call(command,shell=True)
+                    if not args.skip_upload:
+                        command = 'python'
+                        command += ' "{}"'.format(os.path.join(args.cmddir,'file_station_upload_files.py'))
+                        for fnam in fnams:
+                            command += ' "{}"'.format(fnam)
+                        if args.server is not None:
+                            command += ' --server {}'.format(args.server)
+                        if args.port is not None:
+                            command += ' --port {}'.format(args.port)
+                        command += ' --srcdir {}/{}'.format(args.atcor_path,ystr)
+                        command += ' --verbose'
+                        if args.debug:
+                            sys.stderr.write('{}\n'.format(command))
+                            sys.stderr.flush()
+                        else:
+                            call(command,shell=True)
 
 if not args.skip_interp and not (args.skip_upload and args.skip_copy):
     if args.interp_dir is not None:
@@ -478,21 +482,22 @@ if not args.skip_interp and not (args.skip_upload and args.skip_copy):
                                 sys.stderr.flush()
                 fnams = glob(os.path.join(dnam,'{}_interp.*'.format(dstr)))
                 if len(fnams) > 0:
-                    command = 'python'
-                    command += ' "{}"'.format(os.path.join(args.cmddir,'file_station_upload_files.py'))
-                    for fnam in fnams:
-                        command += ' "{}"'.format(fnam)
-                    if args.server is not None:
-                        command += ' --server {}'.format(args.server)
-                    if args.port is not None:
-                        command += ' --port {}'.format(args.port)
-                    command += ' --srcdir {}/{}'.format(args.interp_path,ystr)
-                    command += ' --verbose'
-                    if args.debug:
-                        sys.stderr.write('{}\n'.format(command))
-                        sys.stderr.flush()
-                    else:
-                        call(command,shell=True)
+                    if not args.skip_upload:
+                        command = 'python'
+                        command += ' "{}"'.format(os.path.join(args.cmddir,'file_station_upload_files.py'))
+                        for fnam in fnams:
+                            command += ' "{}"'.format(fnam)
+                        if args.server is not None:
+                            command += ' --server {}'.format(args.server)
+                        if args.port is not None:
+                            command += ' --port {}'.format(args.port)
+                        command += ' --srcdir {}/{}'.format(args.interp_path,ystr)
+                        command += ' --verbose'
+                        if args.debug:
+                            sys.stderr.write('{}\n'.format(command))
+                            sys.stderr.flush()
+                        else:
+                            call(command,shell=True)
         # Upload tentative interp
         for ystr in sorted(os.listdir(tentative_dnam)):
             if not re.search('^\d\d\d\d$',ystr):
@@ -517,19 +522,20 @@ if not args.skip_interp and not (args.skip_upload and args.skip_copy):
                     sys.stderr.flush()
                 fnams = glob(os.path.join(dnam,'{}_interp.*'.format(dstr)))
                 if len(fnams) > 0:
-                    command = 'python'
-                    command += ' "{}"'.format(os.path.join(args.cmddir,'file_station_upload_files.py'))
-                    for fnam in fnams:
-                        command += ' "{}"'.format(fnam)
-                    if args.server is not None:
-                        command += ' --server {}'.format(args.server)
-                    if args.port is not None:
-                        command += ' --port {}'.format(args.port)
-                    command += ' --srcdir {}/{}'.format(args.tentative_path,ystr)
-                    command += ' --overwrite'
-                    command += ' --verbose'
-                    if args.debug:
-                        sys.stderr.write('{}\n'.format(command))
-                        sys.stderr.flush()
-                    else:
-                        call(command,shell=True)
+                    if not args.skip_upload:
+                        command = 'python'
+                        command += ' "{}"'.format(os.path.join(args.cmddir,'file_station_upload_files.py'))
+                        for fnam in fnams:
+                            command += ' "{}"'.format(fnam)
+                        if args.server is not None:
+                            command += ' --server {}'.format(args.server)
+                        if args.port is not None:
+                            command += ' --port {}'.format(args.port)
+                        command += ' --srcdir {}/{}'.format(args.tentative_path,ystr)
+                        command += ' --overwrite'
+                        command += ' --verbose'
+                        if args.debug:
+                            sys.stderr.write('{}\n'.format(command))
+                            sys.stderr.flush()
+                        else:
+                            call(command,shell=True)
