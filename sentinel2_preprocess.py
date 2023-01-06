@@ -14,8 +14,6 @@ HOME = os.environ.get('HOME')
 if HOME is None:
     HOME = os.environ.get('USERPROFILE')
 TOPDIR = os.path.join(HOME,'Work')
-TOP_NAS = '/SATREPS/ipb/User/1_Spatial-information/Sentinel-2'
-TOP_COPY = '/mnt/hlab2/Data/Sentinel-2'
 
 # Default values
 SITE = 'Cihea'
@@ -27,6 +25,8 @@ SCRDIR = os.path.join(HOME,'SatelliteTool')
 S2_DATA = os.path.join(TOPDIR,'Sentinel-2_Data')
 GIS_FNAM = os.path.join(TOPDIR,'Shapefile','All_area_polygon_20210914','All_area_polygon_20210914.shp')
 WV_FNAM = os.path.join(TOPDIR,'WorldView','wv2_180629_mul.tif')
+TOP_NAS = '/SATREPS/ipb/User/1_Spatial-information/Sentinel-2'
+TOP_COPY = '/mnt/hlab2/Data/Sentinel-2'
 TMAX = datetime.now().strftime('%Y%m%d')
 GROW_PERIOD = 120 # day
 TMGN = 90 # day

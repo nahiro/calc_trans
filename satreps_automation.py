@@ -87,6 +87,7 @@ for site in ['Bojongsoang','Cihea','Testsite']:
     command += ' --atcor_path {}/{}/atcor'.format(s2_path,site)
     command += ' --interp_path {}/{}/interp'.format(s2_path,site)
     command += ' --tentative_path {}/{}/tentative_interp'.format(s2_path,site)
+    command += ' --skip_copy'
     if site in ['Bojongsoang']:
         command += ' --gis_fnam "{}"'.format(gis_bojongsoang)
         command += ' --wv_fnam "{}"'.format(wv_bojongsoang)
