@@ -77,6 +77,7 @@ for site in ['Bojongsoang','Cihea','Testsite']:
     # Calculate/Upload Preprocess
     command = python_path
     command += ' "{}"'.format(os.path.join(cmddir,'sentinel2_preprocess.py'))
+    command += ' --python_path "{}"'.format(python_path)
     command += ' --cmddir "{}"'.format(cmddir)
     command += ' --scrdir "{}"'.format(scrdir)
     command += ' --site {}'.format(site)
