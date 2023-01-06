@@ -13,6 +13,8 @@ HOME = os.environ.get('HOME')
 if HOME is None:
     HOME = os.environ.get('USERPROFILE')
 TOPDIR = os.path.join(HOME,'Work')
+NAS_TOP = '/SATREPS/ipb/User/1_Spatial-information/Sentinel-2'
+COPY_TOP = '/mnt/hlab2/Data/Sentinel-2'
 
 # Default values
 SITE = 'Cihea'
@@ -24,12 +26,18 @@ SCRDIR = os.path.join(HOME,'SatelliteTool')
 S2_DATA = os.path.join(TOPDIR,'Sentinel-2_Data')
 GIS_FNAM = os.path.join(TOPDIR,'Shapefile','All_area_polygon_20210914','All_area_polygon_20210914.shp')
 WV_FNAM = os.path.join(TOPDIR,'WorldView','wv2_180629_mul.tif')
-GEOCOR_PATH = '/SATREPS/ipb/User/1_Spatial-information/Sentinel-2/Cihea/geocor'
-INDICES_PATH = '/SATREPS/ipb/User/1_Spatial-information/Sentinel-2/Cihea/indices'
-PARCEL_PATH = '/SATREPS/ipb/User/1_Spatial-information/Sentinel-2/Cihea/parcel'
-ATCOR_PATH = '/SATREPS/ipb/User/1_Spatial-information/Sentinel-2/Cihea/atcor'
-INTERP_PATH = '/SATREPS/ipb/User/1_Spatial-information/Sentinel-2/Cihea/interp'
-TENTATIVE_PATH = '/SATREPS/ipb/User/1_Spatial-information/Sentinel-2/Cihea/tentative_interp'
+GEOCOR_PATH = '{}/{}/geocor'.format(NAS_TOP,SITE)
+INDICES_PATH = '{}/{}/indices'.format(NAS_TOP,SITE)
+PARCEL_PATH = '{}/{}/parcel'.format(NAS_TOP,SITE)
+ATCOR_PATH = '{}/{}/atcor'.format(NAS_TOP,SITE)
+INTERP_PATH = '{}/{}/interp'.format(NAS_TOP,SITE)
+TENTATIVE_PATH = '{}/{}/tentative_interp'.format(NAS_TOP,SITE)
+GEOCOR_COPY = os.path.join(COPY_TOP,SITE,'geocor')
+INDICES_COPY = os.path.join(COPY_TOP,SITE,'indices')
+PARCEL_COPY = os.path.join(COPY_TOP,SITE,'parcel')
+ATCOR_COPY = os.path.join(COPY_TOP,SITE,'atcor')
+INTERP_COPY = os.path.join(COPY_TOP,SITE,'interp')
+TENTATIVE_COPY = os.path.join(COPY_TOP,SITE,'tentative_interp')
 TMAX = datetime.now().strftime('%Y%m%d')
 GROW_PERIOD = 120 # day
 TMGN = 90 # day
