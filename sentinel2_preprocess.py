@@ -1,5 +1,6 @@
 import os
 import sys
+import shutil
 import re
 import tempfile
 from glob import glob
@@ -292,6 +293,30 @@ if not args.skip_geocor and not (args.skip_upload and args.skip_copy):
                             sys.stderr.flush()
                         else:
                             call(command,shell=True)
+                    if not args.skip_copy:
+                        copy_dnam = os.path.join(args.geocor_copy,ystr)
+                        if not os.path.exists(copy_dnam):
+                            os.makedirs(copy_dnam)
+                        if not os.path.isdir(copy_dnam):
+                            sys.stderr.write('Warning, no such folder >>> {}\n'.format(copy_dnam))
+                            sys.stderr.flush()
+                        else:
+                            for fnam in fnams:
+                                copy_fnam = os.path.join(copy_dnam,os.path.basename(fnam))
+                                if args.debug:
+                                    sys.stderr.write('cp {} {}\n'.format(fnam,copy_fnam))
+                                    sys.stderr.flush()
+                                elif os.path.exists(copy_fnam):
+                                    sys.stderr.write('File exists, skip   >>> {}\n'.format(copy_fnam))
+                                    sys.stderr.flush()
+                                else:
+                                    shutil.copy2(fnam,copy_fnam)
+                                    if os.path.exists(copy_fnam):
+                                        sys.stderr.write('Successfully copied >>> {}\n'.format(copy_fnam))
+                                        sys.stderr.flush()
+                                    else:
+                                        sys.stderr.write('Warning, failed to copy file >>> {}\n'.format(copy_fnam))
+                                        sys.stderr.flush()
 
 if not args.skip_indices and not (args.skip_upload and args.skip_copy):
     if args.indices_dir is not None:
