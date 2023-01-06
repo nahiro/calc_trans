@@ -83,6 +83,7 @@ parser.add_argument('--skip_parcel',default=False,action='store_true',help='Skip
 parser.add_argument('--skip_atcor',default=False,action='store_true',help='Skip atcor (%(default)s)')
 parser.add_argument('--skip_interp',default=False,action='store_true',help='Skip interp (%(default)s)')
 parser.add_argument('--skip_upload',default=False,action='store_true',help='Skip upload (%(default)s)')
+parser.add_argument('--skip_copy',default=False,action='store_true',help='Skip copy (%(default)s)')
 parser.add_argument('--keep_tentative',default=False,action='store_true',help='Keep tentative interp (%(default)s)')
 parser.add_argument('-v','--verbose',default=False,action='store_true',help='Verbose mode (%(default)s)')
 parser.add_argument('-d','--debug',default=False,action='store_true',help='Debug mode (%(default)s)')
@@ -243,7 +244,7 @@ else:
 if os.path.exists(fp.name):
     os.remove(fp.name)
 
-if not args.skip_geocor and not args.skip_upload:
+if not args.skip_geocor and not (args.skip_upload and args.skip_copy):
     if args.geocor_dir is not None:
         geocor_dnam = args.geocor_dir
     else:
@@ -291,7 +292,7 @@ if not args.skip_geocor and not args.skip_upload:
                     else:
                         call(command,shell=True)
 
-if not args.skip_indices and not args.skip_upload:
+if not args.skip_indices and not (args.skip_upload and args.skip_copy):
     if args.indices_dir is not None:
         indices_dnam = args.indices_dir
     else:
@@ -338,7 +339,7 @@ if not args.skip_indices and not args.skip_upload:
                     else:
                         call(command,shell=True)
 
-if not args.skip_parcel and not args.skip_upload:
+if not args.skip_parcel and not (args.skip_upload and args.skip_copy):
     if args.parcel_dir is not None:
         parcel_dnam = args.parcel_dir
     else:
@@ -385,7 +386,7 @@ if not args.skip_parcel and not args.skip_upload:
                     else:
                         call(command,shell=True)
 
-if not args.skip_atcor and not args.skip_upload:
+if not args.skip_atcor and not (args.skip_upload and args.skip_copy):
     if args.atcor_dir is not None:
         atcor_dnam = args.atcor_dir
     else:
@@ -433,7 +434,7 @@ if not args.skip_atcor and not args.skip_upload:
                     else:
                         call(command,shell=True)
 
-if not args.skip_interp and not args.skip_upload:
+if not args.skip_interp and not (args.skip_upload and args.skip_copy):
     if args.interp_dir is not None:
         interp_dnam = args.interp_dir
     else:
