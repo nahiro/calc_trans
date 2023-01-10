@@ -98,12 +98,13 @@ for site in opts.sites:
                 tmax = (t1-relativedelta(months=3)-timedelta(days=1)).strftime('%Y%m%d')
                 data_tmin = (t1-relativedelta(months=9)).strftime('%Y%m%d')
                 data_tmax = dstr
-                jsn_fnam = os.path.join(wrkdir,'trans_date_{}_{}_final.json'.format(site_low,dstr))
-                tif_fnam = os.path.join(wrkdir,'trans_date_{}_{}_final.tif'.format(site_low,dstr))
-                shp_bnam = os.path.join(wrkdir,'trans_date_{}_{}_final'.format(site_low,dstr))
+                hnam = 'planting_{}_{}_{}_{}_{}_final'.format(site_low,tmin,tmax,data_tmin,data_tmax)
+                jsn_fnam = os.path.join(wrkdir,'{}.json'.format(hnam))
+                tif_fnam = os.path.join(wrkdir,'{}.tif'.format(hnam))
+                shp_bnam = os.path.join(wrkdir,'{}'.format(hnam))
                 shp_fnam = shp_bnam+'.shp'
-                trans_pixel_image = os.path.join(wrkdir,'trans_pixel_{}_{}_final.pdf'.format(site_low,dstr))
-                trans_field_image = os.path.join(wrkdir,'trans_field_{}_{}_final.pdf'.format(site_low,dstr))
+                trans_pixel_image = os.path.join(wrkdir,'{}_pixel.pdf'.format(hnam))
+                trans_field_image = os.path.join(wrkdir,'{}_field.pdf'.format(hnam))
                 command = 'python'
                 command += ' '+os.path.join(opts.scrdir,'calc_trans_date.py')
                 #command += ' -x 600 -X 900 -y 680 -Y 1030'
@@ -177,13 +178,14 @@ for site in opts.sites:
                 tmax = (t1-relativedelta(months=2)-timedelta(days=1)).strftime('%Y%m%d')
                 data_tmin = (t1-relativedelta(months=11)).strftime('%Y%m%d')
                 data_tmax = dstr
-                jsn_fnam = os.path.join(wrkdir,'trans_date_{}_{}_final.json'.format(site_low,dstr))
-                shp_bnam = os.path.join(wrkdir,'trans_date_{}_{}_final'.format(site_low,dstr))
+                hnam = 'planting_{}_{}_{}_{}_{}_final'.format(site_low,tmin,tmax,data_tmin,data_tmax)
+                jsn_fnam = os.path.join(wrkdir,'{}.json'.format(hnam))
+                shp_bnam = os.path.join(wrkdir,'{}'.format(hnam))
                 shp_fnam = shp_bnam+'.shp'
-                fpi_s_field_image = os.path.join(wrkdir,'fpi_s_field_{}_{}_final.pdf'.format(site_low,dstr))
+                fpi_s_field_image = os.path.join(wrkdir,'{}_fpi_s_field.pdf'.format(hnam))
                 trans_field_image = []
                 for ican in range(3):
-                    trans_field_image.append(os.path.join(wrkdir,'trans_field_{}_{}_{}_final.pdf'.format(site_low,dstr,ican+1)))
+                    trans_field_image.append(os.path.join(wrkdir,'{}_{}_field.pdf'.format(hnam,ican+1)))
                 command = 'python'
                 command += ' '+os.path.join(opts.scrdir,'calc_trans_date_fi.py')
                 command += ' --tmin '+tmin
