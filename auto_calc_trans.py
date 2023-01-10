@@ -3,6 +3,7 @@ import os
 import sys
 import re
 import numpy as np
+from glob import glob
 from datetime import datetime,timedelta
 from dateutil.relativedelta import relativedelta
 from subprocess import call
@@ -181,9 +182,9 @@ for site in opts.sites:
         d2 = (dtim+timedelta(days=+1)).strftime('%Y%m%d')
         ystr = dstr[:4]
         wrkdir = os.path.join(opts.datdir,site,'preliminary',p_version[site_low],ystr,dstr)
-        gnam = os.path.join(wrkdir,'trans_date_{}_{}_preliminary.shp'.format(site_low,dstr))
-        if os.path.exists(gnam) and not opts.overwrite:
-            sys.stderr.write('Preliminary file exists, skip >>> {}\n'.format(gnam))
+        gnams = glob(os.path.join(wrkdir,'planting_{}_*_{}_preliminary.shp'.format(site_low,dstr)))
+        if (len(gnams) == 1) and not opts.overwrite:
+            sys.stderr.write('Preliminary file exists, skip >>> {}\n'.format(gnams[0]))
             sys.stderr.flush()
         else:
             command = 'python'
@@ -220,9 +221,9 @@ for site in opts.sites:
             d2 = d1
             ystr = dstr[:4]
             wrkdir = os.path.join(opts.datdir,site,'final',f_version[site_low],ystr,dstr)
-            gnam = os.path.join(wrkdir,'trans_date_{}_{}_final.shp'.format(site_low,dstr))
-            if os.path.exists(gnam) and not opts.overwrite:
-                sys.stderr.write('Final file exists, skip >>> {}\n'.format(gnam))
+            gnams = glob(os.path.join(wrkdir,'planting_{}_*_{}_final.shp'.format(site_low,dstr)))
+            if (len(gnams) == 1) and not opts.overwrite:
+                sys.stderr.write('Final file exists, skip >>> {}\n'.format(gnams[0]))
                 sys.stderr.flush()
             else:
                 command = 'python'
