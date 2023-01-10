@@ -94,8 +94,9 @@ for site in opts.sites:
         if d > d2:
             break
         dstr = d.strftime('%Y%m%d')
+        ystr = d.strftime('%Y')
         #sys.stderr.write(dstr+'\n')
-        wrkdir = os.path.join(opts.wrkdir,site,'preliminary',version[site_low],dstr)
+        wrkdir = os.path.join(opts.wrkdir,site,'preliminary',version[site_low],ystr,dstr)
         if not os.path.exists(wrkdir):
             os.makedirs(wrkdir)
         if not os.path.isdir(wrkdir):
