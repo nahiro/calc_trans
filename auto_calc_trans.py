@@ -37,6 +37,7 @@ parser.add_option('--p_versions',default=None,action='append',help='Version of p
 parser.add_option('--f_versions',default=None,action='append',help='Version of final transplanting estimation, for example, Cihea:v1.0 ({})'.format(F_VERSIONS))
 parser.add_option('--date_final',default=DATE_FINAL,type='int',help='Date to calculate final estimation (%default)')
 parser.add_option('-M','--max_retry',default=MAX_RETRY,type='int',help='Maximum number of retries to download data (%default)')
+parser.add_option('--skip_download',default=False,action='store_true',help='Skip download (%default)')
 parser.add_option('--skip_upload',default=False,action='store_true',help='Skip upload (%default)')
 parser.add_option('--skip_copy',default=False,action='store_true',help='Skip copy (%default)')
 parser.add_option('--overwrite',default=False,action='store_true',help='Overwrite mode (%default)')
@@ -86,6 +87,8 @@ for site in opts.sites:
         command += ' --str {}'.format(opts.str)
     if opts.end is not None:
         command += ' --end {}'.format(opts.end)
+    if opts.skip_download:
+        command += ' --skip_download'
     if opts.skip_upload:
         command += ' --skip_upload'
     if opts.skip_copy:
