@@ -2,6 +2,7 @@
 import os
 import sys
 import time
+import tempfile
 from glob import glob
 from datetime import datetime,timedelta
 from subprocess import check_output,PIPE
@@ -22,8 +23,9 @@ parser.add_option('-f','--force',default=False,action='store_true',help='Force t
 (opts,args) = parser.parse_args()
 
 tcur = time.time()
-files = glob('/tmp/jffi*')
-files.extend(glob('/tmp/imageio*'))
+dnam = tempfile.gettempdir()
+files = glob(os.path.join(dnam,'jffi*'))
+files.extend(glob(os.path.join(dnam,'imageio*')))
 files.extend(glob(os.path.join(HOME,'.snap/var/cache/temp/imageio*')))
 files.extend(glob(os.path.join(HOME,'Automation/imageio*')))
 
