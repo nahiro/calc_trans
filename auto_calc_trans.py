@@ -151,21 +151,25 @@ for site in opts.sites:
         raise IOError('Error, no such folder >>> {}'.format(dnam))
     for fnam,dstr in zip(fnams,dstrs):
         gnam = os.path.join(dnam,'{}_subset.tif'.format(dstr))
-        command = 'python'
-        command += ' {}'.format(os.path.join(opts.scrdir,'sentinel1_preprocess.py'))
-        command += ' --inp_fnam {}'.format(fnam)
-        command += ' --out_fnam {}'.format(gnam)
-        command += ' --site {}'.format(site)
-        if 'speckle' in subdir[site_low].lower():
-            command += ' --speckle'
-        command += ' --iangle_value'
-        command += ' --std_grid'
-        command += ' --tiff'
-        call(command,shell=True)
-        # Remove cache
-        command = 'python'
-        command += ' {}'.format(os.path.join(opts.scrdir,'remove_snap_cache.py'))
-        call(command,shell=True)
+        if os.path.exists(gnam):
+            sys.stderr.write('Subset file exists, skip >>> {}\n'.format(gnam))
+            sys.stderr.flush()
+        else:
+            command = 'python'
+            command += ' {}'.format(os.path.join(opts.scrdir,'sentinel1_preprocess.py'))
+            command += ' --inp_fnam {}'.format(fnam)
+            command += ' --out_fnam {}'.format(gnam)
+            command += ' --site {}'.format(site)
+            if 'speckle' in subdir[site_low].lower():
+                command += ' --speckle'
+            command += ' --iangle_value'
+            command += ' --std_grid'
+            command += ' --tiff'
+            call(command,shell=True)
+            # Remove cache
+            command = 'python'
+            command += ' {}'.format(os.path.join(opts.scrdir,'remove_snap_cache.py'))
+            call(command,shell=True)
     dnam = os.path.join(datdir,'resample')
     if not os.path.exists(dnam):
         os.makedirs(dnam)
