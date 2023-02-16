@@ -31,6 +31,7 @@ TMAX = datetime.now().strftime('%Y%m%d')
 GROW_PERIOD = 120 # day
 TMGN = 90 # day
 TSND = 180 # day
+STAT_PERIOD = 730 # day
 CTHR_AVG = 0.06
 CTHR_STD = 0.05
 
@@ -76,6 +77,7 @@ parser.add_argument('--data_tmax',default=None,help='Max date to calculate in th
 parser.add_argument('--grow_period',default=GROW_PERIOD,type=int,help='Length of growing period in day (%(default)s)')
 parser.add_argument('--tmgn',default=TMGN,type=int,help='Margin of calculation period in day (%(default)s)')
 parser.add_argument('--tsnd',default=TSND,type=int,help='Duration of data to send in day (%(default)s)')
+parser.add_argument('--stat_period',default=STAT_PERIOD,type=int,help='Stats period in day (%(default)s)')
 parser.add_argument('--cthr_avg',default=CTHR_AVG,type=float,help='Threshold of mean for clean-day select (%(default)s)')
 parser.add_argument('--cthr_std',default=CTHR_STD,type=float,help='Threshold of std for clean-day select (%(default)s)')
 parser.add_argument('--skip_geocor',default=False,action='store_true',help='Skip geocor (%(default)s)')
@@ -224,6 +226,7 @@ with tempfile.NamedTemporaryFile(mode='w+',suffix='.ini',delete=False) as fp:
     fp.write('atcor.gis_fnam                      = {}\n'.format(args.gis_fnam))
     fp.write('atcor.mask_studyarea                = {}\n'.format(os.path.join(s2_data,'studyarea_mask.tif')))
     fp.write('atcor.mask_parcel                   = {}\n'.format(os.path.join(s2_data,'parcel_mask.tif')))
+    fp.write('atcor.stat_period                   = {}\n'.format(args.stat_period))
     fp.write('atcor.clean_thr                     = [{},{},1.0]\n'.format(args.cthr_avg,args.cthr_std))
     fp.write('#atcor.csv_flag                      = True\n')
     fp.write('#atcor.oflag                         = [False,False,False,False,False]\n')
