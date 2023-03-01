@@ -4,6 +4,36 @@ import re
 import psutil
 from datetime import datetime,timedelta
 from subprocess import call
+from argparse import ArgumentParser,RawTextHelpFormatter
+
+# Constants
+HOME = os.environ.get('HOME')
+if HOME is None:
+    HOME = os.environ.get('USERPROFILE')
+TOPDIR = os.path.join(HOME,'Work')
+
+# Default values
+BINDIR = os.path.join(HOME,'miniconda3','bin')
+if os.path.isdir(BINDIR):
+    PYTHON_PATH = os.path.join(BINDIR,'python')
+else:
+    PYTHON_PATH = os.path.join(HOME,'miniconda3','python')
+CMDDIR = os.path.join(HOME,'Automation')
+SCRDIR = os.path.join(HOME,'SatelliteTool')
+S1_DATA = os.path.join(TOPDIR,'Sentinel-1_Data')
+S2_DATA = os.path.join(TOPDIR,'Sentinel-2_Data')
+
+# Read options
+parser = ArgumentParser(formatter_class=lambda prog:RawTextHelpFormatter(prog,max_help_position=200,width=200))
+parser.add_argument('--python_path',default=PYTHON_PATH,help='Path to the Python (%(default)s)')
+parser.add_argument('--cmddir',default=CMDDIR,help='Command folder (%(default)s)')
+parser.add_argument('--scrdir',default=SCRDIR,help='Script folder (%(default)s)')
+parser.add_argument('--s1_data',default=S1_DATA,help='Sentinel-1 data folder (%(default)s)')
+parser.add_argument('--s2_data',default=S2_DATA,help='Sentinel-2 data folder (%(default)s)')
+parser.add_argument('-c','--skip_calc_trans',default=False,action='store_true',help='Skip calc_trans (%(default)s)')
+parser.add_argument('-u','--skip_s2_update',default=False,action='store_true',help='Skip sentinel2_update (%(default)s)')
+parser.add_argument('-p','--skip_s2_preprocess',default=False,action='store_true',help='Skip sentinel2_preprocess (%(default)s)')
+args = parser.parse_args()
 
 script_name = os.path.basename(sys.argv[0]).lower()
 pids = []
@@ -27,11 +57,6 @@ if HOME is None:
     HOME = os.environ.get('HOME')
 TOPDIR = os.path.join(HOME,'Work')
 
-python_path = os.path.join(HOME,'miniconda3','bin','python')
-cmddir = os.path.join(HOME,'Automation')
-scrdir = os.path.join(HOME,'SatelliteTool')
-s1_data = os.path.join(TOPDIR,'Sentinel-1_Data')
-s2_data = os.path.join(TOPDIR,'Sentinel-2_Data')
 s2_path = '/SATREPS/ipb/User/1_Spatial-information/Sentinel-2'
 dend = datetime.now()
 dstr = dend-timedelta(days=280)
@@ -44,44 +69,50 @@ wv_cihea = os.path.join(TOPDIR,'WorldView','wv2_180629_mul.tif')
 for site in ['Bojongsoang','Cihea','Testsite']:
     # Download/Upload GRD, Calculate/Upload Planting
     if site in ['Bojongsoang','Cihea']:
-        command = python_path
-        command += ' "{}"'.format(os.path.join(cmddir,'auto_calc_trans.py'))
-        command += ' --scrdir "{}"'.format(cmddir)
-        command += ' --datdir "{}"'.format(s1_data)
+        command = args.python_path
+        command += ' "{}"'.format(os.path.join(args.cmddir,'auto_calc_trans.py'))
+        command += ' --scrdir "{}"'.format(args.cmddir)
+        command += ' --datdir "{}"'.format(args.s1_data)
         command += ' --sites {}'.format(site)
         command += ' --str {:%Y%m%d}'.format(dstr)
         command += ' --end {:%Y%m%d}'.format(dend)
         command += ' --skip_upload'
         try:
-            call(command,shell=True)
+            if args.skip_calc_trans:
+                pass
+            else:
+                call(command,shell=True)
         except Exception as e:
             sys.stderr.write('{}\n'.format(e))
             sys.stderr.flush()
 
     # Download/Upload L2A
     if site in ['Bojongsoang']:
-        command = python_path
-        command += ' "{}"'.format(os.path.join(cmddir,'sentinel2_update.py'))
-        command += ' --scrdir "{}"'.format(cmddir)
-        command += ' --datdir "{}"'.format(s2_data)
+        command = args.python_path
+        command += ' "{}"'.format(os.path.join(args.cmddir,'sentinel2_update.py'))
+        command += ' --scrdir "{}"'.format(args.cmddir)
+        command += ' --datdir "{}"'.format(args.s2_data)
         command += ' --sites {}'.format(site)
         command += ' --str {:%Y%m%d}'.format(dstr)
         command += ' --end {:%Y%m%d}'.format(dend)
         command += ' --skip_upload'
         try:
-            call(command,shell=True)
+            if args.skip_s2_update:
+                pass
+            else:
+                call(command,shell=True)
         except Exception as e:
             sys.stderr.write('{}\n'.format(e))
             sys.stderr.flush()
 
     # Calculate/Upload Preprocess
-    command = python_path
-    command += ' "{}"'.format(os.path.join(cmddir,'sentinel2_preprocess.py'))
-    command += ' --python_path "{}"'.format(python_path)
-    command += ' --cmddir "{}"'.format(cmddir)
-    command += ' --scrdir "{}"'.format(scrdir)
+    command = args.python_path
+    command += ' "{}"'.format(os.path.join(args.cmddir,'sentinel2_preprocess.py'))
+    command += ' --python_path "{}"'.format(args.python_path)
+    command += ' --cmddir "{}"'.format(args.cmddir)
+    command += ' --scrdir "{}"'.format(args.scrdir)
     command += ' --site {}'.format(site)
-    command += ' --s2_data "{}"'.format(s2_data)
+    command += ' --s2_data "{}"'.format(args.s2_data)
     command += ' --geocor_path {}/{}/geocor'.format(s2_path,site)
     command += ' --indices_path {}/{}/indices'.format(s2_path,site)
     command += ' --parcel_path {}/{}/parcel'.format(s2_path,site)
@@ -97,22 +128,24 @@ for site in ['Bojongsoang','Cihea','Testsite']:
         command += ' --cthr_avg 0.07'
         command += ' --cthr_std 0.06'
     elif site in ['Cihea']:
-        command += ' --l2a_dir "!{}"'.format(os.path.join(s2_data,'Bojongsoang','L2A'))
+        command += ' --l2a_dir "!{}"'.format(os.path.join(args.s2_data,'Bojongsoang','L2A'))
         command += ' --search_key R032'
         command += ' --gis_fnam "{}"'.format(gis_cihea)
         command += ' --wv_fnam "{}"'.format(wv_cihea)
     elif site in ['Testsite']:
         command += ' --gis_fnam "{}"'.format(gis_testsite)
-        command += ' --geocor_dir "!{}"'.format(os.path.join(s2_data,'Cihea','geocor'))
-        command += ' --indices_dir "!{}"'.format(os.path.join(s2_data,'Cihea','indices'))
+        command += ' --geocor_dir "!{}"'.format(os.path.join(args.s2_data,'Cihea','geocor'))
+        command += ' --indices_dir "!{}"'.format(os.path.join(args.s2_data,'Cihea','indices'))
         command += ' --skip_geocor'
         command += ' --skip_indices'
     else:
         ValueError('Error, site={}'.format(site))
     if site in ['Bojongsoang','Cihea','Testsite']:
         try:
-            #call(command,shell=True)
-            pass
+            if args.skip_s2_preprocess:
+                pass
+            else:
+                call(command,shell=True)
         except Exception as e:
             sys.stderr.write('{}\n'.format(e))
             sys.stderr.flush()
