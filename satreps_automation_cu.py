@@ -23,7 +23,7 @@ SCRDIR = os.path.join(HOME,'SatelliteTool')
 S1_DATA = os.path.join(TOPDIR,'Sentinel-1_Data')
 S2_DATA = os.path.join(TOPDIR,'Sentinel-2_Data')
 S2_PATH = '/SATREPS/ipb/User/1_Spatial-information/Sentinel-2'
-UNZIP = 'None'
+UNZIP = '7za x -o@'
 
 # Read options
 parser = ArgumentParser(formatter_class=lambda prog:RawTextHelpFormatter(prog,max_help_position=200,width=200))
