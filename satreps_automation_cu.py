@@ -11,6 +11,7 @@ HOME = os.environ.get('HOME')
 if HOME is None:
     HOME = os.environ.get('USERPROFILE')
 TOPDIR = os.path.join(HOME,'Work')
+TIME_NOW = datetime.now()
 
 # Default values
 SITES = ['Bojongsoang','Cihea','Testsite']
@@ -70,7 +71,7 @@ if len(pids) > 1:
     sys.stderr.flush()
     sys.exit()
 
-dend = datetime.now()
+dend = TIME_NOW
 dstr = dend-timedelta(days=280)
 
 for site in args.sites:
