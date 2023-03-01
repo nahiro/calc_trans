@@ -28,12 +28,22 @@ parser = ArgumentParser(formatter_class=lambda prog:RawTextHelpFormatter(prog,ma
 parser.add_argument('--python_path',default=PYTHON_PATH,help='Path to the Python (%(default)s)')
 parser.add_argument('--cmddir',default=CMDDIR,help='Command folder (%(default)s)')
 parser.add_argument('--scrdir',default=SCRDIR,help='Script folder (%(default)s)')
-parser.add_argument('--s1_data',default=S1_DATA,help='Sentinel-1 data folder (%(default)s)')
-parser.add_argument('--s2_data',default=S2_DATA,help='Sentinel-2 data folder (%(default)s)')
+parser.add_argument('--topdir',default=TOPDIR,help='Top folder (%(default)s)')
+parser.add_argument('--s1_data',default=None,help='Sentinel-1 data folder ({})'.format(S1_DATA))
+parser.add_argument('--s2_data',default=None,help='Sentinel-2 data folder ({})'.format(S2_DATA))
 parser.add_argument('-c','--skip_calc_trans',default=False,action='store_true',help='Skip calc_trans (%(default)s)')
 parser.add_argument('-u','--skip_s2_update',default=False,action='store_true',help='Skip sentinel2_update (%(default)s)')
 parser.add_argument('-p','--skip_s2_preprocess',default=False,action='store_true',help='Skip sentinel2_preprocess (%(default)s)')
 args = parser.parse_args()
+if args.s1_data is None:
+    args.s1_data = os.path.join(args.topdir,'Sentinel-1_Data')
+if args.s2_data is None:
+    args.s2_data = os.path.join(args.topdir,'Sentinel-2_Data')
+gis_bojongsoang = os.path.join(args.topdir,'Shapefile','Bojongsoang','Bojongsoang.shp')
+gis_cihea = os.path.join(args.topdir,'Shapefile','All_area_polygon_20210914','All_area_polygon_20210914.shp')
+gis_testsite = os.path.join(args.topdir,'Shapefile','Testsite_polygon_20210914','Testsite_polygon_20210914.shp')
+wv_bojongsoang = os.path.join(args.topdir,'WorldView','wv2_190816_mul.tif')
+wv_cihea = os.path.join(args.topdir,'WorldView','wv2_180629_mul.tif')
 
 script_name = os.path.basename(sys.argv[0]).lower()
 pids = []
@@ -52,19 +62,9 @@ if len(pids) > 1:
     sys.stderr.flush()
     sys.exit()
 
-HOME = os.environ.get('USERPROFILE')
-if HOME is None:
-    HOME = os.environ.get('HOME')
-TOPDIR = os.path.join(HOME,'Work')
-
 s2_path = '/SATREPS/ipb/User/1_Spatial-information/Sentinel-2'
 dend = datetime.now()
 dstr = dend-timedelta(days=280)
-gis_bojongsoang = os.path.join(TOPDIR,'Shapefile','Bojongsoang','Bojongsoang.shp')
-gis_cihea = os.path.join(TOPDIR,'Shapefile','All_area_polygon_20210914','All_area_polygon_20210914.shp')
-gis_testsite = os.path.join(TOPDIR,'Shapefile','Testsite_polygon_20210914','Testsite_polygon_20210914.shp')
-wv_bojongsoang = os.path.join(TOPDIR,'WorldView','wv2_190816_mul.tif')
-wv_cihea = os.path.join(TOPDIR,'WorldView','wv2_180629_mul.tif')
 
 for site in ['Bojongsoang','Cihea','Testsite']:
     # Download/Upload GRD, Calculate/Upload Planting
