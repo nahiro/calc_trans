@@ -23,6 +23,7 @@ SCRDIR = os.path.join(HOME,'SatelliteTool')
 S1_DATA = os.path.join(TOPDIR,'Sentinel-1_Data')
 S2_DATA = os.path.join(TOPDIR,'Sentinel-2_Data')
 S2_PATH = '/SATREPS/ipb/User/1_Spatial-information/Sentinel-2'
+UNZIP = 'None'
 
 # Read options
 parser = ArgumentParser(formatter_class=lambda prog:RawTextHelpFormatter(prog,max_help_position=200,width=200))
@@ -33,6 +34,7 @@ parser.add_argument('--topdir',default=TOPDIR,help='Top folder (%(default)s)')
 parser.add_argument('--s1_data',default=None,help='Sentinel-1 data folder ({})'.format(S1_DATA))
 parser.add_argument('--s2_data',default=None,help='Sentinel-2 data folder ({})'.format(S2_DATA))
 parser.add_argument('--s2_path',default=S2_PATH,help='Sentinel-2 path on NAS (%(default)s)')
+parser.add_argument('--unzip',default=UNZIP,help='Unzip command for L2A (%(default)s)')
 parser.add_argument('-c','--skip_calc_trans',default=False,action='store_true',help='Skip calc_trans (%(default)s)')
 parser.add_argument('-u','--skip_s2_update',default=False,action='store_true',help='Skip sentinel2_update (%(default)s)')
 parser.add_argument('-p','--skip_s2_preprocess',default=False,action='store_true',help='Skip sentinel2_preprocess (%(default)s)')
@@ -120,6 +122,7 @@ for site in ['Bojongsoang','Cihea','Testsite']:
     command += ' --atcor_path {}/{}/atcor'.format(args.s2_path,site)
     command += ' --interp_path {}/{}/interp'.format(args.s2_path,site)
     command += ' --tentative_path {}/{}/tentative_interp'.format(args.s2_path,site)
+    command += ' --unzip "{}"'.format(args.unzip)
     command += ' --skip_upload'
     if site in ['Bojongsoang']:
         command += ' --gis_fnam "{}"'.format(gis_bojongsoang)
