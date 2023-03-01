@@ -6,7 +6,7 @@ import tempfile
 from glob import glob
 from datetime import datetime,timedelta
 from subprocess import check_output,PIPE
-from optparse import OptionParser,IndentedHelpFormatter
+from argparse import ArgumentParser,RawTextHelpFormatter
 
 # Constants
 HOME = os.environ.get('HOME')
@@ -14,25 +14,26 @@ if HOME is None:
     HOME = os.environ.get('USERPROFILE')
 
 # Default values
+TMP_DNAM = tempfile.gettempdir()
 DT_MAX = 300 # 5 minutes
 
 # Read options
-parser = OptionParser(formatter=IndentedHelpFormatter(max_help_position=200,width=200))
-parser.add_option('-m','--dt_max',default=DT_MAX,type='float',help='Max time difference in sec (%default)')
-parser.add_option('-f','--force',default=False,action='store_true',help='Force to remove (%default)')
-(opts,args) = parser.parse_args()
+parser = ArgumentParser(formatter_class=lambda prog:RawTextHelpFormatter(prog,max_help_position=200,width=200))
+parser.add_argument('-T','--tmp_dnam',default=TMP_DNAM,help='Temporary directory (%(default)s)')
+parser.add_argument('-m','--dt_max',default=DT_MAX,type=float,help='Max time difference in sec (%(default)s)')
+parser.add_argument('-f','--force',default=False,action='store_true',help='Force to remove (%(default)s)')
+args = parser.parse_args()
 
 tcur = time.time()
-dnam = tempfile.gettempdir()
-files = glob(os.path.join(dnam,'jffi*'))
-files.extend(glob(os.path.join(dnam,'imageio*')))
+files = glob(os.path.join(args.tmp_dnam,'jffi*'))
+files.extend(glob(os.path.join(args.tmp_dnam,'imageio*')))
 files.extend(glob(os.path.join(HOME,'.snap/var/cache/temp/imageio*')))
 files.extend(glob(os.path.join(HOME,'Automation/imageio*')))
 
 for f in files:
     t = os.path.getmtime(f)
     dt = tcur-t
-    if dt <= opts.dt_max:
+    if dt <= args.dt_max:
         continue
     try:
         out = check_output('fuser '+f,stderr=PIPE,shell=True)
@@ -40,7 +41,7 @@ for f in files:
         # files is accessed or in case of a fatal error. If at least one
         # access has been found, fuser returns zero.
         sys.stderr.write('{} is used by {}\n'.format(f,out.decode().strip()))
-        if opts.force:
+        if args.force:
             raise ValueError('')
     except Exception:
         if os.path.exists(f):
