@@ -26,6 +26,7 @@ S1_DATA = os.path.join(TOPDIR,'Sentinel-1_Data')
 S2_DATA = os.path.join(TOPDIR,'Sentinel-2_Data')
 S2_PATH = '/SATREPS/ipb/User/1_Spatial-information/Sentinel-2'
 UNZIP = '7za x -o@'
+PMAX = 1
 
 # Read options
 parser = ArgumentParser(formatter_class=lambda prog:RawTextHelpFormatter(prog,max_help_position=200,width=200))
@@ -38,6 +39,7 @@ parser.add_argument('--s1_data',default=None,help='Sentinel-1 data folder ({})'.
 parser.add_argument('--s2_data',default=None,help='Sentinel-2 data folder ({})'.format(S2_DATA))
 parser.add_argument('--s2_path',default=S2_PATH,help='Sentinel-2 path on NAS (%(default)s)')
 parser.add_argument('--unzip',default=UNZIP,help='Unzip command for L2A (%(default)s)')
+parser.add_argument('--pmax',default=PMAX,type=int,help='Max number of processes allowed simultaneously (%(default)s)')
 parser.add_argument('-c','--skip_calc_trans',default=False,action='store_true',help='Skip calc_trans (%(default)s)')
 parser.add_argument('-u','--skip_s2_update',default=False,action='store_true',help='Skip sentinel2_update (%(default)s)')
 parser.add_argument('-p','--skip_s2_preprocess',default=False,action='store_true',help='Skip sentinel2_preprocess (%(default)s)')
@@ -64,7 +66,7 @@ for p in psutil.process_iter(attrs=['pid','name','cmdline']):
     if re.search('python',command) and re.search(script_name,command) and not re.search('powershell',command):
         pids.append(p.info['pid'])
         cmds.append(command)
-if len(pids) > 1:
+if len(pids) > args.pmax:
     sys.stderr.write('\nProcess exists >>> {}\n'.format(len(pids)))
     for i in range(len(pids)):
         sys.stderr.write('{:3d} {:8d} {}\n'.format(i+1,pids[i],cmds[i]))
