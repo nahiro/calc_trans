@@ -13,6 +13,7 @@ if HOME is None:
 TOPDIR = os.path.join(HOME,'Work')
 
 # Default values
+SITES = ['Bojongsoang','Cihea','Testsite']
 BINDIR = os.path.join(HOME,'miniconda3','bin')
 if os.path.isdir(BINDIR):
     PYTHON_PATH = os.path.join(BINDIR,'python')
@@ -27,6 +28,7 @@ UNZIP = '7za x -o@'
 
 # Read options
 parser = ArgumentParser(formatter_class=lambda prog:RawTextHelpFormatter(prog,max_help_position=200,width=200))
+parser.add_argument('-S','--sites',default=None,action='append',help='Target sites ({})'.format(SITES))
 parser.add_argument('--python_path',default=PYTHON_PATH,help='Path to the Python (%(default)s)')
 parser.add_argument('--cmddir',default=CMDDIR,help='Command folder (%(default)s)')
 parser.add_argument('--scrdir',default=SCRDIR,help='Script folder (%(default)s)')
@@ -39,6 +41,8 @@ parser.add_argument('-c','--skip_calc_trans',default=False,action='store_true',h
 parser.add_argument('-u','--skip_s2_update',default=False,action='store_true',help='Skip sentinel2_update (%(default)s)')
 parser.add_argument('-p','--skip_s2_preprocess',default=False,action='store_true',help='Skip sentinel2_preprocess (%(default)s)')
 args = parser.parse_args()
+if args.sites is None:
+    args.sites = SITES
 if args.s1_data is None:
     args.s1_data = os.path.join(args.topdir,'Sentinel-1_Data')
 if args.s2_data is None:
@@ -69,7 +73,7 @@ if len(pids) > 1:
 dend = datetime.now()
 dstr = dend-timedelta(days=280)
 
-for site in ['Bojongsoang','Cihea','Testsite']:
+for site in args.sites:
     # Download/Upload GRD, Calculate/Upload Planting
     if site in ['Bojongsoang','Cihea']:
         command = args.python_path
