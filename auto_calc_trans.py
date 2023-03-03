@@ -170,6 +170,8 @@ for site in opts.sites:
             command = 'python'
             command += ' {}'.format(os.path.join(opts.scrdir,'remove_snap_cache.py'))
             call(command,shell=True)
+            if not os.path.exists(gnam):
+                raise IOError('Error, no such file >>> {}'.format(gnam))
     dnam = os.path.join(datdir,'resample')
     if not os.path.exists(dnam):
         os.makedirs(dnam)
@@ -178,13 +180,19 @@ for site in opts.sites:
     for dstr,dtim in zip(dstrs,dtims):
         fnam = os.path.join(datdir,'subset','{}_subset.tif'.format(dstr))
         gnam = os.path.join(dnam,'{}_resample.tif'.format(dstr))
-        command = 'python'
-        command += ' {}'.format(os.path.join(opts.scrdir,'sentinel_resample.py'))
-        command += ' --inp_fnam {}'.format(fnam)
-        command += ' --out_fnam {}'.format(gnam)
-        command += ' --site {}'.format(site)
-        command += ' --read_comments'
-        call(command,shell=True)
+        if os.path.exists(gnam):
+            sys.stderr.write('Resample file exists, skip >>> {}\n'.format(gnam))
+            sys.stderr.flush()
+        else:
+            command = 'python'
+            command += ' {}'.format(os.path.join(opts.scrdir,'sentinel_resample.py'))
+            command += ' --inp_fnam {}'.format(fnam)
+            command += ' --out_fnam {}'.format(gnam)
+            command += ' --site {}'.format(site)
+            command += ' --read_comments'
+            call(command,shell=True)
+            if not os.path.exists(gnam):
+                raise IOError('Error, no such file >>> {}'.format(gnam))
         d1 = (dtim+timedelta(days=-1)).strftime('%Y%m%d')
         d2 = (dtim+timedelta(days=+1)).strftime('%Y%m%d')
         ystr = dstr[:4]
@@ -207,6 +215,9 @@ for site in opts.sites:
             if opts.skip_copy:
                 command += ' --skip_copy'
             call(command,shell=True)
+            gnams = glob(os.path.join(wrkdir,'planting_{}_*_{}_preliminary.shp'.format(site_low,dstr)))
+            if (len(gnams) < 1):
+                raise IOError('Error, failed in get_preliminary_estimation.py')
     if opts.str is not None and opts.end is not None:
         pass
     elif opts.str is not None:
@@ -246,6 +257,9 @@ for site in opts.sites:
                 if opts.skip_copy:
                     command += ' --skip_copy'
                 call(command,shell=True)
+                gnams = glob(os.path.join(wrkdir,'planting_{}_*_{}_final.shp'.format(site_low,dstr)))
+                if (len(gnams) < 1):
+                    raise IOError('Error, failed in get_final_estimation.py')
         dtim += timedelta(days=1)
     if os.path.exists(log):
         os.remove(log)
