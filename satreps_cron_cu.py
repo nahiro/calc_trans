@@ -37,5 +37,5 @@ command = args.python_path
 command += ' "{}"'.format(os.path.join(args.cmddir,'satreps_automation_cu.py'))
 command += ' --python_path "{}"'.format(args.python_path)
 command += ' --pmax 2'
-command += ' 2>&1 >>"{}"'.format(logfile)
+command += ' >>"{}" 2>&1'.format(logfile)
 call(command,shell=True)
