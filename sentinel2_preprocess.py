@@ -81,6 +81,7 @@ parser.add_argument('--tsnd',default=TSND,type=int,help='Duration of data to sen
 parser.add_argument('--stat_period',default=STAT_PERIOD,type=int,help='Stats period in day (%(default)s)')
 parser.add_argument('--cthr_avg',default=CTHR_AVG,type=float,help='Threshold of mean for clean-day select (%(default)s)')
 parser.add_argument('--cthr_std',default=CTHR_STD,type=float,help='Threshold of std for clean-day select (%(default)s)')
+parser.add_argument('--enable_extrapolate',default=False,action='store_true',help='Enable extrapolate (%(default)s)')
 parser.add_argument('--skip_geocor',default=False,action='store_true',help='Skip geocor (%(default)s)')
 parser.add_argument('--skip_indices',default=False,action='store_true',help='Skip indices (%(default)s)')
 parser.add_argument('--skip_parcel',default=False,action='store_true',help='Skip parcel (%(default)s)')
@@ -237,6 +238,10 @@ with tempfile.NamedTemporaryFile(mode='w+',suffix='.ini',delete=False) as fp:
     fp.write('atcor.scr_dir                       = {}\n'.format(args.scrdir))
     fp.write('[interp]\n')
     fp.write('#interp.csv_flag                     = True\n')
+    if args.enable_extrapolate:
+        fp.write('interp.eflag                        = True\n')
+    else:
+        fp.write('interp.eflag                        = False\n')
     fp.write('#interp.oflag                        = [False,True]\n')
     fp.write('interp.python_path                  = {}\n'.format(args.python_path))
     fp.write('interp.scr_dir                      = {}\n'.format(args.scrdir))
