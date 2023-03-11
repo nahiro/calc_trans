@@ -36,7 +36,7 @@ parser.add_argument('--s2_data',default=None,help='Sentinel-2 data folder ({})'.
 parser.add_argument('--pmax',default=PMAX,type=int,help='Max number of processes allowed simultaneously (%(default)s)')
 parser.add_argument('-U','--skip_s1_update',default=False,action='store_true',help='Skip sentinel1_update (%(default)s)')
 parser.add_argument('-u','--skip_s2_update',default=False,action='store_true',help='Skip sentinel2_update (%(default)s)')
-parser.add_argument('-p','--skip_s2_preprocess',default=False,action='store_true',help='Skip sentinel2_preprocess (%(default)s)')
+parser.add_argument('--skip_copy',default=False,action='store_true',help='Skip copy (%(default)s)')
 args = parser.parse_args()
 if args.sites is None:
     args.sites = SITES
@@ -44,11 +44,6 @@ if args.s1_data is None:
     args.s1_data = os.path.join(args.topdir,'Sentinel-1_Data')
 if args.s2_data is None:
     args.s2_data = os.path.join(args.topdir,'Sentinel-2_Data')
-gis_bojongsoang = os.path.join(args.topdir,'Shapefile','Bojongsoang','Bojongsoang.shp')
-gis_cihea = os.path.join(args.topdir,'Shapefile','All_area_polygon_20210914','All_area_polygon_20210914.shp')
-gis_testsite = os.path.join(args.topdir,'Shapefile','Testsite_polygon_20210914','Testsite_polygon_20210914.shp')
-wv_bojongsoang = os.path.join(args.topdir,'WorldView','wv2_190816_mul.tif')
-wv_cihea = os.path.join(args.topdir,'WorldView','wv2_180629_mul.tif')
 
 script_name = os.path.basename(sys.argv[0]).lower()
 pids = []
@@ -81,6 +76,8 @@ for site in args.sites:
         command += ' --str {:%Y%m%d}'.format(dstr)
         command += ' --end {:%Y%m%d}'.format(dend)
         command += ' --skip_upload'
+        if args.skip_copy:
+            command += ' --skip_copy'
         try:
             if args.skip_s1_update:
                 pass
@@ -100,6 +97,8 @@ for site in args.sites:
         command += ' --str {:%Y%m%d}'.format(dstr)
         command += ' --end {:%Y%m%d}'.format(dend)
         command += ' --skip_upload'
+        if args.skip_copy:
+            command += ' --skip_copy'
         try:
             if args.skip_s2_update:
                 pass
