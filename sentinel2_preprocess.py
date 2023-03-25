@@ -681,8 +681,13 @@ if not args.skip_interp and not (args.skip_upload and args.skip_copy):
                         else:
                             for fnam in fnams:
                                 copy_fnam = os.path.join(copy_dnam,os.path.basename(fnam))
+                                ftim = int(os.path.getmtime(fnam)+0.5)
+                                fsiz = os.path.getsize(fnam)
                                 if args.debug:
                                     sys.stderr.write('cp {} {}\n'.format(fnam,copy_fnam))
+                                    sys.stderr.flush()
+                                elif os.path.exists(copy_fnam) and (int(os.path.getmtime(copy_fnam)+0.5) == ftim) and (os.path.getsize(copy_fnam) == fsiz):
+                                    sys.stderr.write('File exists, skip   >>> {}\n'.format(copy_fnam))
                                     sys.stderr.flush()
                                 else:
                                     if os.path.exists(copy_fnam):
