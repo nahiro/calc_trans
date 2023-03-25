@@ -46,7 +46,8 @@ parser.add_argument('-W','--wait_time',default=WAIT_TIME,type=int,help='Wait tim
 parser.add_argument('-C','--chunk_size',default=CHUNK_SIZE,type=int,help='Chunk size in byte (%(default)s)')
 parser.add_argument('-l','--logging',default=False,action='store_true',help='Logging mode (%(default)s)')
 parser.add_argument('-v','--verbose',default=False,action='store_true',help='Verbose mode (%(default)s)')
-parser.add_argument('--overwrite',default=False,action='store_true',help='Overwrite mode (%(default)s)')
+parser.add_argument('--overwrite',default=False,action='store_true',help='Overwrite existing files (%(default)s)')
+parser.add_argument('--overwrite_different',default=False,action='store_true',help='Overwrite existing different files (%(default)s)')
 (args,rest) = parser.parse_known_args()
 if len(rest) < 1:
     parser.print_help()
@@ -217,6 +218,8 @@ def read_in_chunks(file_object,chunk_size=GB):
         yield data
 
 def upload_file(fnam,gnam,chunk_size=GB):
+    fsiz = os.path.getsize(fnam)
+    ftim = int(os.path.getmtime(fnam)+0.5)
     parent = os.path.dirname(gnam)
     target = os.path.basename(gnam)
     if parent == '':
@@ -231,14 +234,31 @@ def upload_file(fnam,gnam,chunk_size=GB):
                 sys.stderr.flush()
             if delete_file(gnam) < 0:
                 raise IOError('Error in deleting file >>> '+target)
+        elif args.overwrite_different:
+            result = query_file(gnam)
+            if result is None:
+                sys.stderr.write('Warning, failed in uploading file >>> {}\n'.format(gnam))
+                sys.stderr.flush()
+                return '',-1,'',''
+            gsiz = result[1]
+            gtim = int(datetime.timestamp(result[2])+0.5)
+            if (gsiz == fsiz) and (gtim == ftim):
+                if args.verbose:
+                    sys.stderr.write('File exists, skip >>> '+target+'\n')
+                    sys.stderr.flush()
+                return result
+            else:
+                if args.verbose:
+                    sys.stderr.write('File exists, delete >>> '+target+'\n')
+                    sys.stderr.flush()
+                if delete_file(gnam) < 0:
+                    raise IOError('Error in deleting file >>> '+target)
         else:
             if args.verbose:
                 sys.stderr.write('File exists, skip >>> '+target+'\n')
                 sys.stderr.flush()
             return query_file(gnam)
     # Upload file
-    byte_size = os.path.getsize(fnam)
-    ftim = int(os.path.getmtime(fnam)+0.5)
     if args.verbose:
         tstr = datetime.now()
         sys.stderr.write('{:%Y-%m-%dT%H:%M:%S} Uploading file ({}) >>> {}\n'.format(tstr,get_size(fnam),fnam))
@@ -255,20 +275,20 @@ def upload_file(fnam,gnam,chunk_size=GB):
             offset = 0
             for chunk in read_in_chunks(fp,chunk_size):
                 data_size = len(chunk)
-                url = common_url+'&func=chunked_upload&upload_id={}&upload_root_dir={}&dest_path={}&upload_name={}&filesize={}&offset={}&overwrite={}&settime=1&mtime={}'.format(upload_id,parent,parent,target,byte_size,offset,(1 if args.overwrite else 0),ftim)
+                url = common_url+'&func=chunked_upload&upload_id={}&upload_root_dir={}&dest_path={}&upload_name={}&filesize={}&offset={}&overwrite={}&settime=1&mtime={}'.format(upload_id,parent,parent,target,fsiz,offset,(1 if args.overwrite else 0),ftim)
                 offset += data_size
-                if offset < byte_size:
+                if offset < fsiz:
                     url += '&multipart=1'
                 resp = session.post(url,files=(('fileName',(None,target)),('file',('blob',chunk,'application/octet-stream'))))
                 status = resp.json()['status']
                 if status != 1:
                     raise ValueError('Error, status={}'.format(status))
-                if offset < byte_size:
+                if offset < fsiz:
                     t2 = datetime.now()
                     dt = (t2-t1).total_seconds()
                     rate = data_size/dt
-                    t3 = t2+timedelta(seconds=(byte_size-offset)/rate)
-                    sys.stderr.write('{:%Y-%m-%dT%H:%M:%S} Upload {:6.2f} % @ {:8.3f} Mbps, Expected completion at {:%Y-%m-%dT%H:%M:%S}\n'.format(t2,100.0*offset/byte_size,rate*8.0e-6,t3))
+                    t3 = t2+timedelta(seconds=(fsiz-offset)/rate)
+                    sys.stderr.write('{:%Y-%m-%dT%H:%M:%S} Upload {:6.2f} % @ {:8.3f} Mbps, Expected completion at {:%Y-%m-%dT%H:%M:%S}\n'.format(t2,100.0*offset/fsiz,rate*8.0e-6,t3))
                     sys.stderr.flush()
                     t1 = t2
         flag = True
@@ -279,7 +299,7 @@ def upload_file(fnam,gnam,chunk_size=GB):
     if args.verbose:
         tend = datetime.now()
         dt = (tend-tstr).total_seconds()
-        rate = byte_size/dt
+        rate = fsiz/dt
         if flag:
             sys.stderr.write('{:%Y-%m-%dT%H:%M:%S} Upload completed in {:.2f} seconds ({:8.3f} Mbps) >>> {}\n'.format(tend,dt,rate*8.0e-6,fnam))
         else:
