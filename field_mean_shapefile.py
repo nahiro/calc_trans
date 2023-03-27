@@ -68,8 +68,8 @@ with open(opts.area_fnam,'r') as fp:
         areas[-1] = np.array(areas[-1])
 object_ids = np.array(object_ids)
 blocks = np.array(blocks)
-inds = np.array(inds,dtype='object')
-areas = np.array(areas,dtype='object')
+inds = np.array(inds,dtype=object)
+areas = np.array(areas,dtype=object)
 nobject = object_ids.size
 
 scheduled = {}
